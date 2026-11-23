@@ -16,6 +16,7 @@ packages = ["apps/api/src/breathewise"]
 
 [tool.pytest.ini_options]
 testpaths = ["apps/api/tests"]
+markers = ["integration: migrated database/API integration using isolated synthetic test data"]
 
 [tool.ruff]
 target-version = "py312"

@@ -73,3 +73,8 @@ cities and boundary provenance; stations and provider aliases; ingestion_runs an
 
 ## Identity and alert delivery
 Choose and document one straightforward session/auth implementation; enforce user ownership on saved places/preferences/alerts. Public observations and forecasts do not require accounts. Tests must prove one user cannot access another user's records. Email needs configured delivery credentials; in-app alerts can work without email but must not falsely claim sent email. Use idempotent outbox processing, timezone-aware schedules and cooldowns. Avoid mandatory sensitive medical information.
+
+
+## Implemented backend decisions (24 November 2026)
+Opaque random bearer sessions are provisioned by local administrator CLI with seven-day expiry, token hash persistence and private token file output. No user-ID header identity. All owned resource queries filter authenticated user, with tombstoned alert rules preserving event history. Notifications are transactionally delivered in-app; no external outbox/email provider or automatic scheduler is configured.
+Canonical data import validates explicit hour-ending UTC/units/availability and conflicts before committing. Original-unit normalized JSON/Parquet archives accompany SQL station/observation tables; no model feature fabrication or automatic upstream timestamp repair. SQLite fixture tests are supplementary to the selected PostgreSQL target. No model dependencies are installed until teammate requirements arrive. Source-level model audit is still blocked.

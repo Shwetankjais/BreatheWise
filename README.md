@@ -2,7 +2,7 @@
 Local air pollution forecasting and exposure planning.
 
 ## Current state — 24 November 2026
-Foundation implementation now includes FastAPI/Pydantic API errors/capabilities, initial SQLAlchemy/Alembic schema, locked Python/web tooling and generated OpenAPI/TypeScript contract 1.0.0. No frontend source, operational model inference or live-provider/browser workflow is verified. See docs/ESSENTIALS.md for runnable commands and docs/handoffs/codex.md for current checkpoints and precise blockers.
+Foundation implementation now includes FastAPI/Pydantic API errors/capabilities, SQLAlchemy/Alembic migrations, canonical observations/history, opaque-session account persistence, in-app observation alerts, locked tooling and generated OpenAPI/TypeScript contract 1.1.0. Frontend source exists but has integration review changes requested. Operational model inference, real datasets/providers, PostgreSQL and browser workflows remain unverified. See docs/ESSENTIALS.md for runnable commands and docs/handoffs/codex.md for current checkpoints and precise blockers.
 
 Approved project folder: `/Users/shwetankjaiswal/Desktop/BreatheWise`.
 Approved remote: https://github.com/Shwetankjais/BreatheWise .

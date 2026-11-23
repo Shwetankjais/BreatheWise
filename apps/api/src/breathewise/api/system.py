@@ -33,7 +33,7 @@ def ready(request: Request, response: Response):
         with engine().connect() as connection:
             db_ready = (
                 connection.execute(text("select version_num from alembic_version")).scalar()
-                == "0001"
+                == "0002"
             )
     except SQLAlchemyError:
         pass

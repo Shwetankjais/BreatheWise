@@ -4,7 +4,14 @@ from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ROOT = Path(__file__).resolve().parents[5]
+ROOT = next(
+    (
+        p
+        for p in Path(__file__).resolve().parents
+        if (p / "pyproject.toml").exists() and (p / "docs/MODEL_STATIC_AUDIT.json").exists()
+    ),
+    Path.cwd(),
+)
 
 
 class Settings(BaseSettings):

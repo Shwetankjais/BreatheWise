@@ -7,7 +7,7 @@ client = TestClient(app)
 def test_liveness_has_contract_metadata():
     response = client.get("/api/v1/health")
     assert response.status_code == 200
-    assert response.json()["meta"]["contract_version"] == "1.0.0"
+    assert response.json()["meta"]["contract_version"] == "1.1.0"
     assert response.headers["x-request-id"] == response.json()["meta"]["request_id"]
 
 
@@ -55,3 +55,12 @@ def test_duration_planner_does_not_interpolate_fake_hours():
     )
     assert response.status_code == 409
     assert response.json()["error"]["code"] == "TRAJECTORY_UNAVAILABLE"
+
+
+def test_advisories_are_sourced_and_not_personalized():
+    response = client.get("/api/v1/advisories?pollutant=pm25")
+    assert response.status_code == 200
+    data = response.json()["data"][0]
+    assert data["scope"] == "general_education"
+    assert data["source_url"].startswith("https://www.who.int/")
+    assert "no clinical review" in data["review_scope"]

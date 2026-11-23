@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "data_mode": "demo",
+  "timestamp_semantics": "hour_ending_utc",
+  "provenance": "Synthetic developer fixture; not an actual monitoring station or observation",
+  "stations": [
+    {
+      "id": "demo-delhi-001",
+      "name": "Synthetic Delhi example (DEMO)",
+      "city_id": "delhi",
+      "latitude": 28.61,
+      "longitude": 77.21,
+      "source": "synthetic demo fixture",
+      "data_mode": "demo",
+      "forecast_eligible": false
+    }
+  ],
+  "observations": [
+    {
+      "station_id": "demo-delhi-001",
+      "pollutant": "pm25",
+      "measured_at": "2026-11-20T00:00:00Z",
+      "available_at": "2026-11-20T00:05:00Z",
+      "value": 25,
+      "unit": "ug/m3",
+      "source": "synthetic demo fixture",
+      "averaging_period_minutes": 60
+    }
+  ]
+}

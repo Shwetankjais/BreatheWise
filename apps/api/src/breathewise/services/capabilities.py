@@ -39,7 +39,7 @@ def capabilities() -> Capabilities:
     def missing(*items):
         return Capability(requirements_missing=list(items))
 
-    return Capabilities(
+    result = Capabilities(
         model_forecast=Capability(requirements_missing=MODEL_MISSING),
         observations=missing("audited imported station observations"),
         history=missing("audited imported observations"),
@@ -55,3 +55,30 @@ def capabilities() -> Capabilities:
         evaluation=missing("evaluation predictions, split dates and baselines"),
         traffic_live=missing("live traffic provider"),
     )
+
+    from breathewise.services.availability import availability
+
+    db_ready, observation_count, city_counts = availability()
+    if db_ready:
+        result.saved_places = Capability(
+            supported=True,
+            method="persisted opaque bearer sessions; local administrator provisioning",
+            supported_scope=["provisioned identities", "owned places/preferences"],
+        )
+    if observation_count:
+        result.observations = Capability(
+            supported=True,
+            method="audited canonical hourly imports; no automatic provider polling",
+            supported_scope=sorted(city_counts),
+        )
+        result.history = Capability(
+            supported=True,
+            method="UTC hour-ending records and issue-time availability cutoff",
+            supported_scope=["station-level hourly; max 31 days"],
+        )
+        result.alerts = Capability(
+            supported=True,
+            method="fresh hourly observation threshold; transactional in-app notification",
+            supported_scope=["in_app", "manual/scheduled worker command", "provisioned identities"],
+        )
+    return result

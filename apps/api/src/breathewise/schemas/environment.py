@@ -9,6 +9,7 @@ class City(StrictModel):
     name: str
     aliases: list[str]
     eligible_station_count: int = 0
+    observed_station_count: int = 0
     availability: str = "unaudited"
 
 

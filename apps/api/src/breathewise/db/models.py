@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, String, UniqueConstraint
+from sqlalchemy import JSON, DateTime, Float, ForeignKey, Index, String, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -21,7 +21,12 @@ class Station(Base):
 
 class Observation(Base):
     __tablename__ = "observations"
-    __table_args__ = (UniqueConstraint("station_id", "pollutant", "measured_at", "source"),)
+    __table_args__ = (
+        UniqueConstraint("station_id", "pollutant", "measured_at", "source"),
+        Index(
+            "uq_observation_canonical_hour", "station_id", "pollutant", "measured_at", unique=True
+        ),
+    )
     id: Mapped[int] = mapped_column(primary_key=True)
     station_id: Mapped[str] = mapped_column(ForeignKey("stations.id"), index=True)
     pollutant: Mapped[str] = mapped_column(String(10))
@@ -55,3 +60,30 @@ class SavedPlace(Base):
     label: Mapped[str] = mapped_column(String(120))
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
+
+
+class AlertRule(Base):
+    __tablename__ = "alert_rules"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    station_id: Mapped[str] = mapped_column(ForeignKey("stations.id"))
+    pollutant: Mapped[str] = mapped_column(String(10))
+    threshold: Mapped[float] = mapped_column(Float)
+    cooldown_minutes: Mapped[int] = mapped_column(default=60)
+    enabled: Mapped[bool] = mapped_column(default=True)
+    deleted: Mapped[bool] = mapped_column(default=False)
+    last_event_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    __table_args__ = (UniqueConstraint("rule_id", "observation_id"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    rule_id: Mapped[str] = mapped_column(ForeignKey("alert_rules.id"))
+    observation_id: Mapped[int] = mapped_column(ForeignKey("observations.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    value: Mapped[float] = mapped_column(Float)
+    threshold: Mapped[float] = mapped_column(Float)
+    status: Mapped[str] = mapped_column(String(30), default="delivered_in_app")
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

@@ -35,3 +35,7 @@ test-integration:
 	$(UV) pytest -q -m integration
 test-e2e:
 	@echo 'UNAVAILABLE: requires Antigravity FRONTEND_READY and coordinated browser journeys'; exit 2
+
+test-postgres:
+	@test -n "$$BREATHEWISE_TEST_POSTGRES_URL" || (echo 'Set BREATHEWISE_TEST_POSTGRES_URL to a disposable PostgreSQL database with schema-create rights'; exit 2)
+	$(UV) pytest -q -m integration

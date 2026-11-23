@@ -9,6 +9,7 @@ from breathewise.schemas.environment import (
     RouteRequest,
     WeatherRequest,
 )
+from breathewise.services.advisories import Advisory, advisory
 from breathewise.services.capabilities import MODEL_MISSING
 from breathewise.services.cities import cities, validate_city
 from fastapi import APIRouter, Query, Request
@@ -18,8 +19,20 @@ router = APIRouter()
 
 @router.get("/cities", response_model=Envelope[list[City]])
 def get_cities(request: Request):
+    from breathewise.services.availability import availability
+
+    _, _, counts = availability()
+    data = cities()
+    for city in data:
+        city.observed_station_count = counts.get(city.id, 0)
+        if city.observed_station_count:
+            city.availability = "imported_observations_model_eligibility_unverified"
     return Envelope(
-        meta=metadata(request, "requested city scope; eligibility unaudited"), data=cities()
+        meta=metadata(
+            request,
+            "requested city scope; imported observation counts; model eligibility unaudited",
+        ),
+        data=data,
     )
 
 
@@ -119,8 +132,9 @@ def performance(
     )
 
 
-@router.get("/advisories")
-def advisories(pollutant: Pollutant):
-    raise ServiceError(
-        503, "GUIDANCE_UNREVIEWED", "Health guidance requires reviewed primary-source content"
+@router.get("/advisories", response_model=Envelope[list[Advisory]])
+def advisories(request: Request, pollutant: Pollutant):
+    return Envelope(
+        meta=metadata(request, "WHO educational facts; engineering source review"),
+        data=[advisory(pollutant)],
     )
