@@ -5,6 +5,7 @@ on:
     paths:
       - "apps/**"
       - "scripts/**"
+      - "tools/model-diagnostics/**"
       - "packages/contracts/**"
       - "pyproject.toml"
       - "uv.lock"
@@ -46,3 +47,14 @@ jobs:
         env:
           BREATHEWISE_TEST_POSTGRES_URL: postgresql+psycopg://breathewise:breathewise@127.0.0.1:5432/breathewise
       - run: uv run --locked python -m build --wheel --outdir work/dist
+
+  model-diagnostic-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install uv
+      - run: make setup-model-diagnostics
+      - run: make check-model-diagnostics

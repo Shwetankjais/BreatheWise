@@ -13,8 +13,8 @@ contracts:
 	$(UV) python scripts/export_contracts.py
 	npm run contracts
 check:
-	$(UV) ruff check apps/api scripts
-	$(UV) ruff format --check apps/api scripts
+	$(UV) ruff check apps/api scripts tools/model-diagnostics/tests
+	$(UV) ruff format --check apps/api scripts tools/model-diagnostics/tests
 	$(UV) pytest -q
 	$(UV) python scripts/export_contracts.py --check
 	npm run contracts:check
@@ -39,3 +39,15 @@ test-e2e:
 test-postgres:
 	@test -n "$$BREATHEWISE_TEST_POSTGRES_URL" || (echo 'Set BREATHEWISE_TEST_POSTGRES_URL to a disposable PostgreSQL database with schema-create rights'; exit 2)
 	$(UV) pytest -q -m integration
+
+# Isolated optional runtime: does not modify the web or API dependency environments.
+setup-model-diagnostics:
+	uv sync --locked --project tools/model-diagnostics
+recover-model:
+	$(UV) python scripts/model_diagnostics.py recover $(ARGS)
+diagnose-model:
+	uv run --locked --project tools/model-diagnostics python scripts/model_diagnostics.py predict $(ARGS)
+probe-model:
+	uv run --locked --project tools/model-diagnostics python scripts/model_diagnostics.py probe $(ARGS)
+check-model-diagnostics:
+	uv run --locked --project tools/model-diagnostics python scripts/model_diagnostics.py check $(ARGS)
