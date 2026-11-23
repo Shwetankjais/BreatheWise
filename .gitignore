@@ -1,0 +1,26 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+# Models and environmental datasets stay local; commit manifests and retrieval scripts
+artifacts/models/*
+!artifacts/models/.gitkeep
+data/raw/
+data/processed/
+data/cache/
+work/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.log
+.DS_Store
+# Runtime handoff scratch lock, not source
+.agent-git.lock/

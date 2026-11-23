@@ -1,0 +1,1718 @@
+{
+  "components": {
+    "schemas": {
+      "ActivityRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "activity": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Activity",
+            "type": "string"
+          },
+          "duration_minutes": {
+            "maximum": 1440.0,
+            "minimum": 1.0,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "end": {
+            "format": "date-time",
+            "title": "End",
+            "type": "string"
+          },
+          "sensitivity": {
+            "default": "general",
+            "enum": [
+              "general",
+              "sensitive"
+            ],
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "start": {
+            "format": "date-time",
+            "title": "Start",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_id",
+          "activity",
+          "duration_minutes",
+          "start",
+          "end"
+        ],
+        "title": "ActivityRequest",
+        "type": "object"
+      },
+      "Capabilities": {
+        "properties": {
+          "alerts": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "calibrated_exceedance_probability": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "calibrated_intervals": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "continuous_hourly_trajectory": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "declared_artifact_horizons": {
+            "default": [
+              1,
+              3,
+              6,
+              12,
+              24
+            ],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Declared Artifact Horizons",
+            "type": "array"
+          },
+          "evaluation": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "history": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "model_forecast": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "observations": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "population_coverage": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "routes": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "saved_places": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "spatial_exposure": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "traffic_live": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "verified_forecast_horizons": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Verified Forecast Horizons",
+            "type": "array"
+          },
+          "verified_forecast_pollutants": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Verified Forecast Pollutants",
+            "type": "array"
+          },
+          "weather_scenarios": {
+            "$ref": "#/components/schemas/Capability"
+          }
+        },
+        "required": [
+          "model_forecast",
+          "observations",
+          "history",
+          "saved_places",
+          "alerts",
+          "continuous_hourly_trajectory",
+          "calibrated_intervals",
+          "calibrated_exceedance_probability",
+          "spatial_exposure",
+          "routes",
+          "weather_scenarios",
+          "population_coverage",
+          "evaluation",
+          "traffic_live"
+        ],
+        "title": "Capabilities",
+        "type": "object"
+      },
+      "Capability": {
+        "properties": {
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "requirements_missing": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Requirements Missing",
+            "type": "array"
+          },
+          "supported": {
+            "default": false,
+            "title": "Supported",
+            "type": "boolean"
+          },
+          "supported_scope": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Supported Scope",
+            "type": "array"
+          }
+        },
+        "title": "Capability",
+        "type": "object"
+      },
+      "City": {
+        "additionalProperties": false,
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Aliases",
+            "type": "array"
+          },
+          "availability": {
+            "default": "unaudited",
+            "title": "Availability",
+            "type": "string"
+          },
+          "eligible_station_count": {
+            "default": 0,
+            "title": "Eligible Station Count",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "aliases"
+        ],
+        "title": "City",
+        "type": "object"
+      },
+      "Coordinates": {
+        "additionalProperties": false,
+        "properties": {
+          "latitude": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "type": "number"
+          },
+          "longitude": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "type": "number"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "title": "Coordinates",
+        "type": "object"
+      },
+      "Envelope_Capabilities_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Capabilities"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[Capabilities]",
+        "type": "object"
+      },
+      "Envelope_Forecast_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Forecast"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[Forecast]",
+        "type": "object"
+      },
+      "Envelope_Health_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Health"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[Health]",
+        "type": "object"
+      },
+      "Envelope_Readiness_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Readiness"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[Readiness]",
+        "type": "object"
+      },
+      "Envelope_list_City__": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/City"
+            },
+            "title": "Data",
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[list[City]]",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "array"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "requirements_missing": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Requirements Missing",
+            "type": "array"
+          },
+          "retryable": {
+            "default": false,
+            "title": "Retryable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "error"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "Forecast": {
+        "additionalProperties": false,
+        "properties": {
+          "input_cutoff_at": {
+            "format": "date-time",
+            "title": "Input Cutoff At",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "model_artifact_sha256": {
+            "title": "Model Artifact Sha256",
+            "type": "string"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPoint"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "quality": {
+            "additionalProperties": true,
+            "title": "Quality",
+            "type": "object"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          },
+          "supported_horizons": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Supported Horizons",
+            "type": "array"
+          },
+          "unit": {
+            "const": "\u00b5g/m\u00b3",
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_id",
+          "pollutant",
+          "unit",
+          "model_version",
+          "model_artifact_sha256",
+          "issued_at",
+          "input_cutoff_at",
+          "supported_horizons",
+          "points",
+          "quality"
+        ],
+        "title": "Forecast",
+        "type": "object"
+      },
+      "ForecastPoint": {
+        "additionalProperties": false,
+        "properties": {
+          "horizon_h": {
+            "enum": [
+              1,
+              3,
+              6,
+              12,
+              24
+            ],
+            "title": "Horizon H",
+            "type": "integer"
+          },
+          "interval_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Level"
+          },
+          "lower": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower"
+          },
+          "predicted_concentration": {
+            "minimum": 0.0,
+            "title": "Predicted Concentration",
+            "type": "number"
+          },
+          "upper": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper"
+          },
+          "valid_at": {
+            "format": "date-time",
+            "title": "Valid At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "horizon_h",
+          "valid_at",
+          "predicted_concentration"
+        ],
+        "title": "ForecastPoint",
+        "type": "object"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "Metadata": {
+        "properties": {
+          "contract_version": {
+            "default": "1.0.0",
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "data_mode": {
+            "enum": [
+              "live",
+              "historical_replay",
+              "demo"
+            ],
+            "title": "Data Mode",
+            "type": "string"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "quality_flags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Quality Flags",
+            "type": "array"
+          },
+          "replay_issue_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replay Issue At"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data_mode",
+          "source"
+        ],
+        "title": "Metadata",
+        "type": "object"
+      },
+      "Pollutant": {
+        "enum": [
+          "pm25",
+          "pm10",
+          "no2",
+          "so2",
+          "o3",
+          "co"
+        ],
+        "title": "Pollutant",
+        "type": "string"
+      },
+      "Readiness": {
+        "properties": {
+          "database": {
+            "title": "Database",
+            "type": "boolean"
+          },
+          "model": {
+            "default": false,
+            "title": "Model",
+            "type": "boolean"
+          },
+          "providers": {
+            "default": false,
+            "title": "Providers",
+            "type": "boolean"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "database"
+        ],
+        "title": "Readiness",
+        "type": "object"
+      },
+      "RouteRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "departure": {
+            "format": "date-time",
+            "title": "Departure",
+            "type": "string"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Coordinates"
+          },
+          "mode": {
+            "enum": [
+              "walking",
+              "cycling",
+              "driving"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/Coordinates"
+          },
+          "tradeoff": {
+            "default": 0.5,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Tradeoff",
+            "type": "number"
+          }
+        },
+        "required": [
+          "origin",
+          "destination",
+          "mode",
+          "departure"
+        ],
+        "title": "RouteRequest",
+        "type": "object"
+      },
+      "WeatherRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          },
+          "wind_speed_multiplier": {
+            "maximum": 2.0,
+            "minimum": 0.1,
+            "title": "Wind Speed Multiplier",
+            "type": "number"
+          }
+        },
+        "required": [
+          "station_id",
+          "issued_at",
+          "wind_speed_multiplier"
+        ],
+        "title": "WeatherRequest",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "BreatheWise API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/activity-plan": {
+      "post": {
+        "operationId": "activity_plan_api_v1_activity_plan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Activity Plan"
+      }
+    },
+    "/api/v1/advisories": {
+      "get": {
+        "operationId": "advisories_api_v1_advisories_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Advisories"
+      }
+    },
+    "/api/v1/capabilities": {
+      "get": {
+        "operationId": "get_capabilities_api_v1_capabilities_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_Capabilities_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Capabilities"
+      }
+    },
+    "/api/v1/cities": {
+      "get": {
+        "operationId": "get_cities_api_v1_cities_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_list_City__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Cities"
+      }
+    },
+    "/api/v1/coverage": {
+      "get": {
+        "operationId": "coverage_api_v1_coverage_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": true,
+            "schema": {
+              "title": "City Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "population_epoch",
+            "required": false,
+            "schema": {
+              "default": 2020,
+              "maximum": 2030,
+              "minimum": 1980,
+              "title": "Population Epoch",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Coverage"
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_Health_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/api/v1/hotspots": {
+      "get": {
+        "operationId": "hotspots_api_v1_hotspots_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": true,
+            "schema": {
+              "title": "City Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizon_h",
+            "required": true,
+            "schema": {
+              "enum": [
+                1,
+                3,
+                6,
+                24
+              ],
+              "title": "Horizon H",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant",
+              "default": "pm25"
+            }
+          },
+          {
+            "in": "query",
+            "name": "threshold",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Threshold",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Hotspots"
+      }
+    },
+    "/api/v1/model-performance": {
+      "get": {
+        "operationId": "performance_api_v1_model_performance_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "model_version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Model Version"
+            }
+          },
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "City Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizon_h",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    1,
+                    3,
+                    6,
+                    12,
+                    24
+                  ],
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Horizon H"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Performance"
+      }
+    },
+    "/api/v1/ready": {
+      "get": {
+        "operationId": "ready_api_v1_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_Readiness_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Ready"
+      }
+    },
+    "/api/v1/routes/compare": {
+      "post": {
+        "operationId": "routes_api_v1_routes_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Routes"
+      }
+    },
+    "/api/v1/scenarios/weather": {
+      "post": {
+        "operationId": "weather_api_v1_scenarios_weather_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Weather"
+      }
+    },
+    "/api/v1/stations/{station_id}/forecast": {
+      "get": {
+        "operationId": "forecast_api_v1_stations__station_id__forecast_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "station_id",
+            "required": true,
+            "schema": {
+              "title": "Station Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant",
+              "default": "pm25"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizons",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Horizons"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_Forecast_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Forecast"
+      }
+    }
+  }
+}

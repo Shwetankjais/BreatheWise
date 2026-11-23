@@ -1,0 +1,37 @@
+export UV_CACHE_DIR := $(CURDIR)/work/uv-cache
+export npm_config_cache := $(CURDIR)/work/npm-cache
+UV := uv run --locked
+.PHONY: setup db-up migrate seed-demo ingest audit-model dev check test-integration test-e2e build contracts
+setup:
+	uv sync --locked
+	npm ci --no-audit --no-fund
+db-up:
+	docker compose up -d --wait db
+migrate:
+	$(UV) alembic upgrade head
+contracts:
+	$(UV) python scripts/export_contracts.py
+	npm run contracts
+check:
+	$(UV) ruff check apps/api scripts
+	$(UV) ruff format --check apps/api scripts
+	$(UV) pytest -q
+	$(UV) python scripts/export_contracts.py --check
+	npm run contracts:check
+	npm run typecheck:contracts
+	@if test -f apps/web/src/main.tsx; then npm run typecheck --workspace apps/web; else echo 'UNVERIFIED: Antigravity frontend entry not supplied'; fi
+audit-model:
+	$(UV) python scripts/audit_model.py
+dev:
+	$(UV) python scripts/dev.py
+build:
+	$(UV) python -m build --wheel --outdir work/dist
+	npm run build --workspace apps/web
+seed-demo:
+	$(UV) python scripts/data_cli.py seed-demo
+ingest:
+	$(UV) python scripts/data_cli.py ingest $(ARGS)
+test-integration:
+	$(UV) pytest -q -m integration
+test-e2e:
+	@echo 'UNAVAILABLE: requires Antigravity FRONTEND_READY and coordinated browser journeys'; exit 2

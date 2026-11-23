@@ -1,0 +1,17 @@
+{
+  "name": "breathewise-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "contracts": "openapi-typescript packages/contracts/openapi.json -o packages/contracts/api.d.ts",
+    "contracts:check": "openapi-typescript packages/contracts/openapi.json -o packages/contracts/api.d.ts --check",
+    "typecheck:contracts": "tsc --noEmit --skipLibCheck packages/contracts/api.d.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.6.1",
+    "typescript": "^5.7.3"
+  }
+}
