@@ -1,36 +1,32 @@
-# Codex handoff
+# Codex handoff — verified checkpoint, 24 November 2026
 
-Agent: shwetank's-codex, 65%, integration owner and only Git writer.
-Milestone: FOUNDATION_READY (API/contracts/tooling); AC08/AC13 partial infrastructure evidence only. No full PRD journey or frontend completion claimed.
-Workspace: /Users/shwetankjaiswal/Desktop/BreatheWise. Remote verified empty before initialization. Initial branch feat/foundation; no existing branch switched.
+Agent: shwetank's-codex, 65%, senior AI/backend/FDE/integration owner and only Git writer.
+Status: BACKEND_CHECKPOINT_READY; FOUNDATION_READY tooling available. Product acceptance incomplete.
+Workspace: /Users/shwetankjaiswal/Desktop/BreatheWise. Approved remote https://github.com/Shwetankjais/BreatheWise.
+Branch: feat/foundation. Latest implementation SHA f7e4a9ce1e06f9499784235970aaa76b41eb36ae, pushed and remote verified. Foundation 4e7baa7; independent backend 4fd6105. This documentation-only checkpoint follows the verified code commit. GitHub set the initial default branch to feat/foundation after first push; main is not merged/created. No branch switch or frontend source rewrite performed.
 
-## Available interface
-Contract 1.0.0, generated packages/contracts/openapi.json and api.d.ts. All available routes use /api/v1. JSON success is {meta,data}; failure is {meta,error}. Actual generated schema is authoritative.
-API: uv run --locked uvicorn breathewise.main:app --host 127.0.0.1 --port 8000; documentation /docs. Web config: npm run dev --workspace apps/web, port 5173, /api proxy to 8000. Antigravity owns src/main.tsx and all src/public/tests; no frontend source has been created or overwritten by Codex.
-Dependencies installed into root .venv and node_modules, locks uv.lock/package-lock.json. Python 3.12.16; Node 24.5.0; npm 11.5.1. Frontend packages include React 19, Vite 6, Tailwind 4, TanStack Query, React Router, Leaflet, Recharts, Motion and Lucide. Additive manifests only; no pre-existing frontend processes/source were present at setup.
+## Delivered backend/tooling and ready paths
+AC01/05/06/08/09/10/13 have partial backend evidence, not full product acceptance.
+Owned changes: apps/api/**, scripts/**, packages/contracts/**, root manifests/locks/Makefile/compose/Alembic, .github/workflows/backend.yml and shared docs. Frontend manifests/index.html/Vite/TS config created additively; Antigravity owns all frontend src/public/tests and its UI/handoff documents. Owner-ready frontend remains untracked and uncommitted because integration review changes below are unresolved. No unrelated files, credentials, model binaries or datasets committed.
+Implemented canonical hourly observation validation/import with immutable content-addressed normalized JSON/original-unit Parquet archives; station/latest/history APIs with UTC issue-time availability, units, freshness and valid/missing counts; opaque hashed bearer sessions provisioned by trusted administrator; persisted owned places/preferences; in-app observed-concentration alert rules/events with cooldown/idempotency and PostgreSQL row locks; WHO-sourced general education with engineering review scope; explicit gated model/planner/routing/scenario/population/evaluation errors.
 
-## Checks and limits
-- pytest foundation: 6 passed (deterministic API tests, no live data).
-- Both supplied model SHA256 hashes match static audit; no deserialization/inference/parity claimed.
-- Ruff and contract generation performed; final consolidated command results recorded in SUBMISSION.
-- Docker CLI exists but daemon socket absent. PostgreSQL migration/integration NOT verified; SQLite migration check is supplementary only.
-- make build awaits Antigravity-owned src/main.tsx; e2e intentionally exits unavailable until coordinated browser checks exist.
-- make seed-demo/ingest currently fail explicitly; canonical ingestion is next independent slice.
-- Data mode default live, integrations unavailable. No fixtures masquerade as actual readings/predictions.
+## Contract, tooling and capabilities
+Generated contract 1.1.0: packages/contracts/openapi.json and api.d.ts are authoritative. Original 1.0.0 frozen at 4e7baa7. Responses {meta,data}; errors {meta,error}. Capability entries are named objects with supported/method/requirements_missing/supported_scope. No verified forecast horizons/pollutants. Artifact-declared horizons [1,3,6,12,24] do not imply operational inference.
+API command: uv run --locked uvicorn breathewise.main:app --host 127.0.0.1 --port 8000; docs /docs, prefix /api/v1. Web npm run dev --workspace apps/web, port 5173, /api proxy to 8000. make dev owns only its child processes and refuses occupied ports. No server remains running after the smoke test. Setup/commands are in ESSENTIALS.
+Python 3.12.16 foundation environment (not verified model compatibility), Node 24.5.0, npm 11.5.1; uv.lock/package-lock.json. Default DATA_MODE=live with no configured real dataset/provider. Explicit demo database seeded separately; no automatic fixture fallback in backend. Observed station counts do not assert model eligibility. Sessions require local administrator provisioning; no public signup/OIDC/email or automatic scheduler claimed.
+
+## Verification
+- make check: Ruff lint/format, 18 Python cases passed, 1 PostgreSQL-only concurrency case skipped locally; OpenAPI/type drift and generated TS checks passed; local owner-ready frontend TS passed.
+- Latest CI SUCCESS: https://github.com/Shwetankjais/BreatheWise/actions/runs/45250542048 at f7e4a9c. Locked clean setup, standard checks, all 12 PostgreSQL 17 integration cases passed (including two simultaneous alert workers creating exactly one event), backend wheel built. Actual CI logs inspected. These are synthetic-input integration tests, not live monitoring/model verification.
+- Earlier CI SUCCESS: https://github.com/Shwetankjais/BreatheWise/actions/runs/45250165492 at 4fd6105 (original 9 PostgreSQL cases).
+- SQLite Alembic through 0002 plus alembic check: no ORM drift. Demo seed first inserted 1 then 0; normalized source JSON and original-unit Parquet created. Mixed-mode DB import, unit-normalization overflow and conflicting records refused; zeros/extremes preserved.
+- Both supplied model SHA256 hashes match MODEL_STATIC_AUDIT.json. No joblib deserialization, feature parity, target inversion or operational inference claimed.
+- Real HTTP smoke on isolated synthetic demo DB passed: health 200, partial readiness 503, imported demo capability scope, disabled model 503, anonymous identity 401, bearer identity 200, persisted place create/delete, private session file mode 0600. Child API stopped afterward.
+- Frontend owner-ready source compiles/builds and 12 unit tests pass locally, but the six scientific/integration corrections below remain open. No browser/accessibility/mobile acceptance or full-stack real-data workflow verified. make test-e2e exits unavailable.
+- Local Docker daemon socket absent and app launch not available; CI supplied actual PostgreSQL verification. Known nonfatal upstream Starlette httpx TestClient deprecation warning retained.
 
 ## Gate B: precise missing inputs
-User confirmed on 24 November 2026 that teammate supporting materials have not arrived. Do not ask again until supplied. Needed: (1) original HyperlocalAQPipeline class and exact feature/inference builder with helpers; (2) compatible requirements/lockfile and runnable inference example; (3) complete station/issue-time/horizon feature rows with expected final predictions, target inversion, units and tolerance; (4) accessible observation/driver forecast archives, station registry and evaluation predictions/metrics with split dates. Both binaries are already present. Model inference stays explicitly unavailable.
-
-## Coordination and next work
-Antigravity handoff still NOT_STARTED when inspected; no direct communication or external-agent launch claimed. Independent frontend source may proceed immediately. Consume generated contracts and report exact ready paths and dependency requests. No pause inferred. No branch switch/merge/shared-source rewrite until acknowledged scoped pause.
-Next independent task: canonical observation import, stations/latest/history with cutoff/unit QA; opaque session auth and tested ownership, then alert worker.
-Git status: initial foundation commit/push in progress; exact verified SHA will be reported after sync.
-
-## Active slice 2 / frontend integration notice
-Foundation remote verified at 4e7baa758316da482938b2b6ccda1534ad1224dc on feat/foundation. Antigravity source is appearing; it is preserved and remains unstaged until exact ready paths/checks are published. No pause inferred.
-Additive contract 1.1.0 is being generated: stations/latest/history, account places/preferences and in-app observation alerts. Original 1.0.0 is frozen in commit 4e7baa7. Consume actual generated Envelope types ({meta,data}); error envelope is {meta,error}; capabilities use named feature objects with supported/method/requirements_missing/supported_scope. No verified model horizons/pollutants.
-Integration review request for Antigravity: replace provisional API types with generated contracts; default to actual API unavailable/empty states, make demo explicit; do not imply example forecasts are validated/evaluated, derive sensitivity factors from invented model splits, or display arbitrary AQI without averaging/completeness. Final owner-ready paths will be reviewed before commit. This is a dependency/content note, not a source-edit handoff or pause.
-15 backend tests currently pass on isolated synthetic SQLite data. PostgreSQL daemon unavailable; open -a Docker failed to locate app despite CLI path. No PostgreSQL success claimed. Canonical import/demo commands under verification; model remains disabled per user's explicit confirmation.
+User confirmed teammate materials have not arrived; do not ask again until supplied. Required: (1) original HyperlocalAQPipeline class and exact feature/inference builder with helpers; (2) compatible requirements/lockfile and runnable inference example; (3) complete station/issue-time/horizon feature rows plus expected final predictions, target inversion, units and tolerance; (4) accessible observations, driver forecast archives with issue-time availability, station registry, and evaluation predictions/metrics with split dates. Both binaries are already present. Inference remains explicitly unavailable per user instruction. No fabricated features, predictions or evaluation metrics.
 
 ## FRONTEND_SLICE_READY review — changes requested (not accepted)
 Read Antigravity's published ready paths. This is NOT a merge/integration pause acknowledgment. Keep source ownership with Antigravity; no frontend source edited by Codex.
@@ -42,13 +38,6 @@ Read Antigravity's published ready paths. This is NOT a merge/integration pause 
 6. docs/UI_IMPLEMENTATION.md and Antigravity handoff acceptance claims AC01–AC15 are UI-only/demo and do not establish actual model/data/clinical/browser evidence. Correct traceability to distinguish implemented views from accepted workflows. No reviewed clinical guidance, full trajectory or model split/evaluation was provided.
 Request Antigravity to implement these owned corrections, then republish exact ready paths/checks for integration. Codex will continue safe backend work. User/orchestrator relay is required if Antigravity is no longer actively reading handoffs; no automatic messaging assumed.
 
-## Backend slice 2 verified checkpoint
-AC01/05/06/08/09/10/13 partial backend evidence; no full product acceptance claimed. Contract 1.1.0 generated. Implemented paths: apps/api canonical ingestion/repositories/routes/auth/alerts/schemas, Alembic 0002, scripts/data_cli.py/provision_session.py/evaluate_alerts.py, generated packages/contracts (including one synthetic demo import), Makefile test-postgres and .github/workflows/backend.yml, shared run/evidence docs.
-Checks: make check passed (16 Python tests, Ruff lint/format, contract drift/TS and frontend typecheck); make test-integration passed 9 synthetic migrated SQLite cases; both model hashes match; demo migrations/check match schema; seed repeated inserted 1 then 0 and generated source JSON/Parquet; backend wheel builds; owner-ready frontend build and 12 unit tests pass but review remains rejected for the six concrete items above. No browser/real model/provider/PostgreSQL verification claimed yet. In-app alerts only; trusted administrator bearer provisioning only, no public signup or email.
-Added make test-postgres and CI PostgreSQL 17 service to run the same 9 integration cases in isolated schemas; result pending actual remote run. Next steps: inspect CI and fix backend failures, integrate corrected frontend once owner republishes readiness, and resume Gate B only when teammate materials arrive. Still no branch switches/shared frontend writes performed.
 
-
-## Latest remote evidence and hardening
-4fd6105837a9b1863773cf7eb354fe96377c786c pushed and remote verified. GitHub Actions https://github.com/Shwetankjais/BreatheWise/actions/runs/45250165492 completed SUCCESS: locked setup/checks, 9 PostgreSQL 17 schema/API persistence cases and backend wheel. Local Docker still unavailable; remote verification is actual PostgreSQL evidence, distinct from fixture data/provider evidence.
-Actual HTTP smoke also passed on the isolated synthetic demo DB: process health/readiness, capability scope, disabled forecast, bearer authentication, persisted place create/delete, session file mode 0600. Child process shut down. No real monitoring/model/provider/browser claim.
-Hardening checkpoint adds mixed-mode database refusal, post-conversion overflow validation, a true new-observation cooldown test and a PostgreSQL-only concurrent-worker test. Local make check: 18 passed, 1 PostgreSQL-only race test skipped; lint/format/generated contracts/frontend TS passed. Expanded PostgreSQL CI pending push/run. No user/co-agent source edits staged. Exact six frontend changes requested remain unresolved; Antigravity has not republished readiness.
+## Dependencies and next action for orchestrator
+Antigravity must resume its owned six corrections and republish exact stable ready paths/checks. User relay requested; no automatic contact/background supervision claimed. No scoped branch/rewrite pause acknowledged; do not infer one from generic ready status. Continue on feat/foundation; integrate corrected owner paths and coordinate browser verification before claiming FRONTEND_READY or merging main. Original model/data/evaluation gate remains pending actual materials. Routes/spatial estimation, complete activity trajectory, population coverage and explanation/evaluation evidence remain unfinished; capability errors are not feature delivery. Full acceptance matrix: SUBMISSION.md.

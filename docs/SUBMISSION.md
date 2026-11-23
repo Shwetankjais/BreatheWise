@@ -12,7 +12,7 @@ Status: incomplete product; backend/API checkpoints delivered. Model/data/provid
 | Backend wheel build | breathewise-0.1.0-py3-none-any.whl built under ignored work/dist |
 | Frontend typecheck/build | Passed on owner-ready source; review still requires corrections |
 | Frontend unit tests | 12 passed in 3 files; tests do not establish model/scientific correctness |
-| PostgreSQL | GitHub Actions run 45250165492 passed 9 PostgreSQL 17 integration cases at 4fd6105; local daemon remains unavailable; added concurrency/hardening cases await next CI |
+| PostgreSQL | GitHub Actions run 45250542048 passed all 12 PostgreSQL 17 cases at f7e4a9c, including concurrent alert workers; local daemon unavailable |
 | Browser/e2e | Not performed; corrected frontend and coordination required |
 
 | Acceptance | Evidence and remaining gate |
@@ -26,7 +26,7 @@ Status: incomplete product; backend/API checkpoints delivered. Model/data/provid
 | AC07 | Population extent/epoch absent; unfinished |
 | AC08 | Structured capabilities/errors, freshness, mode/replay labels, cutoff tests; frontend automatic fallback rejected in review |
 | AC09 | Persisted opaque sessions/places/preferences, cross-user and expiry API tests; production DB and browser auth flow pending |
-| AC10 | In-app observation worker, freshness/cooldown/idempotency/ownership tests; new PostgreSQL concurrent-worker test awaiting CI; browser verification pending; email/forecast alerts unavailable |
+| AC10 | In-app observation worker, freshness/cooldown/idempotency/ownership tests; PostgreSQL concurrent-worker test passed in CI; browser verification pending; email/forecast alerts unavailable |
 | AC11 | EVALUATION_UNAVAILABLE; actual evaluation/baseline/split evidence absent |
 | AC12 | Frontend compiles/tests; no accepted accessibility/responsive/browser evidence |
 | AC13 | Locked setup/scripts/contracts/package verified locally; PostgreSQL/clean full-stack real setup open |
@@ -40,3 +40,6 @@ Official references used for implementation: [FastAPI error handlers](https://fa
 Post-foundation real HTTP smoke passed using an explicitly labeled synthetic demo database: health 200, partial readiness 503, actual imported scope, disabled forecast 503, anonymous account 401, authenticated account 200, persisted saved-place create/delete and token-file permissions 0600. The child API process was stopped afterward; no persistent server/deployment claimed.
 
 Hardening adds refusal of mixed-mode imports, rejection of nonfinite normalized units, a distinct-observation cooldown regression, and a PostgreSQL-only two-worker race test. Original PostgreSQL CI evidence: https://github.com/Shwetankjais/BreatheWise/actions/runs/45250165492 (success). Later run status is recorded at checkpoint rather than assumed.
+
+
+Final code checkpoint: f7e4a9ce1e06f9499784235970aaa76b41eb36ae, remote verified. [Expanded CI run](https://github.com/Shwetankjais/BreatheWise/actions/runs/45250542048) completed success: 18 standard cases passed and 1 PostgreSQL-only case skipped in SQLite, then all 12 PostgreSQL integration cases passed with no skips, wheel packaged. The source tree is unchanged by the following evidence-only documentation commit. Frontend owner files remain local/untracked pending corrections; no main merge/deployment or real model/browser success.
