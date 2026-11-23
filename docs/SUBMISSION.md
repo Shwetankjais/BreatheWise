@@ -1,41 +1,40 @@
 # Verification and checkpoint evidence — 24 November 2026
 
-Status: incomplete product; backend/API checkpoints delivered. Model/data/provider and frontend integration gates remain open. Branch feat/foundation. Foundation commit 4e7baa758316da482938b2b6ccda1534ad1224dc pushed and remote verified; later checkpoints are recorded in Git and Codex handoff. No merge to main or deployment claimed.
+Status: incomplete product; real-observation backend and native diagnostic milestones delivered on feat/foundation. No operational model inference, main merge or deployment. Current code checkpoint 4e6ccf54c0af54db763a237940c4e24887fe51ce pushed; [CI45291003341](https://github.com/Shwetankjais/BreatheWise/actions/runs/45291003341) succeeded. Earlier checkpoint history is retained after the current evidence.
 
 | Check | Actual result |
 | --- | --- |
-| make check | Ruff lint/format, Python tests, contract drift/types and frontend TS passed; 18 passed, 1 PostgreSQL-only test skipped locally |
-| make test-integration | 11 isolated SQLite/Alembic/API tests passed, 1 PostgreSQL-only concurrency case skipped locally |
-| SQLite Alembic upgrade head + check | Through 0002, no ORM schema drift |
-| Demo seed twice | First inserted 1 observation, second inserted 0; explicit DATA_MODE=demo; JSON/Parquet archives generated |
-| make audit-model | Both SHA256 hashes match supplied audit; no deserialization, feature parity or inference |
-| Backend wheel build | breathewise-0.1.0-py3-none-any.whl built under ignored work/dist |
-| Frontend typecheck/build | Passed on owner-ready source; review still requires corrections |
-| Frontend unit tests | 12 passed in 3 files; tests do not establish model/scientific correctness |
-| PostgreSQL | GitHub Actions run 45250542048 passed all 12 PostgreSQL 17 cases at f7e4a9c, including concurrent alert workers; local daemon unavailable |
-| Browser/e2e | Not performed; corrected frontend and coordination required |
+| make check | 46 passed, 1 PostgreSQL-only local skip; Ruff, generated 1.1.0 contract drift/types and frontend TS passed |
+| Native diagnostics | Both artifact hashes preserved; identical native booster hash, 75 features, 1105 trees; 2 isolated mechanics tests passed; no wrapper/golden parity |
+| Migration/worker | Through 0003; safe retry/overlap controls, persisted outcomes; demo repeated intake inserted 1 then 0 |
+| Real provider | OpenAQ authenticated locally; 70 actual Anand Vihar PM2.5 hours cached; latest 98 µg/m³ at 24 Nov 03:00 IST was stale/partial; source flags retained |
+| Real API/browser | Stations/latest/history 200; history 70 valid/3 missing of 73; forecast/evaluation 503. Desktop/mobile display checks passed; DATA_EVIDENCE.json |
+| Account/error/demo browser | 8 desktop/mobile/reduced-motion cases passed against isolated synthetic DB: HTTP errors, empty data, session/place reload and ownership, explicit demo |
+| Frontend unit/build | 18 owner unit tests and production build passed; targeted scientific/geographic owner corrections remain open; source not committed |
+| PostgreSQL/CI | [CI45291003341](https://github.com/Shwetankjais/BreatheWise/actions/runs/45291003341) at 4e6ccf5 succeeded: 46 standard + 1 default skip, 18 PostgreSQL, 2 native mechanics, wheel; logs inspected |
 
 | Acceptance | Evidence and remaining gate |
 | --- | --- |
-| AC01 | Canonical station/latest APIs and synthetic tests; no actual station dataset/provider or accepted browser integration |
-| AC02 | Explicit model unavailable and unsupported horizon/pollutant checks; original source/environment/golden/data missing |
-| AC03 | Model-unavailable hotspot response only; ranking unfinished |
-| AC04 | TRAJECTORY_UNAVAILABLE; full planner unfinished |
-| AC05 | Sourced WHO general facts with version/review scope; no clinical review or category-specific guidance; browser integration pending |
-| AC06 | Station hourly history, valid/missing counts and issue-time leakage tests; city aggregation/actual-data EDA unfinished |
-| AC07 | Population extent/epoch absent; unfinished |
-| AC08 | Structured capabilities/errors, freshness, mode/replay labels, cutoff tests; frontend automatic fallback rejected in review |
-| AC09 | Persisted opaque sessions/places/preferences, cross-user and expiry API tests; production DB and browser auth flow pending |
-| AC10 | In-app observation worker, freshness/cooldown/idempotency/ownership tests; PostgreSQL concurrent-worker test passed in CI; browser verification pending; email/forecast alerts unavailable |
-| AC11 | EVALUATION_UNAVAILABLE; actual evaluation/baseline/split evidence absent |
-| AC12 | Frontend compiles/tests; no accepted accessibility/responsive/browser evidence |
-| AC13 | Locked setup/scripts/contracts/package verified locally; PostgreSQL/clean full-stack real setup open |
-| AC14–AC18 | Extensions remain gated on routing/spatial/model/POI/population/explanation evidence; not delivered |
+| AC01 | One real station/latest API and desktop/mobile slice; broader data/geography/frontend review incomplete |
+| AC02 | Native diagnostics work; original feature generation/units/anchors, golden output and held-out validation missing; public forecast unavailable |
+| AC03–AC04 | Hotspot forecasts and full trajectory planner unavailable |
+| AC05 | WHO-sourced general facts; engineering review only, no clinical/category guidance acceptance |
+| AC06 | Actual station hourly history with units/flags and missing counts; original preprocessing and city aggregation/EDA unfinished |
+| AC07 | Population extent/epoch and raster extraction missing |
+| AC08 | Failure/empty/demo behavior browser-tested; scientific copy, mobile mode, pollutant/map review still open |
+| AC09 | Server-owned opaque sessions/places/preferences and ownership tests; place persistence across refresh browser-tested; public signup/OIDC absent |
+| AC10 | In-app observed alerts with freshness/cooldown/deduplication; PostgreSQL concurrency verified; email/forecast alerts unavailable |
+| AC11 | Evaluation unavailable; no invented metrics or calibrated intervals |
+| AC12 | Desktop/mobile behavioral evidence exists; full accessibility/cartographic/content acceptance incomplete |
+| AC13 | Locked tooling, CI, contract and ingestion workflows; local credential/cache not supplied by a clone; no deployed scheduler |
+| AC14–AC18 | Routing/spatial/model/POI/population/explanation extensions remain unfinished |
 
-Frontend owner-ready slice is held from Git because auto fixture fallback, fabricated scenario coefficients, arbitrary forecast/evaluation/population and unsupported AQI/planner claims conflict with scientific requirements. See exact changes requested in Codex handoff. No ownership override or pause inferred. User confirmed teammate files have not arrived; no repeated model-file request is needed. Continue with original pipeline/features, compatible environment, golden station/issue/horizon inputs/outputs/units/tolerance, source datasets/forecast availability provenance and evaluation splits when supplied.
+Frontend ready paths remain held from Git pending the targeted map/wind/radius/attribution, hero/data-mode/quality copy, pollutant selection, zero threshold, demo hotspot and AQI issues in docs/handoffs/codex.md. Source ownership remains with Antigravity. Source values for lat/lon/PM2.5 are verified; all 75 model-feature source/formula/units/time/history/availability statuses are in FEATURE_PROVENANCE.json/md. Missing teammate feature source/environment/golden/evaluation and issue-time driver semantics still block operational inference; no repeated key or model-binary request is needed.
 
 Official references used for implementation: [FastAPI error handlers](https://fastapi.tiangolo.com/tutorial/handling-errors/), [SQLAlchemy 2 sessions](https://docs.sqlalchemy.org/en/20/orm/session_basics.html), [OpenAPI TypeScript CLI](https://openapi-ts.dev/cli). Educational content source: [WHO outdoor air pollution facts](https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health), accessed 24 November 2026; concise paraphrases with no individual disease/causal claims.
 
+
+## Historical checkpoints (superseded where current evidence differs)
 
 Post-foundation real HTTP smoke passed using an explicitly labeled synthetic demo database: health 200, partial readiness 503, actual imported scope, disabled forecast 503, anonymous account 401, authenticated account 200, persisted saved-place create/delete and token-file permissions 0600. The child API process was stopped afterward; no persistent server/deployment claimed.
 
@@ -61,3 +60,7 @@ Verification: make check passed with 43 backend cases and 1 local PostgreSQL-onl
 OpenAQ key absent in local env and no real observation archive found in the project. Key/archive request is pending; do not request either already-present model binary again. Source-first verification and city/station/driver eligibility remain required. Current tested contract remains 1.1.0; no main merge/deployment.
 
 Provider/feature/worker CI: [run 45288748827](https://github.com/Shwetankjais/BreatheWise/actions/runs/45288748827) at 435d5b6bf581c844830c74ae2d795b9d82bf3c38 is SUCCESS. Logs inspected: 43 backend cases passed, 1 default-run PostgreSQL-only skip; all 17 PostgreSQL integration cases passed; 2 isolated native mechanics tests passed; wheel built. Eight browser journeys are separate local Chromium evidence on the uncommitted owner snapshot, not CI or real-provider evidence. A further readiness guard rejects future-dated as well as stale provider success records; its focused test passes locally and will be included in the next CI run.
+
+
+## Real observation milestone
+See DATA_EVIDENCE.json for exact measured/available timestamps, source IDs and archive hash. Stored actual data, keys, native model text and numerical probe tensors remain ignored. Real browser checks were read-only on the cache; eight broader journeys used synthetic inputs. Readiness was database/provider true but model false at verification; provider freshness expires without another run. Existing pipeline source, original units/time anchors/missingness, issue-time weather/CAMS/FIRMS inputs and golden/evaluation evidence remain missing. No native diagnostic score is presented as a city forecast.
