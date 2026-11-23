@@ -1,6 +1,7 @@
 """Bounded OpenAQ v3 hourly adapter; keys stay in headers, publication is not guessed."""
 
 import math
+import re
 from datetime import UTC, datetime, timedelta
 
 import httpx
@@ -22,6 +23,21 @@ def parse_time(value):
     if parsed.tzinfo is None:
         raise ValueError("Provider timestamp has no timezone")
     return utc(parsed)
+
+
+def delhi_assignment(location):
+    locality = (location.get("locality") or "").strip().casefold()
+    if locality in {"delhi", "new delhi"}:
+        return "provider_locality"
+    if (
+        not locality
+        and location.get("owner", {}).get("name") == "Delhi Pollution Control Committee"
+        and re.search(
+            r",\s*(?:New\s+)?Delhi\s*-\s*DPCC\s*$", location.get("name") or "", re.IGNORECASE
+        )
+    ):
+        return "explicit_provider_station_name_and_DPCC_owner_not_boundary_GIS"
+    raise ProviderError("OPENAQ_DELHI_LOCALITY_UNVERIFIED")
 
 
 class OpenAQ:
@@ -68,7 +84,7 @@ class OpenAQ:
         except (KeyError, TypeError, ValueError, AttributeError):
             raise ProviderError("OPENAQ_SCHEMA_MISMATCH") from None
 
-    def _fetch_hourly(self, *, location_id, start, end, mode, received_at=None):
+    def _fetch_hourly(self, *, location_id, start, end, mode, received_at=None, sensor_id=None):
         if (
             mode not in {"live", "historical_replay"}
             or not 0 < (end - start).total_seconds() <= 7 * 86400
@@ -90,15 +106,16 @@ class OpenAQ:
             or location.get("isMonitor") is not True
         ):
             raise ProviderError("OPENAQ_STATION_INELIGIBLE")
-        if (location.get("locality") or "").strip().casefold() not in {"delhi", "new delhi"}:
-            raise ProviderError("OPENAQ_DELHI_LOCALITY_UNVERIFIED")
-        if location.get("timezone") != "Asia/Kolkata" or not location.get("licenses"):
-            raise ProviderError("OPENAQ_TIMEZONE_OR_LICENSE_MISSING")
+        city_method = delhi_assignment(location)
+        if location.get("timezone") != "Asia/Kolkata":
+            raise ProviderError("OPENAQ_TIMEZONE_UNSUPPORTED")
         sensors = [
             sensor
             for sensor in location.get("sensors", [])
             if sensor.get("parameter", {}).get("name") == "pm25"
         ]
+        if sensor_id is not None:
+            sensors = [sensor for sensor in sensors if sensor.get("id") == sensor_id]
         if len(sensors) != 1:
             raise ProviderError("OPENAQ_PM25_SENSOR_MISSING_OR_AMBIGUOUS")
         sensor = sensors[0]
@@ -158,6 +175,10 @@ class OpenAQ:
                     "availability_first_seen_at_fetch",
                     "original_model_preprocessing_unverified",
                 ]
+                if not location.get("licenses"):
+                    flags.append("provider_license_metadata_unavailable")
+                if city_method != "provider_locality":
+                    flags.append("city_from_source_station_name_and_owner")
                 if not coverage:
                     flags.append("provider_coverage_unknown")
                 elif coverage.get("percentCoverage", 0) < 100:
@@ -218,4 +239,6 @@ class OpenAQ:
             "location_id": location_id,
             "sensor_id": sensor["id"],
             "actual_provider_fetch": True,
+            "city_assignment_method": city_method,
+            "license_metadata_present": bool(location.get("licenses")),
         }

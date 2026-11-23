@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--provider", choices=["none", "canonical", "openaq"], default="none")
     parser.add_argument("--input", type=Path)
     parser.add_argument("--location-id", type=int)
+    parser.add_argument("--sensor-id", type=int)
     parser.add_argument("--lookback-hours", type=int, default=72)
     parser.add_argument("--interval-seconds", type=int, default=0)
     args = parser.parse_args()
@@ -52,6 +53,7 @@ def main():
             end = datetime.now(UTC)
             batch, details = adapter.fetch_hourly(
                 location_id=args.location_id,
+                sensor_id=args.sensor_id,
                 start=end - timedelta(hours=args.lookback_hours),
                 end=end,
                 mode=get_settings().data_mode,

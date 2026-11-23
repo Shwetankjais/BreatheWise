@@ -3,7 +3,7 @@
 import json
 
 import httpx
-from breathewise.adapters.openaq import OpenAQ, ProviderError
+from breathewise.adapters.openaq import OpenAQ, ProviderError, delhi_assignment
 from breathewise.core.config import get_settings
 
 try:
@@ -22,20 +22,25 @@ try:
         candidates = []
         for row in body["results"]:
             if (
-                row.get("country", {}).get("code") == "IN"
-                and (row.get("locality") or "").strip().casefold() in {"delhi", "new delhi"}
-                and row.get("isMobile") is False
-                and row.get("isMonitor") is True
+                row.get("country", {}).get("code") != "IN"
+                or row.get("isMobile") is not False
+                or row.get("isMonitor") is not True
             ):
-                candidates.append(
-                    {
-                        "location_id": row["id"],
-                        "name": row.get("name"),
-                        "locality": row.get("locality"),
-                        "source": "OpenAQ provider metadata",
-                        "observation_and_model_eligibility": "unverified",
-                    }
-                )
+                continue
+            try:
+                method = delhi_assignment(row)
+            except ProviderError:
+                continue
+            candidates.append(
+                {
+                    "location_id": row["id"],
+                    "name": row.get("name"),
+                    "locality": row.get("locality"),
+                    "source": "OpenAQ provider metadata",
+                    "city_assignment_method": method,
+                    "observation_and_model_eligibility": "unverified",
+                }
+            )
         print(
             json.dumps(
                 {

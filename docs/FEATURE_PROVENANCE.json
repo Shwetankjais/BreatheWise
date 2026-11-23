@@ -14,7 +14,8 @@
     "synthetic_numeric_execution": "verified mechanics only",
     "reconstructed_feature_generation": "experimental observation-derived candidates only; not production compatible",
     "operational_raw_provider_inference": "unavailable",
-    "independent_forecasting_validation": "unavailable"
+    "independent_forecasting_validation": "unavailable",
+    "real_observation_ingestion": "verified OpenAQ/CPCB Anand Vihar 235 PM2.5 sensor 12235610; 70 hourly records; stale/partial/source flags retained; see DATA_EVIDENCE.json"
   },
   "features": [
     {
@@ -22,7 +23,7 @@
       "feature": "lat",
       "metadata_status": "recovered",
       "semantic_status": "recovered",
-      "source_status": "recovered",
+      "source_status": "verified_from_source",
       "formula_status": "missing",
       "model_unit_status": "missing",
       "candidate_source": "embedded stations_lookup and independently verified provider station registry",
@@ -35,14 +36,23 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "source_evidence": {
+        "report": "docs/DATA_EVIDENCE.json",
+        "provider": "OpenAQ v3 / CPCB",
+        "location_id": 235,
+        "sensor_id": null,
+        "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
+      },
+      "source_unit_status": "verified_from_source",
+      "source_unit": "WGS84 degrees"
     },
     {
       "position": 1,
       "feature": "lon",
       "metadata_status": "recovered",
       "semantic_status": "recovered",
-      "source_status": "recovered",
+      "source_status": "verified_from_source",
       "formula_status": "missing",
       "model_unit_status": "missing",
       "candidate_source": "embedded stations_lookup and independently verified provider station registry",
@@ -55,7 +65,16 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "source_evidence": {
+        "report": "docs/DATA_EVIDENCE.json",
+        "provider": "OpenAQ v3 / CPCB",
+        "location_id": 235,
+        "sensor_id": null,
+        "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
+      },
+      "source_unit_status": "verified_from_source",
+      "source_unit": "WGS84 degrees"
     },
     {
       "position": 2,
@@ -142,7 +161,7 @@
       "feature": "pm25",
       "metadata_status": "recovered",
       "semantic_status": "missing",
-      "source_status": "missing",
+      "source_status": "verified_from_source",
       "formula_status": "missing",
       "model_unit_status": "missing",
       "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
@@ -155,7 +174,16 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "source_evidence": {
+        "report": "docs/DATA_EVIDENCE.json",
+        "provider": "OpenAQ v3 / CPCB",
+        "location_id": 235,
+        "sensor_id": 12235610,
+        "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
+      },
+      "source_unit_status": "verified_from_source",
+      "source_unit": "\u00b5g/m\u00b3"
     },
     {
       "position": 7,
@@ -1518,7 +1546,6 @@
   ],
   "project_data_inventory": {
     "scope": "attached BreatheWise project only; data/, artifacts/, work/, docs/",
-    "actual_observation_tables_found": false,
     "cached_complete_75_feature_rows_found": false,
     "found_data": [
       "explicit synthetic demo observation JSON/Parquet/database",
@@ -1526,6 +1553,9 @@
       "embedded artifact-only station registry and spatial tree"
     ],
     "original_training_feature_source_found": false,
-    "unrelated_personal_folders_scanned": false
+    "unrelated_personal_folders_scanned": false,
+    "initial_actual_observation_tables_found": false,
+    "actual_observation_cache_now_available": true,
+    "actual_source_evidence": "docs/DATA_EVIDENCE.json"
   }
 }

@@ -242,3 +242,83 @@ def test_readiness_requires_recent_success_not_key_or_future_timestamp(backend, 
         with Session(engine()) as db, db.begin():
             db.get(IngestionRun, "readiness-fixture").finished_at = finished
         assert client.get("/api/v1/ready").json()["data"]["providers"] is False
+
+
+def test_delhi_assignment_uses_explicit_owner_and_name_not_arbitrary_city_guess():
+    from breathewise.adapters.openaq import delhi_assignment
+
+    record = {
+        "locality": None,
+        "owner": {"name": "Delhi Pollution Control Committee"},
+        "name": "Anand Vihar, New Delhi - DPCC",
+    }
+    assert (
+        delhi_assignment(record) == "explicit_provider_station_name_and_DPCC_owner_not_boundary_GIS"
+    )
+    record["name"] = "Ambiguous station name"
+    with pytest.raises(ProviderError, match="LOCALITY_UNVERIFIED"):
+        delhi_assignment(record)
+
+
+def test_sensor_selection_is_explicit_and_unknown_license_is_flagged():
+    def handle(request):
+        if "/locations/" in request.url.path:
+            return httpx.Response(
+                200,
+                json={
+                    "results": [
+                        {
+                            "id": 235,
+                            "name": "Anand Vihar, New Delhi - DPCC",
+                            "country": {"code": "IN"},
+                            "locality": None,
+                            "owner": {"name": "Delhi Pollution Control Committee"},
+                            "timezone": "Asia/Kolkata",
+                            "isMonitor": True,
+                            "isMobile": False,
+                            "coordinates": {"latitude": 28.646835, "longitude": 77.316032},
+                            "provider": {"name": "synthetic fixture"},
+                            "licenses": None,
+                            "sensors": [
+                                {"id": 1, "parameter": {"name": "pm25"}},
+                                {"id": 2, "parameter": {"name": "pm25"}},
+                            ],
+                        }
+                    ]
+                },
+            )
+        assert request.url.path == "/v3/sensors/2/hours"
+        return httpx.Response(
+            200,
+            json={
+                "results": [
+                    {
+                        "value": 42,
+                        "flagInfo": {"hasFlags": False},
+                        "parameter": {"name": "pm25", "units": "µg/m³"},
+                        "period": {
+                            "datetimeFrom": {"utc": "2026-11-19T23:30:00Z"},
+                            "datetimeTo": {"utc": "2026-11-20T00:30:00Z"},
+                        },
+                        "coverage": {"percentCoverage": 80},
+                    }
+                ]
+            },
+        )
+
+    with httpx.Client(transport=httpx.MockTransport(handle)) as client:
+        adapter = OpenAQ("test-key-not-real", client)
+        with pytest.raises(ProviderError, match="AMBIGUOUS"):
+            fetch(adapter)
+        batch, details = adapter.fetch_hourly(
+            location_id=235,
+            sensor_id=2,
+            start=datetime(2026, 11, 19, tzinfo=UTC),
+            end=datetime(2026, 11, 20, 2, tzinfo=UTC),
+            mode="live",
+            received_at=datetime(2026, 11, 20, 3, tzinfo=UTC),
+        )
+        assert details["sensor_id"] == 2
+        assert details["license_metadata_present"] is False
+        assert "provider_license_metadata_unavailable" in batch.observations[0].quality_flags
+        assert "city_from_source_station_name_and_owner" in batch.observations[0].quality_flags

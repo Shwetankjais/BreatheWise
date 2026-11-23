@@ -1,0 +1,71 @@
+{
+  "data_mode": "live",
+  "provider": "OpenAQ v3",
+  "upstream": "CPCB",
+  "owner": "Delhi Pollution Control Committee",
+  "location_id": 235,
+  "sensor_id": 12235610,
+  "station_name": "Anand Vihar, New Delhi - DPCC",
+  "coordinates": {
+    "latitude": 28.646835,
+    "longitude": 77.316032
+  },
+  "station_source": "OpenAQ / CPCB; https://api.openaq.org/v3/locations/235",
+  "observation_count": 70,
+  "latest": {
+    "value": 98.0,
+    "unit": "\u00b5g/m\u00b3",
+    "measured_at": "2026-11-23T21:30:00+00:00",
+    "available_at": "2026-11-23T23:34:46.264325+00:00",
+    "quality_flags": [
+      "availability_first_seen_at_fetch",
+      "city_from_source_station_name_and_owner",
+      "original_model_preprocessing_unverified",
+      "provider_license_metadata_unavailable",
+      "provider_partial_hour"
+    ]
+  },
+  "run_id": "d4458a2d-0c78-4f34-8380-a0d674792ff3",
+  "provider_archive_sha256": "582a6c7f49263c8b55dd936844890ce9fbc8c97b1717bc32ef56a3e517ea81fe",
+  "city_assignment_method": "explicit_provider_station_name_and_DPCC_owner_not_boundary_GIS",
+  "license_metadata_present": false,
+  "source_feature_semantics_verified": false,
+  "model_forecast_ready": false,
+  "api_verification": {
+    "station_list_http": 200,
+    "latest_http": 200,
+    "history_http": 200,
+    "history_valid_count": 70,
+    "history_missing_count": 3,
+    "history_expected_count": 73,
+    "latest_stale": true,
+    "latest_observation_age_minutes": 126.2309973,
+    "forecast_http": 503,
+    "evaluation_http": 503,
+    "provider_ready": true,
+    "database_ready": true,
+    "model_ready": false
+  },
+  "verified_at": "2026-11-23T23:36:14.055262+00:00",
+  "browser_verification": [
+    {
+      "viewport": "desktop",
+      "actual_station_visible": true,
+      "actual_concentration_visible": true,
+      "model_unavailable_visible": true,
+      "data_mode": "live",
+      "synthetic_fallback": false,
+      "operational_forecast_verified": false
+    },
+    {
+      "viewport": "mobile",
+      "actual_station_visible": true,
+      "actual_concentration_visible": true,
+      "model_unavailable_visible": true,
+      "data_mode": "live",
+      "synthetic_fallback": false,
+      "operational_forecast_verified": false
+    }
+  ],
+  "government_location_corroboration": "https://www.dpcc.delhigovt.nic.in/uploads/news/edc30867ffd362e8500f2b1686b55eac.pdf"
+}
