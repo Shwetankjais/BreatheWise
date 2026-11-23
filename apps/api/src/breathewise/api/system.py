@@ -61,7 +61,7 @@ def ready(request: Request, response: Response):
                     and last.status in {"success", "partial"}
                     and last.details.get("actual_provider_fetch")
                     and last.finished_at
-                    and (datetime.now(UTC) - utc(last.finished_at)).total_seconds() <= 900
+                    and 0 <= (datetime.now(UTC) - utc(last.finished_at)).total_seconds() <= 900
                 )
         except SQLAlchemyError:
             pass

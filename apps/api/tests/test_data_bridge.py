@@ -212,3 +212,33 @@ def test_worker_does_not_retry_rate_limit_or_report_success(backend):
     assert sleeps == []
     assert events[0]["code"] == "OPENAQ_RATE_LIMITED"
     assert "alerts_created" in events[-1]
+
+
+@pytest.mark.integration
+def test_readiness_requires_recent_success_not_key_or_future_timestamp(backend, monkeypatch):
+    from breathewise.core.config import get_settings
+
+    client, *_ = backend
+    monkeypatch.setenv("OPENAQ_API_KEY", "test-only-placeholder")
+    get_settings.cache_clear()
+    assert client.get("/api/v1/ready").json()["data"]["providers"] is False
+    now = datetime.now(UTC)
+    with Session(engine()) as db, db.begin():
+        db.add(
+            IngestionRun(
+                id="readiness-fixture",
+                provider="openaq",
+                data_mode="demo",
+                status="success",
+                started_at=now,
+                finished_at=now,
+                details={"actual_provider_fetch": True},
+            )
+        )
+    response = client.get("/api/v1/ready")
+    assert response.status_code == 503  # Model still unavailable.
+    assert response.json()["data"]["providers"] is True
+    for finished in [now - timedelta(minutes=20), now + timedelta(minutes=20)]:
+        with Session(engine()) as db, db.begin():
+            db.get(IngestionRun, "readiness-fixture").finished_at = finished
+        assert client.get("/api/v1/ready").json()["data"]["providers"] is False
