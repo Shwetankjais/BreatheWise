@@ -166,3 +166,84 @@ def test_replay_requires_cutoff_and_is_explicit(backend, monkeypatch):
     data = client.get("/api/v1/stations/fixture/latest?issue_at=2026-11-20T02:00:00Z").json()
     assert data["meta"]["data_mode"] == "historical_replay"
     assert data["meta"]["replay_issue_at"] == "2026-11-20T02:00:00Z"
+
+
+def test_normalized_overflow_and_mixed_mode_imports_are_rejected(backend, monkeypatch):
+    from breathewise.core.config import get_settings
+
+    *_, batch = backend
+    overflow = batch.model_copy(deep=True)
+    overflow.observations[0].value = 1e308
+    with pytest.raises(ValueError, match="nonfinite"), Session(engine()) as db, db.begin():
+        import_batch(db, overflow)
+    mixed = batch.model_copy(deep=True)
+    mixed.data_mode = "live"
+    for row in mixed.stations:
+        row.data_mode = "live"
+    monkeypatch.setenv("DATA_MODE", "live")
+    get_settings.cache_clear()
+    with pytest.raises(ValueError, match="isolated database"), Session(engine()) as db, db.begin():
+        import_batch(db, mixed)
+
+
+def test_alert_cooldown_applies_to_new_observation_then_expires(backend):
+    client, first, *_ = backend
+    client.post(
+        "/api/v1/alert-rules",
+        headers=first,
+        json={
+            "station_id": "fixture",
+            "pollutant": "pm25",
+            "threshold": 100,
+            "cooldown_minutes": 60,
+        },
+    )
+    now = datetime(2026, 11, 20, 3, tzinfo=UTC)
+    with Session(engine()) as db, db.begin():
+        assert evaluate(db, now)["created"] == 1
+    with Session(engine()) as db, db.begin():
+        db.add(
+            Observation(
+                station_id="fixture",
+                pollutant="pm25",
+                measured_at=now,
+                available_at=now + timedelta(minutes=5),
+                value=300,
+                unit="µg/m³",
+                original_value=300,
+                original_unit="ug/m3",
+                source="test",
+                quality_flags=[],
+            )
+        )
+    with Session(engine()) as db, db.begin():
+        assert evaluate(db, now + timedelta(minutes=10))["created"] == 0
+    with Session(engine()) as db, db.begin():
+        assert evaluate(db, now + timedelta(minutes=61))["created"] == 1
+        assert db.scalar(select(func.count()).select_from(Notification)) == 2
+
+
+def test_postgres_concurrent_workers_create_only_one_event(backend):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+
+    if engine().dialect.name != "postgresql":
+        pytest.skip("PostgreSQL row-lock concurrency requires make test-postgres")
+    client, first, *_ = backend
+    client.post(
+        "/api/v1/alert-rules",
+        headers=first,
+        json={"station_id": "fixture", "pollutant": "pm25", "threshold": 100},
+    )
+    barrier = Barrier(2)
+
+    def run_worker():
+        with Session(engine()) as db, db.begin():
+            barrier.wait(timeout=10)
+            return evaluate(db, datetime(2026, 11, 20, 3, tzinfo=UTC))["created"]
+
+    with ThreadPoolExecutor(max_workers=2) as workers:
+        results = list(workers.map(lambda _: run_worker(), range(2)))
+    assert sorted(results) == [0, 1]
+    with Session(engine()) as db:
+        assert db.scalar(select(func.count()).select_from(Notification)) == 1

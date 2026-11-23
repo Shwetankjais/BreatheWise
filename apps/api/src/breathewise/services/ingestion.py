@@ -1,4 +1,5 @@
 import hashlib
+import math
 from datetime import UTC, datetime
 
 from breathewise.core.config import get_settings
@@ -12,6 +13,8 @@ from sqlalchemy.orm import Session
 def import_batch(db: Session, batch: ImportBatch) -> dict:
     if batch.data_mode != get_settings().data_mode:
         raise ValueError("Import data_mode must equal configured DATA_MODE")
+    if db.scalar(select(Station.id).where(Station.data_mode != batch.data_mode).limit(1)):
+        raise ValueError("Use an isolated database per data_mode; mixed-mode imports are refused")
     inserted = 0
     now = datetime.now(UTC)
     for row in batch.stations:
@@ -29,6 +32,8 @@ def import_batch(db: Session, batch: ImportBatch) -> dict:
         if utc(row.available_at) > now:
             raise ValueError("An observation cannot be available in the future")
         value = row.value * (1000 if row.unit == "mg/m3" else 1)
+        if not math.isfinite(value):
+            raise ValueError("Unit normalization produced a nonfinite concentration")
         values = dict(
             station_id=row.station_id,
             pollutant=row.pollutant.value,

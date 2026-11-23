@@ -2,6 +2,17 @@ name: Backend and contracts
 on:
   push:
     branches: ["feat/**", main]
+    paths:
+      - "apps/**"
+      - "scripts/**"
+      - "packages/contracts/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "package*.json"
+      - "Makefile"
+      - "alembic.ini"
+      - "compose.yaml"
+      - ".github/workflows/**"
   pull_request:
 permissions:
   contents: read
