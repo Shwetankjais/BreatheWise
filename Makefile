@@ -34,7 +34,7 @@ ingest:
 test-integration:
 	$(UV) pytest -q -m integration
 test-e2e:
-	@echo 'UNAVAILABLE: requires Antigravity FRONTEND_READY and coordinated browser journeys'; exit 2
+	PLAYWRIGHT_BROWSERS_PATH="$(CURDIR)/work/browsers" npm test --prefix tools/browser-tests
 
 test-postgres:
 	@test -n "$$BREATHEWISE_TEST_POSTGRES_URL" || (echo 'Set BREATHEWISE_TEST_POSTGRES_URL to a disposable PostgreSQL database with schema-create rights'; exit 2)
@@ -51,3 +51,12 @@ probe-model:
 	uv run --locked --project tools/model-diagnostics python scripts/model_diagnostics.py probe $(ARGS)
 check-model-diagnostics:
 	uv run --locked --project tools/model-diagnostics python scripts/model_diagnostics.py check $(ARGS)
+
+worker:
+	$(UV) python scripts/run_worker.py $(ARGS)
+feature-snapshot:
+	$(UV) python scripts/feature_snapshot.py $(ARGS)
+
+setup-browser-tests:
+	npm ci --prefix tools/browser-tests --no-audit --no-fund
+	PLAYWRIGHT_BROWSERS_PATH="$(CURDIR)/work/browsers" tools/browser-tests/node_modules/.bin/playwright install chromium

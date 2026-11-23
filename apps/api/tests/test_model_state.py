@@ -114,3 +114,31 @@ def test_diagnostics_refuse_unsupported_horizons_and_unknown_fields(input_schema
     payload["pretend_forecast_validated"] = True
     with pytest.raises(ValueError, match="exactly"):
         validate_input(payload, model)
+
+
+def test_diagnostic_explicit_nominal_units_are_checked(input_schema):
+    model, payload = input_schema
+    payload["feature_units"] = {"forecast_horizon_h": "minutes"}
+    with pytest.raises(ValueError, match="unit mismatch"):
+        validate_input(payload, model)
+    payload["feature_units"] = {"forecast_horizon_h": "h"}
+    assert validate_input(payload, model) == payload["rows"]
+
+
+def test_provenance_matrix_preserves_all_75_positions():
+    from breathewise.core.config import ROOT
+
+    audit = json.loads((ROOT / "docs/MODEL_STATIC_AUDIT.json").read_text())[
+        "zero_input_aq_weather_model.joblib"
+    ]
+    matrix = json.loads((ROOT / "docs/FEATURE_PROVENANCE.json").read_text())
+    assert len(matrix["features"]) == 75
+    assert [row["feature"] for row in matrix["features"]] == audit["features"]
+    assert [row["position"] for row in matrix["features"]] == list(range(75))
+    assert all(row["metadata_status"] == "recovered" for row in matrix["features"])
+    for row in matrix["features"]:
+        if row["source_status"] == "verified_from_source":
+            assert row.get("source_evidence"), (
+                "Verified source needs concrete evidence, not a candidate label"
+            )
+    assert matrix["readiness_states"]["operational_raw_provider_inference"] == "unavailable"

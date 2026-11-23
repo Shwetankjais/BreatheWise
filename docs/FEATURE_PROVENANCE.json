@@ -1,0 +1,1531 @@
+{
+  "feature_count": 75,
+  "order_source": "hash-verified serialized metadata + native feature_names",
+  "status_vocabulary": [
+    "recovered",
+    "verified_from_source",
+    "reconstructed_assumption",
+    "missing"
+  ],
+  "interpretation": "Metadata recovery is not source/formula/unit verification. Candidate formulas are documented possibilities, never production feature construction. No feature is silently filled.",
+  "readiness_states": {
+    "native_booster_loading": "verified locally from both artifacts",
+    "prediction_on_complete_caller_features": "adapter implemented; actual environmental feature rows not supplied",
+    "synthetic_numeric_execution": "verified mechanics only",
+    "reconstructed_feature_generation": "experimental observation-derived candidates only; not production compatible",
+    "operational_raw_provider_inference": "unavailable",
+    "independent_forecasting_validation": "unavailable"
+  },
+  "features": [
+    {
+      "position": 0,
+      "feature": "lat",
+      "metadata_status": "recovered",
+      "semantic_status": "recovered",
+      "source_status": "recovered",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "embedded stations_lookup and independently verified provider station registry",
+      "candidate_units": "WGS84 degrees",
+      "candidate_formula": "candidate direct registry coordinate; original assignment not recovered",
+      "required_history": "static registry",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "registry version must be effective by issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 1,
+      "feature": "lon",
+      "metadata_status": "recovered",
+      "semantic_status": "recovered",
+      "source_status": "recovered",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "embedded stations_lookup and independently verified provider station registry",
+      "candidate_units": "WGS84 degrees",
+      "candidate_formula": "candidate direct registry coordinate; original assignment not recovered",
+      "required_history": "static registry",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "registry version must be effective by issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 2,
+      "feature": "ghs_pop_exact",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "recovered",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "GHSL population raster/embedded population fields",
+      "candidate_units": "people (ratio dimensionless)",
+      "candidate_formula": "missing; _current suffix does not establish epoch or buffer method",
+      "required_history": "population epoch and extraction method",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "population epoch/projection/publication must precede issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 3,
+      "feature": "ghs_pop_1km",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "recovered",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "GHSL population raster/embedded population fields",
+      "candidate_units": "people (ratio dimensionless)",
+      "candidate_formula": "missing; _current suffix does not establish epoch or buffer method",
+      "required_history": "population epoch and extraction method",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "population epoch/projection/publication must precede issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 4,
+      "feature": "ghs_pop_3km",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "recovered",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "GHSL population raster/embedded population fields",
+      "candidate_units": "people (ratio dimensionless)",
+      "candidate_formula": "missing; _current suffix does not establish epoch or buffer method",
+      "required_history": "population epoch and extraction method",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "population epoch/projection/publication must precede issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 5,
+      "feature": "pop_density_ratio",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "GHSL population raster/embedded population fields",
+      "candidate_units": "people (ratio dimensionless)",
+      "candidate_formula": "missing; _current suffix does not establish epoch or buffer method",
+      "required_history": "population epoch and extraction method",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "population epoch/projection/publication must precede issue time",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 6,
+      "feature": "pm25",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 7,
+      "feature": "pm10",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 8,
+      "feature": "no2",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 9,
+      "feature": "so2",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 10,
+      "feature": "o3",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 11,
+      "feature": "co_ugm3",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical ground observation table, e.g. configured OpenAQ hours",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate latest known hourly concentration; original staleness/selection/QA unknown",
+      "required_history": "documented source hourly interval at issue cutoff",
+      "time_alignment": "preserve actual hour-ending UTC including IST half-hour phase",
+      "issue_time_availability": "observed available_at <= issue_at; API first-seen is conservative, not historical publication evidence",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 12,
+      "feature": "pm25_to_pm10_ratio",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 13,
+      "feature": "no2_to_co_ratio",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 14,
+      "feature": "pm25_lag_1h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 1h, known at issue; original anchor policy unknown",
+      "required_history": "exact 1 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 15,
+      "feature": "pm25_lag_3h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 3h, known at issue; original anchor policy unknown",
+      "required_history": "exact 3 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 16,
+      "feature": "pm25_lag_6h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 6h, known at issue; original anchor policy unknown",
+      "required_history": "exact 6 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 17,
+      "feature": "pm25_lag_12h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 12h, known at issue; original anchor policy unknown",
+      "required_history": "exact 12 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 18,
+      "feature": "pm25_lag_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 24h, known at issue; original anchor policy unknown",
+      "required_history": "exact 24 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 19,
+      "feature": "pm25_lag_48h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 observation history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate value at anchor - 48h, known at issue; original anchor policy unknown",
+      "required_history": "exact 48 hours before anchor; no nearest-time fill",
+      "time_alignment": "exact interval-ending timestamps, no interpolation",
+      "issue_time_availability": "both measured_at and available_at <= issue_at",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 20,
+      "feature": "pm25_diff_3h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate current - lag(3h); original signed/relative formula unknown",
+      "required_history": "anchor and exact 3h lag",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 21,
+      "feature": "pm25_diff_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "candidate current - lag(24h); original signed/relative formula unknown",
+      "required_history": "anchor and exact 24h lag",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 22,
+      "feature": "pm25_roll_mean_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "missing original endpoint, minimum completeness, ddof and reduction semantics",
+      "required_history": "24h plus exact closed/open window policy",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 23,
+      "feature": "pm25_roll_std_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "missing original endpoint, minimum completeness, ddof and reduction semantics",
+      "required_history": "24h plus exact closed/open window policy",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 24,
+      "feature": "pm25_roll_max_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "canonical PM2.5 history",
+      "candidate_units": "\u00b5g/m\u00b3",
+      "candidate_formula": "missing original endpoint, minimum completeness, ddof and reduction semantics",
+      "required_history": "24h plus exact closed/open window policy",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 25,
+      "feature": "pm25_local_bias",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 26,
+      "feature": "pm25_cams_ratio",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 27,
+      "feature": "temperature_2m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "\u00b0C (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 28,
+      "feature": "relative_humidity_2m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "% (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 29,
+      "feature": "dewpoint_spread",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 30,
+      "feature": "precipitation",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 31,
+      "feature": "wind_speed_10m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 32,
+      "feature": "wind_direction_10m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 33,
+      "feature": "boundary_layer_height",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "m (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 34,
+      "feature": "surface_pressure",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "hPa (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 35,
+      "feature": "shortwave_radiation",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "W/m\u00b2 (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 36,
+      "feature": "ventilation_coeff",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 37,
+      "feature": "stagnation_index",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 38,
+      "feature": "wind_u",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 39,
+      "feature": "wind_v",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 40,
+      "feature": "cams_pm25",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 41,
+      "feature": "cams_pm10",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 42,
+      "feature": "cams_no2",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 43,
+      "feature": "cams_co",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 44,
+      "feature": "cams_so2",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 45,
+      "feature": "cams_o3",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 46,
+      "feature": "cams_dust",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 47,
+      "feature": "cams_dust_fraction",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 48,
+      "feature": "fire_cnt_25km_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 49,
+      "feature": "fire_frp_25km_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 50,
+      "feature": "fire_cnt_50km_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 51,
+      "feature": "fire_frp_50km_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 52,
+      "feature": "fire_cnt_100km_48h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 53,
+      "feature": "fire_frp_100km_48h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 54,
+      "feature": "upwind_fire_frp_100km_24h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "NASA FIRMS with product/acquisition/availability provenance",
+      "candidate_units": "count or MW FRP; aggregation definitions unverified",
+      "candidate_formula": "missing original buffer/geodesic dedup/product/FRP aggregation and upwind-sector formulas",
+      "required_history": "24h/48h acquisition window plus coverage evidence",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "acquisition and actual availability <= issue time; unknown coverage is not zero",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 55,
+      "feature": "hour_sin",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 56,
+      "feature": "hour_cos",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 57,
+      "feature": "doy_sin",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 58,
+      "feature": "doy_cos",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 59,
+      "feature": "is_weekend",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 60,
+      "feature": "forecast_horizon_h",
+      "metadata_status": "recovered",
+      "semantic_status": "recovered",
+      "source_status": "missing",
+      "formula_status": "recovered",
+      "model_unit_status": "recovered",
+      "candidate_source": "caller-requested artifact-declared horizon",
+      "candidate_units": "hours",
+      "candidate_formula": "explicit declared horizon in [1,3,6,12,24]",
+      "required_history": "none",
+      "time_alignment": "target = issue + horizon; exact issue anchor not yet verified",
+      "issue_time_availability": "known at issue; declared horizons are not validation evidence",
+      "blockers": [
+        "supported-horizon held-out evidence and golden output parity"
+      ]
+    },
+    {
+      "position": 61,
+      "feature": "target_temperature_2m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "\u00b0C (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 62,
+      "feature": "target_relative_humidity_2m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "% (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 63,
+      "feature": "target_precipitation",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 64,
+      "feature": "target_wind_speed_10m",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 65,
+      "feature": "target_boundary_layer_height",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "m (candidate)",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 66,
+      "feature": "target_ventilation_coeff",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "weather forecast archive or exact independently specified transforms",
+      "candidate_units": "unknown; wind m/s versus km/h must not be guessed",
+      "candidate_formula": "missing original source product, units and dependent-feature recomputation",
+      "required_history": "issue/run/valid/available times; derived inputs as defined by original builder",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "driver forecast run available_at <= issue_at, valid_at = required driver timestamp",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 67,
+      "feature": "target_cams_pm25",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 68,
+      "feature": "target_cams_pm10",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 69,
+      "feature": "target_cams_no2",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 70,
+      "feature": "cams_pm25_delta_h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "CAMS forecast archive and ground observations where relevant",
+      "candidate_units": "pollutant-specific; original source/normalization unknown",
+      "candidate_formula": "missing original bias/delta/ratio formula or source mapping",
+      "required_history": "forecast issue/run/valid/available times and grid support",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "target-hour values must come from a run available at pollution issue time, not realized reanalysis",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 71,
+      "feature": "cams_pm25_ratio_h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 72,
+      "feature": "ventilation_ratio_h",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "ground/background/driver inputs",
+      "candidate_units": "dimensionless only if numerator and denominator units match",
+      "candidate_formula": "missing original numerator/denominator, epsilon, clipping and zero policy",
+      "required_history": "unknown",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "must be established before operational use",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 73,
+      "feature": "target_hour_sin",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    },
+    {
+      "position": 74,
+      "feature": "target_hour_cos",
+      "metadata_status": "recovered",
+      "semantic_status": "missing",
+      "source_status": "missing",
+      "formula_status": "missing",
+      "model_unit_status": "missing",
+      "candidate_source": "issue/target timestamp with explicit timezone policy",
+      "candidate_units": "dimensionless",
+      "candidate_formula": "missing original timezone, half-hour encoding, annual denominator/leap policy",
+      "required_history": "calendar only",
+      "time_alignment": "original feature builder unavailable",
+      "issue_time_availability": "calendar is known, but original encoding semantics remain unknown",
+      "blockers": [
+        "original formula/preprocessing and missingness policy",
+        "source/provenance and exact model units",
+        "golden feature/output parity"
+      ]
+    }
+  ],
+  "project_data_inventory": {
+    "scope": "attached BreatheWise project only; data/, artifacts/, work/, docs/",
+    "actual_observation_tables_found": false,
+    "cached_complete_75_feature_rows_found": false,
+    "found_data": [
+      "explicit synthetic demo observation JSON/Parquet/database",
+      "synthetic diagnostic probes",
+      "embedded artifact-only station registry and spatial tree"
+    ],
+    "original_training_feature_source_found": false,
+    "unrelated_personal_folders_scanned": false
+  }
+}

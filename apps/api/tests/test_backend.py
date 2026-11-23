@@ -67,7 +67,7 @@ def test_invalid_features_never_imputed(backend):
     with pytest.raises(ValidationError):
         ImportBatch.model_validate(payload)
     payload["observations"][0]["value"] = 1
-    payload["observations"][0]["measured_at"] = "2026-11-20T00:30:00Z"
+    payload["observations"][0]["measured_at"] = "2026-11-20T00:17:00Z"
     with pytest.raises(ValidationError):
         ImportBatch.model_validate(payload)
 

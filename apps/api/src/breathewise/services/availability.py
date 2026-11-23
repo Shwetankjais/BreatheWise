@@ -12,7 +12,7 @@ def availability():
     try:
         with Session(engine()) as db:
             migrated = (
-                db.execute(text("select version_num from alembic_version")).scalar() == "0002"
+                db.execute(text("select version_num from alembic_version")).scalar() == "0003"
             )
             if not migrated:
                 return False, 0, {}

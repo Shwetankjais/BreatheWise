@@ -28,7 +28,22 @@ def import_batch(db: Session, batch: ImportBatch) -> dict:
         else:
             db.add(Station(**values))
     db.flush()
+    phases = {}
     for row in batch.observations:
+        phase_key = (row.station_id, row.pollutant)
+        if phase_key not in phases:
+            prior = db.scalar(
+                select(Observation)
+                .where(
+                    Observation.station_id == row.station_id, Observation.pollutant == row.pollutant
+                )
+                .limit(1)
+            )
+            phases[phase_key] = prior.measured_at.minute if prior else row.measured_at.minute
+        if row.measured_at.minute != phases[phase_key]:
+            raise ValueError(
+                "Mixed hourly phases require explicit upstream interval reconciliation"
+            )
         if utc(row.available_at) > now:
             raise ValueError("An observation cannot be available in the future")
         value = row.value * (1000 if row.unit == "mg/m3" else 1)
@@ -44,7 +59,9 @@ def import_batch(db: Session, batch: ImportBatch) -> dict:
             original_value=row.value,
             original_unit=row.unit,
             source=row.source,
-            quality_flags=["unit_converted"] if row.unit == "mg/m3" else [],
+            quality_flags=sorted(
+                set(row.quality_flags + (["unit_converted"] if row.unit == "mg/m3" else []))
+            ),
         )
         existing = db.scalar(
             select(Observation).where(

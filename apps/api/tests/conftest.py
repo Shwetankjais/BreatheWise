@@ -39,6 +39,7 @@ def backend(tmp_path, monkeypatch):
         )
     monkeypatch.setenv("DATABASE_URL", database_url)
     monkeypatch.setenv("DATA_MODE", "demo")
+    monkeypatch.setenv("DATA_ROOT", str(tmp_path / "data"))
     get_settings.cache_clear()
     command.upgrade(Config("alembic.ini"), "head")
     with Session(engine()) as db, db.begin():

@@ -15,14 +15,19 @@ class InputObservation(StrictModel):
     unit: Literal["µg/m³", "ug/m3", "mg/m3"]
     source: str = Field(min_length=1, max_length=500)
     averaging_period_minutes: Literal[60]
+    quality_flags: list[str] = Field(default_factory=list, max_length=20)
 
     @model_validator(mode="after")
     def known_after_measured(self):
         if self.available_at < self.measured_at:
             raise ValueError("available_at cannot precede end of measurement hour")
-        if self.measured_at.minute or self.measured_at.second or self.measured_at.microsecond:
+        if (
+            self.measured_at.minute not in {0, 30}
+            or self.measured_at.second
+            or self.measured_at.microsecond
+        ):
             raise ValueError(
-                "canonical hourly series requires UTC hour-ending alignment; audit half-hour inputs before import"
+                "canonical hourly series preserves UTC hour-ending phase (00 or 30 minutes); no shifting"
             )
         if self.measured_at.utcoffset().total_seconds() != 0:
             raise ValueError("canonical measurements must be explicitly normalized to UTC")

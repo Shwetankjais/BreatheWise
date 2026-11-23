@@ -27,7 +27,11 @@ def finite_number(value):
 
 def validate_input(payload, model: RecoveredModel):
     required = {"input_kind", "provenance", "feature_names", "rows"}
-    if not isinstance(payload, dict) or set(payload) != required:
+    if (
+        not isinstance(payload, dict)
+        or not required.issubset(payload)
+        or set(payload) - required - {"feature_units"}
+    ):
         raise ValueError(f"Diagnostic input must contain exactly {sorted(required)}")
     if payload["input_kind"] not in {
         "caller_supplied_complete_features",
@@ -38,6 +42,22 @@ def validate_input(payload, model: RecoveredModel):
         raise ValueError("Explicit input provenance is required")
     if payload["feature_names"] != model.features:
         raise ValueError("Feature names and order must exactly match the recovered 75-input schema")
+    units = payload.get("feature_units")
+    if units is not None:
+        if (
+            not isinstance(units, dict)
+            or set(units) - set(model.features)
+            or any(not isinstance(v, str) or not v.strip() for v in units.values())
+        ):
+            raise ValueError(
+                "Feature unit labels must refer to named features and contain explicit strings"
+            )
+        nominal = {"forecast_horizon_h": {"h", "hours"}, "co_ugm3": {"µg/m³", "ug/m3", "μg/m³"}}
+        for feature, accepted in nominal.items():
+            if feature in units and units[feature] not in accepted:
+                raise ValueError(
+                    "Nominal feature unit mismatch; no automatic conversion or model compatibility assumed"
+                )
     rows = payload["rows"]
     if not isinstance(rows, list) or not 1 <= len(rows) <= 1000:
         raise ValueError("Diagnostic batch must contain 1..1000 complete rows")
@@ -130,6 +150,8 @@ def run_diagnostics(model: RecoveredModel, payload, native_path: Path):
             json.dumps(payload, sort_keys=True, allow_nan=False, separators=(",", ":")).encode()
         ).hexdigest(),
         "input_environmental_consistency_verified": False,
+        "supplied_feature_units": payload.get("feature_units"),
+        "unit_validation_scope": "Explicit nominal horizon/CO identifier labels only; other original model units remain unverified",
         "input_kind": payload["input_kind"],
         "input_provenance": payload["provenance"],
         "artifact_sha256": model.artifact_sha256,

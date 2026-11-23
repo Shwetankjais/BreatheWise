@@ -107,8 +107,15 @@ def history(
         raise ServiceError(
             409, "UNSUPPORTED_AGGREGATION", "Only source hourly values are supported"
         )
-    if any(t.minute or t.second or t.microsecond for t in [start, end]):
-        raise ServiceError(422, "UNALIGNED_RANGE", "History bounds must align to UTC hour endings")
+    if (
+        any(t.minute not in {0, 30} or t.second or t.microsecond for t in [start, end])
+        or (end - start).total_seconds() % 3600
+    ):
+        raise ServiceError(
+            422,
+            "UNALIGNED_RANGE",
+            "History bounds must preserve a single UTC hourly phase (00 or 30 minutes)",
+        )
     repo.station(db, station_id)
     rows = db.scalars(
         repo.observations(db, station_id, pollutant, cutoff).where(

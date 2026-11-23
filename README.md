@@ -2,7 +2,7 @@
 Local air pollution forecasting and exposure planning.
 
 ## Current state — 24 November 2026
-Foundation implementation now includes FastAPI/Pydantic API errors/capabilities, SQLAlchemy/Alembic migrations, canonical observations/history, opaque-session account persistence, in-app observation alerts, locked tooling and generated OpenAPI/TypeScript contract 1.1.0. Frontend source exists but has integration review changes requested. Operational model inference, real datasets/providers and browser workflows remain unverified; PostgreSQL integration tests passed in CI. Offline native-booster recovery/diagnostic execution is implemented separately and does not enable forecasts. See docs/ESSENTIALS.md for runnable commands and docs/handoffs/codex.md for current checkpoints and precise blockers.
+Foundation implementation now includes FastAPI/Pydantic API errors/capabilities, SQLAlchemy/Alembic migrations, canonical observations/history, opaque-session account persistence, in-app observation alerts, provider/cache/worker interfaces, locked tooling and generated OpenAPI/TypeScript contract 1.1.0. Frontend source exists but has integration review changes requested. Operational model inference, real datasets/providers and browser workflows remain unverified; PostgreSQL integration tests passed in CI. Offline native-booster recovery/diagnostic execution is implemented separately and does not enable forecasts. See docs/ESSENTIALS.md for runnable commands and docs/handoffs/codex.md for current checkpoints and precise blockers.
 
 Approved project folder: `/Users/shwetankjaiswal/Desktop/BreatheWise`.
 Approved remote: https://github.com/Shwetankjais/BreatheWise .
@@ -29,3 +29,5 @@ Remote was verified empty and shell account has push rights. Codex initialized f
 - `docs/SUBMISSION.md`: verification and release evidence.
 
 Copied starter files in `docs/reference/starter-kit/` retain their source content below an archive notice. They are non-governing reference templates; active root instructions and project requirements govern implementation, including the single-Git-writer rule. Binary model files are intentionally excluded from normal Git commits.
+
+Model recovery and all 75 feature provenance statuses are documented in docs/MODEL_RECOVERY.json and docs/FEATURE_PROVENANCE.md. OpenAQ intake requires a locally configured key; no real Delhi observations are claimed yet. Eight browser integration cases pass on an explicitly synthetic test database; frontend copy/geographic review remains open.
