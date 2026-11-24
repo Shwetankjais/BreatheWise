@@ -24,14 +24,6 @@ class HotspotHorizon(IntEnum):
     h24 = 24
 
 
-class DeclaredHorizon(IntEnum):
-    h1 = 1
-    h3 = 3
-    h6 = 6
-    h12 = 12
-    h24 = 24
-
-
 router = APIRouter()
 
 
@@ -152,7 +144,7 @@ def performance(
     request: Request,
     model_version: str | None = None,
     city_id: str | None = None,
-    horizon_h: DeclaredHorizon | None = None,
+    horizon_h: int | None = Query(None, ge=1, le=24),
 ):
     if model_version:
         from breathewise.api.models import recorded_meta

@@ -9,6 +9,8 @@ import pytest
 from breathewise.ml.experiment import (
     BACKTESTS,
     HORIZONS,
+    HOURLY_HORIZONS,
+    HOURLY_MODEL_VERSION,
     MODEL_VERSION,
     SPLITS,
     checked_artifact,
@@ -89,7 +91,7 @@ def test_split_applies_to_observed_target_not_issue_time_and_drops_missing_targe
     assert any(t < datetime(2025, 1, 1) for t in np.array(frame["issue_times"])[mask])
 
 
-@pytest.mark.parametrize("horizon", HORIZONS)
+@pytest.mark.parametrize("horizon", HOURLY_HORIZONS)
 def test_baselines_are_exact_and_issue_time_available(horizon):
     times, values, _ = fixture_frame()
     frame = make_frame(times, values, horizon)
@@ -102,7 +104,7 @@ def test_baselines_are_exact_and_issue_time_available(horizon):
 def test_unsupported_horizons_and_non_hourly_or_aware_clocks_refused():
     times, values, _ = fixture_frame()
     with pytest.raises(ValueError, match="Unsupported"):
-        feature_definitions(2)
+        feature_definitions(25)
     with pytest.raises(ValueError, match="timezone"):
         make_frame([t.replace(tzinfo=UTC) for t in times], values, 3)
     times[3] += timedelta(minutes=30)
@@ -199,3 +201,58 @@ def test_incomplete_or_malformed_manifest_rejected_as_valueerror(tmp_path):
         (tmp_path / "manifest.json").write_text(json.dumps(payload))
         with pytest.raises(ValueError, match="Incomplete"):
             load_manifest(tmp_path)
+
+
+def test_hourly_version_registry_preserves_exact_v1_scope(tmp_path):
+    def artifact(name):
+        (tmp_path / name).write_text("synthetic bytes")
+        return {"path": name, "sha256": hashlib.sha256(b"synthetic bytes").hexdigest()}
+
+    manifest = complete_manifest({}, artifact("predictions.csv"))
+    manifest["model_version"] = HOURLY_MODEL_VERSION
+    manifest["supported_horizons"] = list(HOURLY_HORIZONS)
+    score = score_group(np.array([1.0]), np.array([1.0]), np.array([1.0]), np.array([1.0]))
+    manifest["models"] = {
+        str(h): {
+            **artifact(f"model{h}.txt"),
+            "feature_names": [f["name"] for f in feature_definitions(h)],
+        }
+        for h in HOURLY_HORIZONS
+    }
+    manifest["evaluation"] = {str(h): {"test": score, "validation": score} for h in HOURLY_HORIZONS}
+    manifest["rolling_backtests"] = {
+        fold["name"]: {str(h): score for h in HOURLY_HORIZONS} for fold in BACKTESTS
+    }
+    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
+    assert load_manifest(tmp_path)["supported_horizons"] == list(range(1, 25))
+    manifest["model_version"] = MODEL_VERSION
+    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Unknown experiment version/horizons"):
+        load_manifest(tmp_path)
+
+
+def test_hourly_features_and_split_causality_at_each_new_horizon():
+    times, values, _ = fixture_frame()
+    for horizon in HOURLY_HORIZONS:
+        first = make_frame(times, values, horizon)
+        changed = values.copy()
+        changed[81:] = 999
+        second = make_frame(times, changed, horizon)
+        np.testing.assert_equal(first["x"][:81], second["x"][:81])
+        assert len(feature_definitions(horizon)) == 39
+        mask = split_mask(first, "2025-01-01T00:00:00", "2025-01-02T00:00:00")
+        assert all(
+            datetime(2025, 1, 1) <= t < datetime(2025, 1, 2)
+            for t in np.array(first["target_times"])[mask]
+        )
+
+
+def test_missing_current_issue_is_excluded_at_every_hourly_horizon():
+    times, values, _ = fixture_frame()
+    values[80] = np.nan
+    for horizon in HOURLY_HORIZONS:
+        frame = make_frame(times, values, horizon)
+        mask = split_mask(frame, "2024-01-01T00:00:00", "2026-01-01T00:00:00")
+        assert not mask[80]
+        assert np.isnan(frame["persistence"][80])
+        assert not mask[80 - horizon]

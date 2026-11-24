@@ -10,6 +10,7 @@ from breathewise.main import create_app
 from breathewise.ml.experiment import (
     BACKTESTS,
     HORIZONS,
+    HOURLY_MODEL_VERSION,
     MODEL_VERSION,
     SPLITS,
     feature_definitions,
@@ -147,3 +148,80 @@ def test_tampered_predictions_disable_evaluation_and_registry_readiness(registry
     entries = client.get("/api/v1/models").json()["data"]["models"]
     item = next(m for m in entries if m["model_version"] == MODEL_VERSION)
     assert item["status"] == "artifact_invalid" and not item["retrospective_evaluation_ready"]
+
+
+def test_hourly_version_is_separate_and_playback_filters_preserve_recorded_clock(
+    registry, monkeypatch
+):
+    from breathewise.ml.experiment import EXPERIMENT_VERSIONS, feature_definitions
+
+    client, original = registry
+    folder = original.parent / HOURLY_MODEL_VERSION
+    folder.mkdir()
+    manifest = json.loads((original / "manifest.json").read_text())
+    manifest["model_version"] = HOURLY_MODEL_VERSION
+    manifest["supported_horizons"] = list(EXPERIMENT_VERSIONS[HOURLY_MODEL_VERSION])
+    for horizon in manifest["supported_horizons"]:
+        key = str(horizon)
+        data = dict(manifest["models"]["1"])
+        data["features"] = feature_definitions(horizon)
+        data["feature_names"] = [x["name"] for x in data["features"]]
+        manifest["models"][key] = data
+        manifest["evaluation"][key] = manifest["evaluation"]["1"]
+        for fold in manifest["rolling_backtests"].values():
+            fold[key] = fold["1"]
+    for source in original.iterdir():
+        if source.name != "manifest.json":
+            (folder / source.name).write_bytes(source.read_bytes())
+    (folder / "manifest.json").write_text(json.dumps(manifest))
+    synthetic_issue_purge(folder, manifest, monkeypatch)
+    base = f"/api/v1/models/{HOURLY_MODEL_VERSION}"
+    assert client.get(f"{base}/evaluation?horizon_h=2").status_code == 200
+    assert client.get(f"{base}/evaluation?horizon_h=25").status_code == 409
+    assert (
+        client.get(
+            f"/api/v1/model-performance?model_version={HOURLY_MODEL_VERSION}&horizon_h=2"
+        ).status_code
+        == 200
+    )
+    assert client.get(f"/api/v1/models/{MODEL_VERSION}/evaluation?horizon_h=2").status_code == 409
+    url = f"{base}/predictions?horizon_h=1"
+    response = client.get(url + "&target_start=2025-01-01T00:00:00&target_end=2025-01-01T02:00:00")
+    assert response.status_code == 200 and response.json()["data"]["total_count"] == 1
+    assert client.get(url + "&target_end=2025-01-01T01:00:00").json()["data"]["total_count"] == 0
+    assert (
+        client.get(
+            url + "&target_start=2025-01-01T02:00:00&target_end=2025-01-01T01:00:00"
+        ).status_code
+        == 422
+    )
+    assert client.get(url + "&target_start=2025-01-01T00:00:00Z").status_code == 422
+
+
+def synthetic_issue_purge(folder, manifest, monkeypatch):
+    """Hash-checked synthetic supplement; test trust anchor uses its own actual bytes."""
+    from breathewise.ml.issue_purged import EXPECTED_SIDECAR_SHA256
+
+    protocol = folder / "protocol.json"
+    protocol.write_text(json.dumps(manifest["protocol"]))
+    report = {
+        "model_version": manifest["model_version"],
+        "supported_horizons": list(range(1, 25)),
+        "source_protocol_sha256": hashlib.sha256(protocol.read_bytes()).hexdigest(),
+        "source_predictions_sha256": manifest["heldout_predictions"]["sha256"],
+        "evaluation": manifest["evaluation"],
+        "rolling_backtests": manifest["rolling_backtests"],
+        "rule": {"test": "issue >= validation_end"},
+        "row_counts": {
+            str(h): {"test": {"original_rows": 1, "retained_rows": 1, "removed_boundary_rows": 0}}
+            for h in range(1, 25)
+        },
+        "limitations": ["Synthetic mechanics fixture, not measured environmental scores"],
+    }
+    sidecar = folder / "issue_purged_evaluation.json"
+    sidecar.write_text(json.dumps(report))
+    monkeypatch.setitem(
+        EXPECTED_SIDECAR_SHA256,
+        manifest["model_version"],
+        hashlib.sha256(sidecar.read_bytes()).hexdigest(),
+    )

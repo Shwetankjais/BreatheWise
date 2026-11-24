@@ -7,7 +7,12 @@ from pydantic import Field
 class ModelSummary(StrictModel):
     model_version: str
     kind: Literal["native_diagnostic", "retrospective_forecast"]
-    dataset_mode: Literal["diagnostic", "recorded_clock"]
+    dataset_mode: Literal["diagnostic", "recorded_clock", "utc_provider_history"]
+    timezone: str | None = None
+    clock_basis: str | None = None
+    evaluation_cohort: str | None = None
+    evaluation_path: str | None = None
+    predictions_path: str | None = None
     station_ids: list[str] = []
     pollutant: str = "pm25"
     target_unit: str | None = None
@@ -48,6 +53,20 @@ class HorizonEvaluation(StrictModel):
     splits: dict[str, EvaluationGroup]
 
 
+class BoundaryRowCounts(StrictModel):
+    original_rows: int
+    retained_rows: int
+    removed_boundary_rows: int
+
+
+class IssuePurgeSummary(StrictModel):
+    rule: dict[str, str]
+    row_counts: dict[str, dict[str, BoundaryRowCounts]]
+    source_predictions_sha256: str
+    sidecar_sha256: str
+    limitations: list[str]
+
+
 class RecordedSplit(StrictModel):
     name: str
     start_recorded_at: str
@@ -74,6 +93,9 @@ class ModelEvaluation(StrictModel):
     supported_horizons: list[int]
     splits: list[RecordedSplit]
     horizons: list[HorizonEvaluation]
+    evaluation_cohort: str = "target_timestamp_split_only"
+    target_only_horizons: list[HorizonEvaluation] = []
+    issue_time_purge: IssuePurgeSummary | None = None
     rolling_backtests: dict[str, list[HorizonEvaluation]]
     features: dict[str, list[FeatureDefinition]]
     preprocessing: str
@@ -94,6 +116,7 @@ class HeldoutPrediction(StrictModel):
 
 
 class PredictionPage(StrictModel):
+    evaluation_cohort: str = "target_timestamp_split_only"
     model_version: str
     dataset_mode: Literal["recorded_clock"] = "recorded_clock"
     timezone: None = None

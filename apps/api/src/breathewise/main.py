@@ -16,6 +16,7 @@ from breathewise.api import (
     models,
     observations,
     routing,
+    shadow,
     system,
 )
 from breathewise.core.config import get_settings
@@ -92,6 +93,7 @@ def create_app():
     app.include_router(models.router, prefix="/api/v1")
     app.include_router(archive.router, prefix="/api/v1")
     app.include_router(catalogue.router, prefix="/api/v1")
+    app.include_router(shadow.router, prefix="/api/v1")
     return app
 
 

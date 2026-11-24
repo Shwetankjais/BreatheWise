@@ -13,6 +13,9 @@ from pathlib import Path
 
 MODEL_VERSION = "delhi-recorded-pm25-v1"
 HORIZONS = (1, 3, 6, 12, 24)
+HOURLY_MODEL_VERSION = "delhi-recorded-pm25-hourly-v2"
+HOURLY_HORIZONS = tuple(range(1, 25))
+EXPERIMENT_VERSIONS = {MODEL_VERSION: HORIZONS, HOURLY_MODEL_VERSION: HOURLY_HORIZONS}
 LAGS = (0, 1, 2, 3, 6, 12, 24, 48, 72, 168)
 WINDOWS = (6, 24, 168)
 # Frozen before any experiment fit; each split constrains target timestamps.
@@ -65,7 +68,7 @@ def sha256(path):
 
 
 def feature_definitions(horizon):
-    if horizon not in HORIZONS:
+    if type(horizon) is not int or horizon not in HOURLY_HORIZONS:
         raise ValueError("Unsupported experiment horizon")
     result = []
     for lag in LAGS:
@@ -327,9 +330,8 @@ def load_manifest(folder):
         }
         if not isinstance(manifest, dict) or not required.issubset(manifest):
             raise ValueError("Incomplete experiment manifest")
-        if manifest["model_version"] != MODEL_VERSION or manifest["supported_horizons"] != list(
-            HORIZONS
-        ):
+        horizons = EXPERIMENT_VERSIONS.get(manifest["model_version"])
+        if horizons is None or manifest["supported_horizons"] != list(horizons):
             raise ValueError("Unknown experiment version/horizons")
         if (
             manifest["dataset_mode"] != "recorded_clock"
@@ -350,7 +352,7 @@ def load_manifest(folder):
             isinstance(x, str) for x in manifest["limitations"]
         ):
             raise ValueError("Invalid limitation metadata")
-        if set(manifest["models"]) != {str(h) for h in HORIZONS}:
+        if set(manifest["models"]) != {str(h) for h in horizons}:
             raise ValueError("Manifest must declare exactly the trained experiment horizons")
         for horizon, descriptor in manifest["models"].items():
             expected = [item["name"] for item in feature_definitions(int(horizon))]
@@ -362,7 +364,7 @@ def load_manifest(folder):
         if set(manifest["rolling_backtests"]) != {fold["name"] for fold in BACKTESTS}:
             raise ValueError("Rolling backtest metadata mismatch")
         for fold in manifest["rolling_backtests"].values():
-            for horizon in HORIZONS:
+            for horizon in horizons:
                 _validate_scores(fold[str(horizon)])
         checked_artifact(folder, manifest["heldout_predictions"])
         protocol_path = folder / "protocol.json"
@@ -377,9 +379,9 @@ def load_manifest(folder):
 
 def load_native_model(folder, horizon, *, openmp_library=None):
     """Verified optional offline native loading; never exposes live inference."""
-    if horizon not in HORIZONS:
-        raise ValueError("Unsupported experiment horizon")
     manifest = load_manifest(folder)
+    if type(horizon) is not int or horizon not in manifest["supported_horizons"]:
+        raise ValueError("Unsupported experiment horizon")
     if openmp_library:
         import ctypes
 
@@ -395,7 +397,7 @@ def load_native_model(folder, horizon, *, openmp_library=None):
     return model
 
 
-def run_experiment(source, output, *, openmp_library=None):
+def run_experiment(source, output, *, openmp_library=None, model_version=MODEL_VERSION):
     import ctypes
 
     if openmp_library:
@@ -403,28 +405,33 @@ def run_experiment(source, output, *, openmp_library=None):
     import lightgbm as lgb
     import numpy as np
 
+    if model_version not in EXPERIMENT_VERSIONS:
+        raise ValueError("Unknown experiment version")
+    horizons = EXPERIMENT_VERSIONS[model_version]
     source, output = Path(source).resolve(strict=True), Path(output).resolve()
     if output.exists() and any(output.iterdir()):
         raise ValueError("Experiment output must be empty; preserve previous evidence/version")
     output.mkdir(parents=True, exist_ok=True)
     protocol = {
-        "model_version": MODEL_VERSION,
+        "model_version": model_version,
         "source_sha256": sha256(source),
         "station_id": "site_301",
         "splits": SPLITS,
         "rolling_backtests": BACKTESTS,
-        "supported_horizons": list(HORIZONS),
+        "supported_horizons": list(horizons),
         "parameters": PARAMETERS,
         "max_boost_round": 200,
         "early_stopping_rounds": 20,
         "target_transform": "identity",
         "dataset_mode": "recorded_clock",
         "frozen_before_fit_at": datetime.now(UTC).isoformat(),
+        "selection_policy": "Inherited v1 fixed parameters; validation early stopping only; no test tuning",
+        "prior_evidence": "v1 five-horizon test metrics already observed before hourly extension; v2 is a preregistered extension, not an untouched confirmatory test",
     }
     (output / "protocol.json").write_text(json.dumps(protocol, indent=2) + "\n")
     times, values = load_observed(source)
     report = {
-        "model_version": MODEL_VERSION,
+        "model_version": model_version,
         "dataset_mode": "recorded_clock",
         "timezone": None,
         "source_station_ids": ["site_301"],
@@ -432,7 +439,7 @@ def run_experiment(source, output, *, openmp_library=None):
         "pollutant": "pm25",
         "target_unit": "µg/m³",
         "target_transform": "identity",
-        "supported_horizons": list(HORIZONS),
+        "supported_horizons": list(horizons),
         "continuous_trajectory": False,
         "live_forecast_ready": False,
         "retrospective_evaluation_ready": True,
@@ -445,7 +452,17 @@ def run_experiment(source, output, *, openmp_library=None):
         "preprocessing": "no fit/scaling/imputation; native NaN plus explicit lag missing indicators",
         "input_availability_assumption": "recorded current and past rows hypothetically available at issue; actual publication unknown",
         "libraries": {"lightgbm": lgb.__version__, "numpy": np.__version__},
-        "limitations": LIMITATIONS,
+        "limitations": [
+            *LIMITATIONS,
+            "Full hourly retrospective outputs do not establish a live operational trajectory.",
+        ],
+        "missing_input_behavior": {
+            "missing_current": "issue excluded; no persistence or model forecast",
+            "missing_target": "excluded from evaluation; never imputed",
+            "older_lags": "native NaN plus missing indicators",
+            "rolling_statistics": "NaN below 75 percent observed window; count retained",
+            "previous_day_baseline": "missing prediction if exact comparison row absent",
+        },
         "models": {},
         "evaluation": {},
         "rolling_backtests": {},
@@ -468,7 +485,7 @@ def run_experiment(source, output, *, openmp_library=None):
     with predictions_path.open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
-        for horizon in HORIZONS:
+        for horizon in horizons:
             frame = make_frame(times, values, horizon)
             names = frame["feature_names"]
             masks = {key: split_mask(frame, *bounds) for key, bounds in SPLITS.items()}
@@ -497,6 +514,16 @@ def run_experiment(source, output, *, openmp_library=None):
                 "best_iteration": model.best_iteration,
                 "feature_names": names,
                 "features": feature_definitions(horizon),
+                "training_sample_count": int(masks["train"].sum()),
+                "input_coverage": {
+                    "issue_rows_with_missing_current": int(
+                        (~np.isfinite(frame["persistence"])).sum()
+                    ),
+                    "target_rows_missing": int((~np.isfinite(frame["y"])).sum()),
+                    "eligible_test_rows_with_any_missing_feature": int(
+                        np.isnan(frame["x"][masks["test"]]).any(axis=1).sum()
+                    ),
+                },
             }
             report["evaluation"][str(horizon)] = {}
             for split in ["validation", "test"]:
@@ -513,7 +540,7 @@ def run_experiment(source, output, *, openmp_library=None):
                 )
                 for index, prediction in zip(np.flatnonzero(mask), predicted, strict=True):
                     row = {
-                        "model_version": MODEL_VERSION,
+                        "model_version": model_version,
                         "station_id": "site_301",
                         "pollutant": "pm25",
                         "split": split,
@@ -549,7 +576,7 @@ def run_experiment(source, output, *, openmp_library=None):
                 for index, prediction in zip(np.flatnonzero(score_mask), predicted, strict=True):
                     writer.writerow(
                         {
-                            "model_version": MODEL_VERSION,
+                            "model_version": model_version,
                             "station_id": "site_301",
                             "pollutant": "pm25",
                             "split": fold["name"],
@@ -571,6 +598,7 @@ def run_experiment(source, output, *, openmp_library=None):
         "rows": prediction_count,
         "columns": fields,
     }
+    report["protocol_sha256"] = sha256(output / "protocol.json")
     report["completed_at"] = datetime.now(UTC).isoformat()
     (output / "manifest.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     load_manifest(output)

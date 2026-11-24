@@ -98,3 +98,35 @@ class IngestionRun(Base):
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     details: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class ForecastRun(Base):
+    __tablename__ = "forecast_runs"
+    __table_args__ = (UniqueConstraint("station_id", "model_version", "issue_at", "input_cutoff"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    station_id: Mapped[str] = mapped_column(String(100), index=True)
+    model_version: Mapped[str] = mapped_column(String(100), index=True)
+    data_mode: Mapped[str] = mapped_column(String(30))
+    status: Mapped[str] = mapped_column(String(30))
+    error_code: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    issue_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    input_cutoff: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    input_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    provenance: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class ShadowPrediction(Base):
+    __tablename__ = "shadow_predictions"
+    __table_args__ = (UniqueConstraint("run_id", "horizon_h"),)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    run_id: Mapped[str] = mapped_column(ForeignKey("forecast_runs.id"), index=True)
+    horizon_h: Mapped[int] = mapped_column()
+    target_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    concentration: Mapped[float] = mapped_column(Float)
+    unit: Mapped[str] = mapped_column(String(20))
+    quality_flags: Mapped[list] = mapped_column(JSON, default=list)
+    matched_observation_id: Mapped[int | None] = mapped_column(
+        ForeignKey("observations.id"), nullable=True
+    )
+    matched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

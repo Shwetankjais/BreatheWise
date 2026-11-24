@@ -2,7 +2,7 @@
 
 from breathewise.core.config import get_settings
 from breathewise.db.models import Observation, Station
-from breathewise.db.session import engine
+from breathewise.db.session import LATEST_SCHEMA_REVISION, engine
 from sqlalchemy import func, select, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -12,7 +12,8 @@ def availability():
     try:
         with Session(engine()) as db:
             migrated = (
-                db.execute(text("select version_num from alembic_version")).scalar() == "0003"
+                db.execute(text("select version_num from alembic_version")).scalar()
+                == LATEST_SCHEMA_REVISION
             )
             if not migrated:
                 return False, 0, {}

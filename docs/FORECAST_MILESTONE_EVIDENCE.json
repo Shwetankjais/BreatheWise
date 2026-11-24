@@ -1,0 +1,405 @@
+{
+  "verified_at_utc": "2026-11-24T06:15:28.225212+00:00",
+  "scope": "In-process actual FastAPI handlers with configured real local artifacts/observations, no browser or network-provider mock",
+  "contract_version": "1.3.0",
+  "checks": [
+    {
+      "path": "/models",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/evaluation",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=2&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=24&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=25",
+      "status": 409
+    },
+    {
+      "path": "/stations/openaq-235/forecast?model_version=delhi-recorded-pm25-hourly-v2",
+      "status": 409
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&target_start=2026-07-01T00:00:00Z",
+      "status": 422
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-evaluation",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=1&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=2&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=24&split=test&limit=2&issue_time_purged=true",
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=25",
+      "status": 409
+    },
+    {
+      "path": "/stations/openaq-235/forecast?model_version=delhi-openaq-pm25-hourly-v1",
+      "status": 409
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=1&target_start=2026-07-01T00:00:00",
+      "status": 422
+    },
+    {
+      "path": "/forecast-runs?station_id=openaq-235&limit=100",
+      "status": 200
+    },
+    {
+      "path": "/forecast-runs/09865bb9-377c-42e8-9014-7e163903b26f",
+      "status": 200
+    },
+    {
+      "path": "/forecast-runs/5c92341a-3158-4eab-80f6-bf83043d42c3",
+      "status": 200
+    },
+    {
+      "path": "/forecast-runs/be70767c-45db-4930-a7b1-efbe1a724fba",
+      "status": 200
+    },
+    {
+      "path": "/forecast-runs/eddb514c-71af-4b0e-b9e7-a4045049d234",
+      "status": 200
+    },
+    {
+      "path": "/capabilities",
+      "status": 200
+    }
+  ],
+  "models": [
+    {
+      "model_version": "delhi-recorded-pm25-hourly-v2",
+      "clock_basis": "source_naive_clock_unverified",
+      "samples": [
+        {
+          "horizon_h": 1,
+          "rows": 14717,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 13977,
+              "mae": 18.913312140631415,
+              "rmse": 30.12476139159713,
+              "bias": -0.3058271178801107
+            },
+            "persistence": {
+              "count": 13977,
+              "mae": 20.870491521785777,
+              "rmse": 33.118531667995626,
+              "bias": 0.06959004078128354
+            },
+            "previous_day_same_hour": {
+              "count": 13977,
+              "mae": 47.92171639121421,
+              "rmse": 73.50225081676459,
+              "bias": -0.663297560277599
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 3276,
+              "mae": 33.94252316125135,
+              "rmse": 49.26870821991707,
+              "bias": -8.874371446865892
+            },
+            "persistence": {
+              "count": 3276,
+              "mae": 37.38593711843712,
+              "rmse": 54.16504805668417,
+              "bias": -6.246285103785104
+            },
+            "previous_day_same_hour": {
+              "count": 3134,
+              "mae": 91.81102425015953,
+              "rmse": 121.45575268550289,
+              "bias": -31.883296107211233
+            }
+          }
+        },
+        {
+          "horizon_h": 2,
+          "rows": 14611,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 13891,
+              "mae": 26.331908539882395,
+              "rmse": 40.32573390945931,
+              "bias": -1.9714472858372012
+            },
+            "persistence": {
+              "count": 13891,
+              "mae": 31.62025484126411,
+              "rmse": 48.47233653613359,
+              "bias": 0.09761140306673384
+            },
+            "previous_day_same_hour": {
+              "count": 13891,
+              "mae": 48.09216975019804,
+              "rmse": 73.74861625200664,
+              "bias": -0.43347563170398085
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 3254,
+              "mae": 49.068451929541716,
+              "rmse": 67.84285712363344,
+              "bias": -20.930612850407975
+            },
+            "persistence": {
+              "count": 3254,
+              "mae": 58.11255377996312,
+              "rmse": 80.14382227452559,
+              "bias": -13.953518746158574
+            },
+            "previous_day_same_hour": {
+              "count": 3117,
+              "mae": 91.86228745588707,
+              "rmse": 121.56579717251067,
+              "bias": -31.612848893166507
+            }
+          }
+        },
+        {
+          "horizon_h": 24,
+          "rows": 14291,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 14291,
+              "mae": 39.57525494633487,
+              "rmse": 62.18210111166671,
+              "bias": -5.9401492651669185
+            },
+            "persistence": {
+              "count": 14291,
+              "mae": 47.82202015254362,
+              "rmse": 73.52154642302676,
+              "bias": -0.29185571338604716
+            },
+            "previous_day_same_hour": {
+              "count": 14291,
+              "mae": 47.82202015254362,
+              "rmse": 73.52154642302676,
+              "bias": -0.29185571338604716
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 3156,
+              "mae": 81.1767630310854,
+              "rmse": 110.98366189865014,
+              "bias": -59.907023865595825
+            },
+            "persistence": {
+              "count": 3156,
+              "mae": 92.26505069708492,
+              "rmse": 122.1067763755098,
+              "bias": -32.31400506970849
+            },
+            "previous_day_same_hour": {
+              "count": 3156,
+              "mae": 92.26505069708492,
+              "rmse": 122.1067763755098,
+              "bias": -32.31400506970849
+            }
+          }
+        }
+      ]
+    },
+    {
+      "model_version": "delhi-openaq-pm25-hourly-v1",
+      "clock_basis": "UTC_hour_ending",
+      "samples": [
+        {
+          "horizon_h": 1,
+          "rows": 1690,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 1324,
+              "mae": 11.173321724078484,
+              "rmse": 16.603162387286417,
+              "bias": 1.0649894457286246
+            },
+            "persistence": {
+              "count": 1324,
+              "mae": 11.650490936555888,
+              "rmse": 17.901044132739745,
+              "bias": 1.0129531722054381
+            },
+            "previous_day_same_hour": {
+              "count": 1324,
+              "mae": 27.501435045317226,
+              "rmse": 36.90040358509921,
+              "bias": -1.1425226586102721
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 29,
+              "mae": 38.81187757302182,
+              "rmse": 50.07257041427904,
+              "bias": -30.69738904507452
+            },
+            "persistence": {
+              "count": 29,
+              "mae": 33.53448275862069,
+              "rmse": 47.194845568937524,
+              "bias": -16.224137931034484
+            },
+            "previous_day_same_hour": {
+              "count": 10,
+              "mae": 73.02000000000001,
+              "rmse": 93.80412570884076,
+              "bias": -58.82000000000001
+            }
+          }
+        },
+        {
+          "horizon_h": 2,
+          "rows": 1612,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 1267,
+              "mae": 17.79084720644138,
+              "rmse": 23.984537554981966,
+              "bias": 2.8216908065577755
+            },
+            "persistence": {
+              "count": 1267,
+              "mae": 18.376598263614838,
+              "rmse": 25.499572902933973,
+              "bias": 1.6480268350434097
+            },
+            "previous_day_same_hour": {
+              "count": 1267,
+              "mae": 27.817916337805844,
+              "rmse": 37.590106582251614,
+              "bias": -0.9497237569060775
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 29,
+              "mae": 66.44253062664576,
+              "rmse": 76.72450612088964,
+              "bias": -60.046934511027615
+            },
+            "persistence": {
+              "count": 29,
+              "mae": 53.57586206896552,
+              "rmse": 73.31923349299282,
+              "bias": -33.36896551724138
+            },
+            "previous_day_same_hour": {
+              "count": 12,
+              "mae": 68.05833333333334,
+              "rmse": 82.82028233872828,
+              "bias": -56.225
+            }
+          }
+        },
+        {
+          "horizon_h": 24,
+          "rows": 1532,
+          "common_baseline_cohort": {
+            "lightgbm": {
+              "count": 1532,
+              "mae": 25.800295735558983,
+              "rmse": 32.78959445577785,
+              "bias": 0.07592704512257442
+            },
+            "persistence": {
+              "count": 1532,
+              "mae": 27.60711488250654,
+              "rmse": 37.58856538951407,
+              "bias": -0.40058746736292433
+            },
+            "previous_day_same_hour": {
+              "count": 1532,
+              "mae": 27.60711488250654,
+              "rmse": 37.58856538951407,
+              "bias": -0.40058746736292433
+            }
+          },
+          "high_pollution": {
+            "lightgbm": {
+              "count": 16,
+              "mae": 92.7694500288584,
+              "rmse": 96.62544820633074,
+              "bias": -92.7694500288584
+            },
+            "persistence": {
+              "count": 16,
+              "mae": 80.66875,
+              "rmse": 94.78260982374351,
+              "bias": -63.54375
+            },
+            "previous_day_same_hour": {
+              "count": 16,
+              "mae": 80.66875,
+              "rmse": 94.78260982374351,
+              "bias": -63.54375
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "shadow_runs": [
+    {
+      "id": "09865bb9-377c-42e8-9014-7e163903b26f",
+      "model_version": "utc-persistence-shadow-v1",
+      "status": "rejected",
+      "error_code": "SHADOW_INPUT_STALE",
+      "prediction_count": 0,
+      "generated_at": "2026-11-24T06:15:23.566086Z"
+    },
+    {
+      "id": "5c92341a-3158-4eab-80f6-bf83043d42c3",
+      "model_version": "delhi-recorded-pm25-hourly-v2",
+      "status": "rejected",
+      "error_code": "MODEL_CLOCK_INCOMPATIBLE",
+      "prediction_count": 0,
+      "generated_at": "2026-11-24T06:03:41.157942Z"
+    },
+    {
+      "id": "be70767c-45db-4930-a7b1-efbe1a724fba",
+      "model_version": "delhi-openaq-pm25-hourly-v1",
+      "status": "rejected",
+      "error_code": "SHADOW_MODEL_UNSUPPORTED",
+      "prediction_count": 0,
+      "generated_at": "2026-11-24T06:03:41.156560Z"
+    },
+    {
+      "id": "eddb514c-71af-4b0e-b9e7-a4045049d234",
+      "model_version": "utc-persistence-shadow-v1",
+      "status": "rejected",
+      "error_code": "SCHEDULED_ISSUE_EXPIRED",
+      "prediction_count": 0,
+      "generated_at": "2026-11-24T06:03:41.147821Z"
+    }
+  ],
+  "public_live_forecast_ready": false,
+  "activity_planning_ready": false
+}

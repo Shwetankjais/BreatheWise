@@ -4,6 +4,8 @@ from breathewise.core.config import get_settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
+LATEST_SCHEMA_REVISION = "0004"
+
 
 @lru_cache
 def engine():

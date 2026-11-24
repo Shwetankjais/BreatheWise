@@ -210,6 +210,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/forecast-runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Runs */
+        get: operations["runs_api_v1_forecast_runs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/forecast-runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Run */
+        get: operations["run_api_v1_forecast_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -338,6 +372,40 @@ export interface paths {
         };
         /** Predictions */
         get: operations["predictions_api_v1_models__model_version__predictions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/models/{model_version}/utc-evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Utc Evaluation */
+        get: operations["utc_evaluation_api_v1_models__model_version__utc_evaluation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/models/{model_version}/utc-predictions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Utc Predictions */
+        get: operations["utc_predictions_api_v1_models__model_version__utc_predictions_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -984,6 +1052,15 @@ export interface components {
             /** Station Id */
             station_id: string;
         };
+        /** BoundaryRowCounts */
+        BoundaryRowCounts: {
+            /** Original Rows */
+            original_rows: number;
+            /** Removed Boundary Rows */
+            removed_boundary_rows: number;
+            /** Retained Rows */
+            retained_rows: number;
+        };
         /** Capabilities */
         Capabilities: {
             alerts: components["schemas"]["Capability"];
@@ -1013,6 +1090,7 @@ export interface components {
             route_geometry?: components["schemas"]["Capability"];
             routes: components["schemas"]["Capability"];
             saved_places: components["schemas"]["Capability"];
+            shadow_forecast_runs?: components["schemas"]["Capability"];
             spatial_exposure: components["schemas"]["Capability"];
             station_catalogue?: components["schemas"]["Capability"];
             station_comparison?: components["schemas"]["Capability"];
@@ -1118,11 +1196,6 @@ export interface components {
             /** Longitude */
             longitude: number;
         };
-        /**
-         * DeclaredHorizon
-         * @enum {integer}
-         */
-        DeclaredHorizon: 1 | 3 | 6 | 12 | 24;
         /** Envelope[ArchiveCatalogue] */
         Envelope_ArchiveCatalogue_: {
             data: components["schemas"]["ArchiveCatalogue"];
@@ -1141,6 +1214,16 @@ export interface components {
         /** Envelope[Capabilities] */
         Envelope_Capabilities_: {
             data: components["schemas"]["Capabilities"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ForecastRunDetail] */
+        Envelope_ForecastRunDetail_: {
+            data: components["schemas"]["ForecastRunDetail"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ForecastRunPage] */
+        Envelope_ForecastRunPage_: {
+            data: components["schemas"]["ForecastRunPage"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[Forecast] */
@@ -1226,6 +1309,16 @@ export interface components {
         /** Envelope[StationView] */
         Envelope_StationView_: {
             data: components["schemas"]["StationView"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[UtcModelEvaluation] */
+        Envelope_UtcModelEvaluation_: {
+            data: components["schemas"]["UtcModelEvaluation"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[UtcPredictionPage] */
+        Envelope_UtcPredictionPage_: {
+            data: components["schemas"]["UtcPredictionPage"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[list[Advisory]] */
@@ -1377,6 +1470,90 @@ export interface components {
              * Format: date-time
              */
             valid_at: string;
+        };
+        /** ForecastRunDetail */
+        ForecastRunDetail: {
+            /** Predictions */
+            predictions: components["schemas"]["ShadowPoint"][];
+            run: components["schemas"]["ForecastRunView"];
+        };
+        /** ForecastRunPage */
+        ForecastRunPage: {
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Runs */
+            runs: components["schemas"]["ForecastRunView"][];
+            /** Total Count */
+            total_count: number;
+        };
+        /** ForecastRunView */
+        ForecastRunView: {
+            /**
+             * Activity Planning Ready
+             * @default false
+             * @constant
+             */
+            activity_planning_ready: false;
+            /**
+             * Clock Basis
+             * @default UTC_hour_ending
+             * @constant
+             */
+            clock_basis: "UTC_hour_ending";
+            /** Data Mode */
+            data_mode: string;
+            /** Error Code */
+            error_code: string | null;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /** Id */
+            id: string;
+            /**
+             * Input Cutoff
+             * Format: date-time
+             */
+            input_cutoff: string;
+            /** Input Sha256 */
+            input_sha256: string | null;
+            /**
+             * Issue At
+             * Format: date-time
+             */
+            issue_at: string;
+            /** Matched Count */
+            matched_count: number;
+            /** Model Version */
+            model_version: string;
+            /**
+             * Operation
+             * @default shadow
+             * @constant
+             */
+            operation: "shadow";
+            /** Prediction Count */
+            prediction_count: number;
+            /** Provenance */
+            provenance: {
+                [key: string]: unknown;
+            };
+            /**
+             * Public Live Forecast Ready
+             * @default false
+             * @constant
+             */
+            public_live_forecast_ready: false;
+            /** Station Id */
+            station_id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "succeeded" | "rejected";
         };
         /** GeometryRequest */
         GeometryRequest: {
@@ -1544,6 +1721,25 @@ export interface components {
             /** User Id */
             user_id: string;
         };
+        /** IssuePurgeSummary */
+        IssuePurgeSummary: {
+            /** Limitations */
+            limitations: string[];
+            /** Row Counts */
+            row_counts: {
+                [key: string]: {
+                    [key: string]: components["schemas"]["BoundaryRowCounts"];
+                };
+            };
+            /** Rule */
+            rule: {
+                [key: string]: string;
+            };
+            /** Sidecar Sha256 */
+            sidecar_sha256: string;
+            /** Source Predictions Sha256 */
+            source_predictions_sha256: string;
+        };
         /** LineString */
         LineString: {
             /** Coordinates */
@@ -1601,7 +1797,7 @@ export interface components {
         Metadata: {
             /**
              * Contract Version
-             * @default 1.2.0
+             * @default 1.3.0
              */
             contract_version: string;
             /**
@@ -1638,6 +1834,11 @@ export interface components {
             dataset_mode: "recorded_clock";
             /** Dataset Sha256 */
             dataset_sha256: string;
+            /**
+             * Evaluation Cohort
+             * @default target_timestamp_split_only
+             */
+            evaluation_cohort: string;
             /** Features */
             features: {
                 [key: string]: components["schemas"]["FeatureDefinition"][];
@@ -1646,6 +1847,7 @@ export interface components {
             horizons: components["schemas"]["HorizonEvaluation"][];
             /** Input Availability Assumption */
             input_availability_assumption: string;
+            issue_time_purge?: components["schemas"]["IssuePurgeSummary"] | null;
             /** Limitations */
             limitations: string[];
             /**
@@ -1680,6 +1882,11 @@ export interface components {
             station_ids: string[];
             /** Supported Horizons */
             supported_horizons: number[];
+            /**
+             * Target Only Horizons
+             * @default []
+             */
+            target_only_horizons: components["schemas"]["HorizonEvaluation"][];
             /** Target Transform */
             target_transform: string;
             /** Target Unit */
@@ -1696,6 +1903,8 @@ export interface components {
             artifact_hashes: {
                 [key: string]: string;
             };
+            /** Clock Basis */
+            clock_basis?: string | null;
             /**
              * Continuous Trajectory Ready
              * @default false
@@ -1706,9 +1915,13 @@ export interface components {
              * Dataset Mode
              * @enum {string}
              */
-            dataset_mode: "diagnostic" | "recorded_clock";
+            dataset_mode: "diagnostic" | "recorded_clock" | "utc_provider_history";
             /** Dataset Sha256 */
             dataset_sha256?: string | null;
+            /** Evaluation Cohort */
+            evaluation_cohort?: string | null;
+            /** Evaluation Path */
+            evaluation_path?: string | null;
             /** Feature Count */
             feature_count?: number | null;
             /**
@@ -1741,6 +1954,8 @@ export interface components {
              * @default pm25
              */
             pollutant: string;
+            /** Predictions Path */
+            predictions_path?: string | null;
             /**
              * Retrospective Evaluation Ready
              * @default false
@@ -1763,6 +1978,8 @@ export interface components {
             supported_horizons: number[];
             /** Target Unit */
             target_unit?: string | null;
+            /** Timezone */
+            timezone?: string | null;
         };
         /** NotificationView */
         NotificationView: {
@@ -1921,6 +2138,11 @@ export interface components {
              * @constant
              */
             dataset_mode: "recorded_clock";
+            /**
+             * Evaluation Cohort
+             * @default target_timestamp_split_only
+             */
+            evaluation_cohort: string;
             /** Limit */
             limit: number;
             /** Model Version */
@@ -2103,6 +2325,32 @@ export interface components {
              */
             unit: string;
         };
+        /** ShadowPoint */
+        ShadowPoint: {
+            /** Concentration */
+            concentration: number;
+            /** Error */
+            error?: number | null;
+            /** Horizon H */
+            horizon_h: number;
+            /** Lead Time Seconds */
+            lead_time_seconds: number;
+            /** Matched At */
+            matched_at?: string | null;
+            /** Observation Available At */
+            observation_available_at?: string | null;
+            /** Observed */
+            observed?: number | null;
+            /** Quality Flags */
+            quality_flags: string[];
+            /**
+             * Target At
+             * Format: date-time
+             */
+            target_at: string;
+            /** Unit */
+            unit: string;
+        };
         /** StationCatalogue */
         StationCatalogue: {
             /** Catalogue Verified At */
@@ -2146,6 +2394,184 @@ export interface components {
             name: string;
             /** Source */
             source: string;
+        };
+        /** UtcHeldoutPrediction */
+        UtcHeldoutPrediction: {
+            /** Horizon H */
+            horizon_h: number;
+            /**
+             * Issue At Utc
+             * Format: date-time
+             */
+            issue_at_utc: string;
+            /** Lightgbm */
+            lightgbm: number | null;
+            /** Observed */
+            observed: number;
+            /** Persistence */
+            persistence: number | null;
+            /** Previous Day Same Hour */
+            previous_day_same_hour: number | null;
+            /** Split */
+            split: string;
+            /** Station Id */
+            station_id: string;
+            /**
+             * Target At Utc
+             * Format: date-time
+             */
+            target_at_utc: string;
+        };
+        /** UtcModelEvaluation */
+        UtcModelEvaluation: {
+            /**
+             * Clock Basis
+             * @default exclusive_hour_ending_UTC
+             * @constant
+             */
+            clock_basis: "exclusive_hour_ending_UTC";
+            /**
+             * Continuous Trajectory Ready
+             * @default false
+             * @constant
+             */
+            continuous_trajectory_ready: false;
+            /**
+             * Dataset Mode
+             * @default utc_provider_history
+             * @constant
+             */
+            dataset_mode: "utc_provider_history";
+            /** Dataset Sha256 */
+            dataset_sha256: string;
+            /**
+             * Evaluation Cohort
+             * @default fixed_model_issue_time_purged
+             */
+            evaluation_cohort: string;
+            /** Features */
+            features: {
+                [key: string]: components["schemas"]["FeatureDefinition"][];
+            };
+            /**
+             * Historical Publication Time Known
+             * @default false
+             * @constant
+             */
+            historical_publication_time_known: false;
+            /** Horizons */
+            horizons: components["schemas"]["HorizonEvaluation"][];
+            /** Input Availability Assumption */
+            input_availability_assumption: string;
+            issue_time_purge: components["schemas"]["IssuePurgeSummary"];
+            /** Limitations */
+            limitations: string[];
+            /**
+             * Live Forecast Ready
+             * @default false
+             * @constant
+             */
+            live_forecast_ready: false;
+            /** Missing Input Behavior */
+            missing_input_behavior: {
+                [key: string]: string;
+            };
+            /** Model Version */
+            model_version: string;
+            /** Preprocessing */
+            preprocessing: string;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /** Rolling Backtests */
+            rolling_backtests: {
+                [key: string]: components["schemas"]["HorizonEvaluation"][];
+            };
+            /** Sensor Ids */
+            sensor_ids: number[];
+            /** Splits */
+            splits: components["schemas"]["UtcSplit"][];
+            /** Station Ids */
+            station_ids: string[];
+            /** Supported Horizons */
+            supported_horizons: number[];
+            /**
+             * Target Only Horizons
+             * @default []
+             */
+            target_only_horizons: components["schemas"]["HorizonEvaluation"][];
+            /** Target Transform */
+            target_transform: string;
+            /** Target Unit */
+            target_unit: string;
+            /**
+             * Timezone
+             * @default UTC
+             * @constant
+             */
+            timezone: "UTC";
+        };
+        /** UtcPredictionPage */
+        UtcPredictionPage: {
+            /**
+             * Dataset Mode
+             * @default utc_provider_history
+             * @constant
+             */
+            dataset_mode: "utc_provider_history";
+            /**
+             * Evaluation Cohort
+             * @default target_timestamp_split_only
+             */
+            evaluation_cohort: string;
+            /**
+             * Historical Publication Time Known
+             * @default false
+             * @constant
+             */
+            historical_publication_time_known: false;
+            /** Limit */
+            limit: number;
+            /** Model Version */
+            model_version: string;
+            /** Offset */
+            offset: number;
+            /** Points */
+            points: components["schemas"]["UtcHeldoutPrediction"][];
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /**
+             * Timezone
+             * @default UTC
+             * @constant
+             */
+            timezone: "UTC";
+            /** Total Count */
+            total_count: number;
+            /** Unit */
+            unit: string;
+        };
+        /** UtcSplit */
+        UtcSplit: {
+            /**
+             * End At Utc Exclusive
+             * Format: date-time
+             */
+            end_at_utc_exclusive: string;
+            /** Name */
+            name: string;
+            /**
+             * Start At Utc
+             * Format: date-time
+             */
+            start_at_utc: string;
         };
         /** WeatherRequest */
         WeatherRequest: {
@@ -3117,6 +3543,143 @@ export interface operations {
             };
         };
     };
+    runs_api_v1_forecast_runs_get: {
+        parameters: {
+            query?: {
+                station_id?: string | null;
+                model_version?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ForecastRunPage_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    run_api_v1_forecast_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ForecastRunDetail_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     health_api_v1_health_get: {
         parameters: {
             query?: never;
@@ -3395,7 +3958,7 @@ export interface operations {
             query?: {
                 model_version?: string | null;
                 city_id?: string | null;
-                horizon_h?: components["schemas"]["DeclaredHorizon"] | null;
+                horizon_h?: number | null;
             };
             header?: never;
             path?: never;
@@ -3600,6 +4163,9 @@ export interface operations {
                 split?: "test" | "validation" | "rolling_2022" | "rolling_2023";
                 limit?: number;
                 offset?: number;
+                target_start?: string | null;
+                target_end?: string | null;
+                issue_time_purged?: boolean;
             };
             header?: never;
             path: {
@@ -3616,6 +4182,150 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PredictionPage_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    utc_evaluation_api_v1_models__model_version__utc_evaluation_get: {
+        parameters: {
+            query?: {
+                horizon_h?: number | null;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_UtcModelEvaluation_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    utc_predictions_api_v1_models__model_version__utc_predictions_get: {
+        parameters: {
+            query: {
+                horizon_h: number;
+                split?: string;
+                limit?: number;
+                offset?: number;
+                target_start?: string | null;
+                target_end?: string | null;
+                issue_time_purged?: boolean;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_UtcPredictionPage_"];
                 };
             };
             /** @description Unauthorized */

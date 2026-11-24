@@ -4,7 +4,7 @@ from breathewise.core.config import get_settings
 from breathewise.core.errors import metadata
 from breathewise.core.time import utc
 from breathewise.db.models import IngestionRun
-from breathewise.db.session import engine
+from breathewise.db.session import LATEST_SCHEMA_REVISION, engine
 from breathewise.schemas.common import Envelope
 from breathewise.services.capabilities import Capabilities, capabilities
 from fastapi import APIRouter, Request, Response
@@ -39,7 +39,7 @@ def ready(request: Request, response: Response):
         with engine().connect() as connection:
             db_ready = (
                 connection.execute(text("select version_num from alembic_version")).scalar()
-                == "0003"
+                == LATEST_SCHEMA_REVISION
             )
     except SQLAlchemyError:
         pass

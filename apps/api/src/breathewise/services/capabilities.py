@@ -37,6 +37,7 @@ class Capabilities(BaseModel):
     native_diagnostics: Capability = Field(default_factory=Capability)
     retrospective_evaluation: Capability = Field(default_factory=Capability)
     route_geometry: Capability = Field(default_factory=Capability)
+    shadow_forecast_runs: Capability = Field(default_factory=Capability)
     declared_artifact_horizons: list[int] = [1, 3, 6, 12, 24]
     verified_forecast_horizons: list[int] = []
     verified_forecast_pollutants: list[str] = []
@@ -126,7 +127,7 @@ def capabilities() -> Capabilities:
     ready_models = [m.model_version for m in models if m.retrospective_evaluation_ready]
     result.retrospective_evaluation = Capability(
         supported=bool(ready_models),
-        method="independent recorded-clock experiment with frozen test and baselines",
+        method="versioned retrospective experiments with separate recorded/UTC clock bases and baselines",
         supported_scope=ready_models,
         requirements_missing=[]
         if ready_models
@@ -137,6 +138,14 @@ def capabilities() -> Capabilities:
     if settings.routing_base_url:
         result.routes.requirements_missing = ["validated spatial estimator and coverage"]
         result.routes.method = "Road geometry available separately through route_geometry; pollution comparison unavailable"
+    result.shadow_forecast_runs = Capability(
+        supported=db_ready,
+        method="persisted experimental UTC run/status and exact observed matching; no public inference",
+        supported_scope=["UTC persistence shadow baseline; rejected learned-model runs visible"]
+        if db_ready
+        else [],
+        requirements_missing=[] if db_ready else ["database migrations through0004"],
+    )
     result.route_geometry = Capability(
         supported=bool(settings.routing_base_url),
         method="configured OSRM driving geometry; cached/throttled; no exposure/traffic",
