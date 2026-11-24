@@ -1,5 +1,10 @@
 # Codex handoff — current feature-building milestone, 24 November 2026
 
+## GitHub-only public demo — deployed and verified
+
+Public URL: https://shwetankjais.github.io/BreatheWise/ . GitHub Pages Actions45421443266 successfully deployed d4c20fc. Actual desktop/mobileHTTP200, ten tabs each, persistent demo/scope labels after reload, zero page errors/API network requests/bodyoverflow. Full evidence and exact supported/unavailable scope: GITHUB_PAGES_DEPLOYMENT.md and GITHUB_PAGES_VERIFICATION.json. Pages serves synthetic static preview only; no API, database, private archive/model assets or server account persistence. The deployment entry explicitly returns STATIC_DEMO_API_UNAVAILABLE for server-backed requests. V5/public live forecasting remain gated. Vercel/Render are unused; their credential blocker no longer blocks this static public demo. Local real-data prototype remains running.
+
+
 ## Public deployment preparation — 24 November 2026
 
 **Status: PENDING; public URL: none.** User confirmed hosting credentials/project identifiers are unavailable. No Vercel/Render credentials or linked project found; authenticated GitHub deployment list is empty. README now clearly distinguishes the accepted private localhost prototype from any future public demo. Exact account-connection steps, environment-variable names and targeted deployment preflight are in PUBLIC_DEPLOYMENT_HANDOFF.md. Asset sizes/hashes/source fingerprints are in DEPLOYMENT_ASSET_INVENTORY.json; no local model/archive redistribution is approved and none was uploaded. Initial authorized public scope is explicitly labeled synthetic demo, with real retrospective/history/replay assets unavailable. Public URL, CORS, hosted migrations/health, SPA routing and public desktop/mobile/account tests cannot be verified before hosting is provisioned. No deployment or new CI pass is inferred from config files. Localhost remains running; no main merge or purchase.

@@ -1,0 +1,50 @@
+{
+  "url": "https://shwetankjais.github.io/BreatheWise/",
+  "checked_at": "2026-11-24T15:06:50.077Z",
+  "scope": "GitHub Pages static demo only",
+  "profiles": [
+    {
+      "name": "desktop",
+      "http_status": 200,
+      "demo_label": true,
+      "visited_tabs": [
+        "Overview & Map",
+        "Activity Planner",
+        "Model Audit",
+        "Historical EDA",
+        "Routes (Exp)",
+        "Health Guidance",
+        "Saved Places",
+        "Emerging HotspotsGated",
+        "Population ExtentGated",
+        "What-If ScenariosGated"
+      ],
+      "api_requests": [],
+      "page_errors": [],
+      "body_width": 1440,
+      "viewport_width": 1440
+    },
+    {
+      "name": "mobile",
+      "http_status": 200,
+      "demo_label": true,
+      "visited_tabs": [
+        "Overview & Map",
+        "Activity Planner",
+        "Model Audit",
+        "Historical EDA",
+        "Routes (Exp)",
+        "Health Guidance",
+        "Saved Places",
+        "Emerging HotspotsGated",
+        "Population ExtentGated",
+        "What-If ScenariosGated"
+      ],
+      "api_requests": [],
+      "page_errors": [],
+      "body_width": 390,
+      "viewport_width": 390
+    }
+  ],
+  "passed": true
+}

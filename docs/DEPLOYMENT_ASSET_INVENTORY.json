@@ -1,6 +1,6 @@
 {
-  "public_deployment_status": "blocked_hosting_authentication",
-  "public_url": null,
+  "public_deployment_status": "github_pages_static_demo_verified",
+  "public_url": "https://shwetankjais.github.io/BreatheWise/",
   "real_asset_distribution_status": "permission_not_established_no_upload",
   "retrospective_bundles": [
     {

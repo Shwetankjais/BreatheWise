@@ -1,6 +1,6 @@
-# Public deployment handoff — pending account access
+# Optional full-stack hosting handoff — Vercel/Render pending
 
-24 November 2026. **No verified public URL exists.** Localhost is running and its accepted desktop/mobile results remain recorded in SUBMISSION.md. GitHub deployment history is empty; no local Vercel/Render authentication or project links were found. The user confirmed hosting credentials/identifiers are unavailable and requested preparation only until access is configured. No private archive, model, database or token was uploaded.
+24 November 2026. **GitHub Pages static demo is now verified at https://shwetankjais.github.io/BreatheWise/; this document describes the optional, still pending Vercel/Render full-stack path.** Localhost is running and its accepted desktop/mobile results remain recorded in SUBMISSION.md. GitHub deployment history is empty; no local Vercel/Render authentication or project links were found. The user confirmed hosting credentials/identifiers are unavailable and requested preparation only until access is configured. No private archive, model, database or token was uploaded.
 
 ## Connect the accounts
 

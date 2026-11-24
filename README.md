@@ -1,6 +1,6 @@
 # BreatheWise India
 
-**Public deployment: PENDING — no public URL has been deployed or verified.** Hosting account access/project identifiers are not yet configured. The accepted real-data prototype is localhost-only at http://127.0.0.1:5173. See [account connection and environment setup](docs/PUBLIC_DEPLOYMENT_HANDOFF.md). Initial cloud scope will be explicitly labeled demo until local archive/model redistribution is approved.
+**Public demo: [https://shwetankjais.github.io/BreatheWise/](https://shwetankjais.github.io/BreatheWise/) — deployed on GitHub Pages and verified on desktop/mobile.** This is an explicitly labeled synthetic static preview without a hosted API or database. The accepted real-data prototype remains localhost-only at http://127.0.0.1:5173. Vercel/Render are not used. See [public demo scope](docs/GITHUB_PAGES_DEPLOYMENT.md).
 
 
 Hyperlocal Atmospheric Intelligence & Machine Learning Forecasting for India's Cities.
