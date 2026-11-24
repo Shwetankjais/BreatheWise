@@ -65,3 +65,11 @@ def test_advisories_are_sourced_and_not_personalized():
     assert data["scope"] == "general_education"
     assert data["source_url"].startswith("https://www.who.int/")
     assert "no clinical review" in data["review_scope"]
+
+
+def test_numeric_query_horizon_reaches_capability_gate_without_expanding_support():
+    response = client.get("/api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0")
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "MODEL_UNAVAILABLE"
+    assert client.get("/api/v1/hotspots?city_id=delhi&horizon_h=2&threshold=0").status_code == 422
+    assert client.get("/api/v1/hotspots?city_id=delhi&horizon_h=6.5&threshold=0").status_code == 422

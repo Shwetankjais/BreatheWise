@@ -1,4 +1,5 @@
-from typing import Annotated, Literal
+from enum import IntEnum
+from typing import Annotated
 
 from breathewise.core.errors import ServiceError, metadata
 from breathewise.schemas.common import Envelope, Pollutant
@@ -14,6 +15,22 @@ from breathewise.services.advisories import Advisory, advisory
 from breathewise.services.capabilities import MODEL_MISSING
 from breathewise.services.cities import cities, validate_city
 from fastapi import APIRouter, Query, Request
+
+
+class HotspotHorizon(IntEnum):
+    h1 = 1
+    h3 = 3
+    h6 = 6
+    h24 = 24
+
+
+class DeclaredHorizon(IntEnum):
+    h1 = 1
+    h3 = 3
+    h6 = 6
+    h12 = 12
+    h24 = 24
+
 
 router = APIRouter()
 
@@ -75,7 +92,7 @@ def forecast(
 @router.get("/hotspots")
 def hotspots(
     city_id: str,
-    horizon_h: Literal[1, 3, 6, 24],
+    horizon_h: HotspotHorizon,
     pollutant: Pollutant = Pollutant.pm25,
     threshold: float = Query(ge=0),
     limit: int = Query(20, ge=1, le=100),
@@ -135,7 +152,7 @@ def performance(
     request: Request,
     model_version: str | None = None,
     city_id: str | None = None,
-    horizon_h: Literal[1, 3, 6, 12, 24] | None = None,
+    horizon_h: DeclaredHorizon | None = None,
 ):
     if model_version:
         from breathewise.api.models import recorded_meta

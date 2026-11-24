@@ -1220,6 +1220,17 @@
         "title": "Coordinates",
         "type": "object"
       },
+      "DeclaredHorizon": {
+        "enum": [
+          1,
+          3,
+          6,
+          12,
+          24
+        ],
+        "title": "DeclaredHorizon",
+        "type": "integer"
+      },
       "Envelope_ArchiveCatalogue_": {
         "properties": {
           "data": {
@@ -2286,6 +2297,16 @@
         ],
         "title": "HorizonEvaluation",
         "type": "object"
+      },
+      "HotspotHorizon": {
+        "enum": [
+          1,
+          3,
+          6,
+          24
+        ],
+        "title": "HotspotHorizon",
+        "type": "integer"
       },
       "Identity": {
         "additionalProperties": false,
@@ -5071,14 +5092,7 @@
             "name": "horizon_h",
             "required": true,
             "schema": {
-              "enum": [
-                1,
-                3,
-                6,
-                24
-              ],
-              "title": "Horizon H",
-              "type": "integer"
+              "$ref": "#/components/schemas/HotspotHorizon"
             }
           },
           {
@@ -5292,14 +5306,7 @@
             "schema": {
               "anyOf": [
                 {
-                  "enum": [
-                    1,
-                    3,
-                    6,
-                    12,
-                    24
-                  ],
-                  "type": "integer"
+                  "$ref": "#/components/schemas/DeclaredHorizon"
                 },
                 {
                   "type": "null"

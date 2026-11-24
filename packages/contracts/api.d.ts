@@ -1118,6 +1118,11 @@ export interface components {
             /** Longitude */
             longitude: number;
         };
+        /**
+         * DeclaredHorizon
+         * @enum {integer}
+         */
+        DeclaredHorizon: 1 | 3 | 6 | 12 | 24;
         /** Envelope[ArchiveCatalogue] */
         Envelope_ArchiveCatalogue_: {
             data: components["schemas"]["ArchiveCatalogue"];
@@ -1528,6 +1533,11 @@ export interface components {
                 [key: string]: components["schemas"]["EvaluationGroup"];
             };
         };
+        /**
+         * HotspotHorizon
+         * @enum {integer}
+         */
+        HotspotHorizon: 1 | 3 | 6 | 24;
         /** Identity */
         Identity: {
             preferences: components["schemas"]["Preferences"];
@@ -3248,7 +3258,7 @@ export interface operations {
         parameters: {
             query: {
                 city_id: string;
-                horizon_h: 1 | 3 | 6 | 24;
+                horizon_h: components["schemas"]["HotspotHorizon"];
                 pollutant?: components["schemas"]["Pollutant"];
                 threshold: number;
                 limit?: number;
@@ -3385,7 +3395,7 @@ export interface operations {
             query?: {
                 model_version?: string | null;
                 city_id?: string | null;
-                horizon_h?: (1 | 3 | 6 | 12 | 24) | null;
+                horizon_h?: components["schemas"]["DeclaredHorizon"] | null;
             };
             header?: never;
             path?: never;

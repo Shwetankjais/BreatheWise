@@ -132,6 +132,9 @@ def test_registry_evaluation_and_bounded_predictions_preserve_scope(registry):
     r = client.get(f"/api/v1/stations/openaq-235/forecast?model_version={MODEL_VERSION}")
     assert r.status_code == 409 and r.json()["error"]["code"] == "MODEL_RETROSPECTIVE_ONLY"
     assert client.get(f"/api/v1/model-performance?model_version={MODEL_VERSION}").status_code == 200
+    filtered = client.get(f"/api/v1/model-performance?model_version={MODEL_VERSION}&horizon_h=3")
+    assert filtered.status_code == 200
+    assert [row["horizon_h"] for row in filtered.json()["data"]["horizons"]] == [3]
     assert client.get("/api/v1/models/unknown/evaluation").status_code == 404
 
 
