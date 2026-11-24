@@ -1,13 +1,13 @@
 /**
  * BreatheWise API Types
- * Strictly aligned with contract 1.1.0 in packages/contracts/api.d.ts
+ * Strictly aligned with contract 1.2.0 in packages/contracts/api.d.ts
  */
 
 import type { components, paths } from '../../../../../packages/contracts/api';
 
 export type Schemas = components['schemas'];
 
-// Contract 1.1.0 Core Entities
+// Contract Core Entities
 export type City = Schemas['City'];
 export type StationView = Schemas['StationView'];
 export type Measurement = Schemas['Measurement'];
@@ -34,6 +34,42 @@ export type Health = Schemas['Health'];
 export type ActivityRequest = Schemas['ActivityRequest'];
 export type RouteRequest = Schemas['RouteRequest'];
 export type WeatherRequest = Schemas['WeatherRequest'];
+
+// Contract 1.2.0 Additive Entities — Station Catalogue & Observed Rankings
+export type StationCatalogue = Schemas['StationCatalogue'];
+export type CatalogueStation = Schemas['CatalogueStation'];
+export type PollutantAvailability = Schemas['PollutantAvailability'];
+export type ObservedRankings = Schemas['ObservedRankings'];
+export type ObservedRank = Schemas['ObservedRank'];
+
+// Contract 1.2.0 Additive Entities — Audited Recorded-Clock Archive
+export type ArchiveCatalogue = Schemas['ArchiveCatalogue'];
+export type ArchiveStation = Schemas['ArchiveStation'];
+export type ArchivePollutantCoverage = Schemas['ArchivePollutantCoverage'];
+export type ArchiveExplore = Schemas['ArchiveExplore'];
+export type ArchiveBucket = Schemas['ArchiveBucket'];
+export type ArchiveDistribution = Schemas['ArchiveDistribution'];
+export type ArchiveCompare = Schemas['ArchiveCompare'];
+export type ArchiveComparisonBucket = Schemas['ArchiveComparisonBucket'];
+export type ArchivePairAgreement = Schemas['ArchivePairAgreement'];
+
+// Contract 1.2.0 Additive Entities — Model Registry & Evaluation
+export type ModelCatalogue = Schemas['ModelCatalogue'];
+export type ModelSummary = Schemas['ModelSummary'];
+export type ModelEvaluation = Schemas['ModelEvaluation'];
+export type HorizonEvaluation = Schemas['HorizonEvaluation'];
+export type EvaluationGroup = Schemas['EvaluationGroup'];
+export type ErrorMetrics = Schemas['ErrorMetrics'];
+export type RecordedSplit = Schemas['RecordedSplit'];
+export type PredictionPage = Schemas['PredictionPage'];
+export type HeldoutPrediction = Schemas['HeldoutPrediction'];
+
+// Contract 1.2.0 Additive Entities — Route Geometry
+export type GeometryRequest = Schemas['GeometryRequest'];
+export type GeometryResponse = Schemas['GeometryResponse'];
+export type RouteGeometry = Schemas['RouteGeometry'];
+export type LineString = Schemas['LineString'];
+export type Coordinates = Schemas['Coordinates'];
 
 export type DataMode = 'live' | 'historical_replay' | 'demo';
 

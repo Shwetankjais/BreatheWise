@@ -1,176 +1,422 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Select';
-import { Badge } from '../../components/ui/Badge';
+import { GeometryResponse, RouteGeometry, Coordinates } from '../../lib/api/types';
+import { apiClient } from '../../lib/api/client';
+
+// Preset Corridor Coordinates across Delhi NCR
+interface RoutePreset {
+  id: string;
+  name: string;
+  originName: string;
+  destName: string;
+  originCoords: [number, number]; // [lat, lon]
+  destCoords: [number, number];   // [lat, lon]
+}
+
+const PRESET_ROUTES: RoutePreset[] = [
+  {
+    id: 'cp-noida',
+    name: 'Connaught Place ↔ Noida Sector 62',
+    originName: 'Connaught Place, Central Delhi',
+    destName: 'Noida Sector 62 / Electronic City',
+    originCoords: [28.6328, 77.2197],
+    destCoords: [28.6280, 77.3649]
+  },
+  {
+    id: 'anand-vihar-igi',
+    name: 'Anand Vihar ISBT ↔ IGI Airport T3',
+    originName: 'Anand Vihar ISBT / Railway Station',
+    destName: 'Indira Gandhi International Airport (T3)',
+    originCoords: [28.6476, 77.3160],
+    destCoords: [28.5562, 77.0999]
+  },
+  {
+    id: 'rohini-nehru-place',
+    name: 'Rohini Sector 16 ↔ Nehru Place',
+    originName: 'Rohini Sector 16, North Delhi',
+    destName: 'Nehru Place Commercial Hub, South Delhi',
+    originCoords: [28.7325, 77.1235],
+    destCoords: [28.5492, 77.2530]
+  }
+];
+
+// Origin and Destination Pin Icons
+const originIcon = L.divIcon({
+  className: 'custom-station-marker',
+  html: `
+    <div class="flex items-center justify-center w-7 h-7 rounded-full bg-emerald-600 border-2 border-white shadow-lg text-white font-bold text-xs" title="Origin">
+      A
+    </div>
+  `,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14]
+});
+
+const destIcon = L.divIcon({
+  className: 'custom-station-marker',
+  html: `
+    <div class="flex items-center justify-center w-7 h-7 rounded-full bg-red-600 border-2 border-white shadow-lg text-white font-bold text-xs" title="Destination">
+      B
+    </div>
+  `,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14]
+});
+
+// Map click handler component to place origin or destination pins
+const MapClickHandler: React.FC<{
+  settingTarget: 'origin' | 'destination' | null;
+  onSetCoords: (coords: [number, number]) => void;
+}> = ({ settingTarget, onSetCoords }) => {
+  useMapEvents({
+    click(e) {
+      if (settingTarget) {
+        onSetCoords([e.latlng.lat, e.latlng.lng]);
+      }
+    }
+  });
+  return null;
+};
+
+const ROUTE_COLORS = ['#0d9488', '#4f46e5', '#7c3aed', '#d97706'];
 
 export const RouteCompareView: React.FC = () => {
-  const [origin, setOrigin] = useState('Connaught Place, Central Delhi');
-  const [destination, setDestination] = useState('Noida Sector 62 / Electronic City');
-  const [mode, setMode] = useState<'driving' | 'transit' | 'cycling'>('driving');
-  const [isCalculated, setIsCalculated] = useState(true);
+  const [selectedPreset, setSelectedPreset] = useState<RoutePreset>(PRESET_ROUTES[0]);
+  const [mode, setMode] = useState<'driving' | 'walking' | 'cycling'>('driving');
+  const [customOrigin, setCustomOrigin] = useState<[number, number]>(PRESET_ROUTES[0].originCoords);
+  const [customDest, setCustomDest] = useState<[number, number]>(PRESET_ROUTES[0].destCoords);
+  const [settingTarget, setSettingTarget] = useState<'origin' | 'destination' | null>(null);
+
+  // Live Route Geometry State (Contract 1.2.0)
+  const [geometryResponse, setGeometryResponse] = useState<GeometryResponse | null>(null);
+  const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+  const [isLoadingGeometry, setIsLoadingGeometry] = useState(false);
+  const [geometryError, setGeometryError] = useState<string | null>(null);
+
+  const handleSelectPreset = (presetId: string) => {
+    const match = PRESET_ROUTES.find(p => p.id === presetId);
+    if (match) {
+      setSelectedPreset(match);
+      setCustomOrigin(match.originCoords);
+      setCustomDest(match.destCoords);
+    }
+  };
+
+  // Fetch real route alternatives via POST /api/v1/routes/geometry (Contract 1.2.0)
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingGeometry(true);
+    setGeometryError(null);
+
+    const origin: Coordinates = { latitude: customOrigin[0], longitude: customOrigin[1] };
+    const destination: Coordinates = { latitude: customDest[0], longitude: customDest[1] };
+
+    apiClient
+      .getRouteGeometry(origin, destination, mode, 3)
+      .then(res => {
+        if (!isMounted) return;
+        setIsLoadingGeometry(false);
+        if (res.ok) {
+          setGeometryResponse(res.data);
+          if (res.data.routes.length > 0) {
+            setSelectedRouteId(res.data.routes[0].id);
+          }
+        } else {
+          setGeometryResponse(null);
+          setGeometryError(`${res.error.code}: ${res.error.message}`);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [customOrigin, customDest, mode]);
+
+  const activeRoute = useMemo(() => {
+    if (!geometryResponse || geometryResponse.routes.length === 0) return null;
+    return geometryResponse.routes.find(r => r.id === selectedRouteId) || geometryResponse.routes[0];
+  }, [geometryResponse, selectedRouteId]);
 
   return (
     <div className="space-y-6">
       {/* Overview & Disclaimer */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-600" />
               <h2 className="text-lg font-bold text-slate-900">
-                Experimental Route Exposure Comparison
+                Route Geometry & Navigation Corridor Workspace
               </h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 uppercase">
-                Experimental Feature
-              </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
-              Compare alternative travel corridors using geometric distance, duration, and path-integrated station proximity exposure proxies.
+              Inspect OSRM-generated road network paths, distance in metres, and duration estimates across Delhi NCR routes.
             </p>
           </div>
-        </div>
 
-        {/* Capability Disclaimer */}
-        <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
-          <svg className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <span className="font-bold">Spatial Modeling Transparency Notice: </span>
-            This tool computes path exposure by sampling continuous CAAQMS monitors along alternative route lines. It does <em>not</em> claim street-canyon micro-dispersion or real-time traffic sensor speeds. Alternatives whose difference falls within spatial uncertainty are reported as statistically indistinguishable.
+          <div className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-700 border border-slate-200">
+            Geometry Active • Exposure Gated (409)
           </div>
         </div>
 
-        {/* Inputs Form */}
-        <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="text-xs font-semibold text-slate-700 block mb-1">Origin Location</label>
-            <input
-              type="text"
-              value={origin}
-              onChange={e => setOrigin(e.target.value)}
-              className="w-full text-xs rounded-lg border border-slate-300 p-2.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
-            />
+        {/* Explicit Separation & Capability Notice */}
+        <div className="p-3.5 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-950 space-y-1.5 leading-relaxed">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-amber-900">ROUTE_COMPARISON_UNAVAILABLE Notice:</span>
+            <span className="text-[10px] font-semibold px-2 py-0.2 rounded bg-amber-200 text-amber-900">
+              409 Contract Gate
+            </span>
           </div>
+          <p>
+            Route geometry and provider-estimated travel times are functional via the OSRM road network. However, path-integrated pollution exposure comparison (<code className="font-mono">/routes/compare</code>) remains gated and unavailable pending validated micro-dispersion and street-canyon models. BreatheWise does not invent cleaner-route percentages, live traffic sensor feeds, or synthetic air quality gradients along road lines.
+          </p>
+        </div>
 
+        {/* Inputs Ribbon */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-100">
           <div>
-            <label className="text-xs font-semibold text-slate-700 block mb-1">Destination Location</label>
-            <input
-              type="text"
-              value={destination}
-              onChange={e => setDestination(e.target.value)}
-              className="w-full text-xs rounded-lg border border-slate-300 p-2.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
-            />
+            <label className="text-xs font-semibold text-slate-700 block mb-1">Preset Corridor Route</label>
+            <select
+              value={selectedPreset.id}
+              onChange={e => handleSelectPreset(e.target.value)}
+              className="w-full text-xs rounded-lg border border-slate-300 p-2.5 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+            >
+              {PRESET_ROUTES.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
             <Select
               label="Travel Mode"
               options={[
-                { value: 'driving', label: 'Car / Cab (AC In-Cabin Filter)' },
-                { value: 'transit', label: 'Metro / Rapid Rail Transit' },
-                { value: 'cycling', label: 'Open Two-Wheeler / Bicycle' }
+                { value: 'driving', label: 'Driving (Motor Vehicle / Cab) — Supported' },
+                { value: 'walking', label: 'Walking (Pedestrian Path) — Unsupported', disabled: true },
+                { value: 'cycling', label: 'Cycling (Bicycle) — Unsupported', disabled: true }
               ]}
               value={mode}
               onChange={e => setMode(e.target.value as any)}
             />
           </div>
+
+          <div>
+            <label className="text-xs font-semibold text-slate-700 block mb-1">Map Click Placement</label>
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                onClick={() => setSettingTarget(settingTarget === 'origin' ? null : 'origin')}
+                className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-colors cursor-pointer text-center ${
+                  settingTarget === 'origin'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {settingTarget === 'origin' ? 'Click Map for Pin A' : 'Set Pin A (Origin)'}
+              </button>
+              <button
+                onClick={() => setSettingTarget(settingTarget === 'destination' ? null : 'destination')}
+                className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-colors cursor-pointer text-center ${
+                  settingTarget === 'destination'
+                    ? 'bg-red-600 text-white border-red-600'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {settingTarget === 'destination' ? 'Click Map for Pin B' : 'Set Pin B (Dest)'}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Alternative Corridors Comparison */}
-      {isCalculated && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Option A: Ring Road Arterial */}
-          <Card className="border-2 border-slate-300">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Corridor Alternative A
-                </span>
-                <Badge category="Very Poor" size="sm">
-                  AQI ~340
-                </Badge>
-              </div>
-              <CardTitle className="text-base font-bold mt-1">
-                Via Ring Road & Vikas Marg Arterial
-              </CardTitle>
-              <CardDescription>Direct arterial route traversing commercial choke points</CardDescription>
-            </CardHeader>
+      {/* Main Grid: Left Route Map, Right Selectable Corridors */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left (7 cols): React Leaflet Route Map */}
+        <div className="lg:col-span-7 space-y-4">
+          <div className="relative w-full h-[420px] sm:h-[480px] rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-900">
+            <MapContainer
+              center={customOrigin}
+              zoom={12}
+              scrollWheelZoom={false}
+              className="w-full h-full"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                subdomains="abcd"
+                maxZoom={19}
+              />
 
-            <CardContent className="space-y-3 pt-2 text-xs">
-              <div className="grid grid-cols-3 gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-center">
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Distance</div>
-                  <div className="text-sm font-extrabold text-slate-800">18.4 km</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Est. Duration</div>
-                  <div className="text-sm font-extrabold text-slate-800">42 mins</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Avg Exposure</div>
-                  <div className="text-sm font-extrabold text-red-600">212 µg/m³</div>
-                </div>
-              </div>
+              <MapClickHandler
+                settingTarget={settingTarget}
+                onSetCoords={coords => {
+                  if (settingTarget === 'origin') setCustomOrigin(coords);
+                  if (settingTarget === 'destination') setCustomDest(coords);
+                  setSettingTarget(null);
+                }}
+              />
 
-              <div className="text-[11px] text-slate-600">
-                <span className="font-semibold text-slate-800">Sampled Monitors: </span>
-                Mandir Marg (168 µg/m³) → ITO (235 µg/m³) → Anand Vihar (284 µg/m³).
-              </div>
+              {/* Origin Marker */}
+              <Marker position={customOrigin} icon={originIcon}>
+                <Popup>
+                  <div className="p-1 text-xs">
+                    <span className="font-bold text-emerald-800">Origin Point (A)</span>
+                    <p className="text-[11px] text-slate-600 mt-0.5">{selectedPreset.originName}</p>
+                    <p className="font-mono text-[10px] text-slate-400 mt-0.5">
+                      {customOrigin[0].toFixed(4)}° N, {customOrigin[1].toFixed(4)}° E
+                    </p>
+                  </div>
+                </Popup>
+              </Marker>
 
-              <div className="p-2.5 bg-red-50 text-red-900 rounded-lg text-[11px] leading-relaxed">
-                <strong>Exposure Note:</strong> Prolonged idling at Vikas Marg intersections increases in-cabin particulate accumulation.
-              </div>
-            </CardContent>
-          </Card>
+              {/* Destination Marker */}
+              <Marker position={customDest} icon={destIcon}>
+                <Popup>
+                  <div className="p-1 text-xs">
+                    <span className="font-bold text-red-800">Destination Point (B)</span>
+                    <p className="text-[11px] text-slate-600 mt-0.5">{selectedPreset.destName}</p>
+                    <p className="font-mono text-[10px] text-slate-400 mt-0.5">
+                      {customDest[0].toFixed(4)}° N, {customDest[1].toFixed(4)}° E
+                    </p>
+                  </div>
+                </Popup>
+              </Marker>
 
-          {/* Option B: Delhi-Meerut Expressway */}
-          <Card className="border-2 border-teal-500 shadow-md">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-teal-700 uppercase tracking-wider">
-                  Corridor Alternative B (Lower Inhaled Dose)
-                </span>
-                <Badge category="Poor" size="sm">
-                  AQI ~260
-                </Badge>
-              </div>
-              <CardTitle className="text-base font-bold mt-1">
-                Via Barapullah & Delhi-Meerut Expressway
-              </CardTitle>
-              <CardDescription>Elevated bypass corridor with improved lateral wind mixing</CardDescription>
-            </CardHeader>
+              {/* Alternative Route Corridor Polylines from OSRM LineStrings (Contract 1.2.0) */}
+              {geometryResponse?.routes.map((route: RouteGeometry, idx: number) => {
+                const isSelected = route.id === selectedRouteId;
+                const color = ROUTE_COLORS[idx % ROUTE_COLORS.length];
+                // Convert GeoJSON [lon, lat] coordinates to Leaflet [lat, lon]
+                const positions = route.geometry.coordinates.map(pt => [pt[1], pt[0]] as [number, number]);
 
-            <CardContent className="space-y-3 pt-2 text-xs">
-              <div className="grid grid-cols-3 gap-2 p-2.5 rounded-lg bg-teal-50/50 border border-teal-100 text-center">
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Distance</div>
-                  <div className="text-sm font-extrabold text-slate-800">21.8 km</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Est. Duration</div>
-                  <div className="text-sm font-extrabold text-slate-800">34 mins</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-bold">Avg Exposure</div>
-                  <div className="text-sm font-extrabold text-amber-700">148 µg/m³</div>
-                </div>
-              </div>
+                return (
+                  <Polyline
+                    key={route.id}
+                    positions={positions}
+                    pathOptions={{
+                      color,
+                      weight: isSelected ? 5 : 3,
+                      opacity: isSelected ? 0.95 : 0.45
+                    }}
+                    eventHandlers={{
+                      click: () => setSelectedRouteId(route.id)
+                    }}
+                  />
+                );
+              })}
+            </MapContainer>
 
-              <div className="text-[11px] text-slate-600">
-                <span className="font-semibold text-slate-800">Sampled Monitors: </span>
-                Lodhi Road (142 µg/m³) → Sarai Kale Khan (156 µg/m³) → Ghazipur (174 µg/m³).
+            {/* Map Legend & Active Route Bar */}
+            {activeRoute && (
+              <div className="absolute bottom-3 left-3 z-20 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-200 text-xs shadow-md flex items-center gap-3">
+                <span className="font-bold text-slate-800">Active Corridor:</span>
+                <span className="font-semibold text-teal-800">{activeRoute.id}</span>
+                <span className="text-slate-400">•</span>
+                <span className="text-slate-600">{(activeRoute.distance_m / 1000).toFixed(1)} km</span>
+                <span className="text-slate-400">•</span>
+                <span className="text-slate-600">{Math.round(activeRoute.estimated_duration_s / 60)} mins</span>
               </div>
+            )}
+          </div>
 
-              <div className="p-2.5 bg-emerald-50 text-emerald-900 rounded-lg text-[11px] leading-relaxed">
-                <strong>Exposure Note:</strong> Elevated carriageway avoids street-level diesel exhaust entrapment, cutting cumulative time-integrated exposure by ~28%.
-              </div>
-            </CardContent>
-          </Card>
+          {/* Attribution & Method Footnote */}
+          {geometryResponse && (
+            <div className="text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+              <span>{geometryResponse.attribution}</span>
+              <span className="italic">{geometryResponse.duration_method}</span>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Right (5 cols): Selectable Alternative Route Cards */}
+        <div className="lg:col-span-5 space-y-3">
+          <div className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+            <span>Alternative Corridors ({geometryResponse?.routes.length ?? 0})</span>
+            {geometryResponse?.cached && (
+              <span className="text-[10px] font-mono text-slate-400">Cached Result</span>
+            )}
+          </div>
+
+          {isLoadingGeometry ? (
+            <div className="p-8 text-center text-xs text-slate-400 bg-white rounded-xl border border-slate-200 animate-pulse">
+              Computing road network alternatives via routing engine...
+            </div>
+          ) : geometryError ? (
+            <div className="p-4 text-center text-xs text-amber-900 bg-amber-50 rounded-xl border border-amber-200">
+              {geometryError}
+            </div>
+          ) : geometryResponse?.routes && geometryResponse.routes.length > 0 ? (
+            geometryResponse.routes.map((route: RouteGeometry, idx: number) => {
+              const isSelected = route.id === selectedRouteId;
+              const color = ROUTE_COLORS[idx % ROUTE_COLORS.length];
+              const distanceKm = (route.distance_m / 1000).toFixed(1);
+              const durationMins = Math.round(route.estimated_duration_s / 60);
+
+              return (
+                <Card
+                  key={route.id}
+                  onClick={() => setSelectedRouteId(route.id)}
+                  className={`transition-all cursor-pointer border-2 ${
+                    isSelected
+                      ? 'border-teal-600 bg-teal-50/10 shadow-sm'
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <CardHeader className="p-4 pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+                        <CardTitle className="text-sm font-bold">
+                          Alternative {idx + 1} ({route.id})
+                        </CardTitle>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                          Exposure Unavailable
+                        </span>
+                        {isSelected && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800 uppercase">
+                            Selected
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <CardDescription className="text-xs mt-1">
+                      Provider road-network corridor connecting Point A to Point B
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-4 pt-1">
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                      <div>
+                        <span className="text-slate-400">Distance: </span>
+                        <strong className="text-slate-800">{distanceKm} km</strong>
+                        <span className="text-[10px] text-slate-400 font-mono ml-1">({route.distance_m}m)</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400">Est. Time ({mode}): </span>
+                        <strong className="text-slate-800">{durationMins} mins</strong>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })
+          ) : (
+            <div className="p-8 text-center text-xs text-slate-400 bg-white rounded-xl border border-slate-200">
+              No routes returned for selected origin and destination coordinates.
+            </div>
+          )}
+
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-500 leading-relaxed">
+            <strong>Exposure Comparison Note: </strong>
+            Quantitative dose integration and comparative air quality scores remain disabled per capability contracts. Lines reflect physical road geometry from OSRM.
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -30,7 +30,17 @@ import {
   ActivityRequest,
   RouteRequest,
   WeatherRequest,
-  ApiResult
+  ApiResult,
+  StationCatalogue,
+  ObservedRankings,
+  ArchiveCatalogue,
+  ArchiveExplore,
+  ArchiveCompare,
+  ModelCatalogue,
+  ModelEvaluation,
+  PredictionPage,
+  GeometryResponse,
+  Coordinates
 } from './types';
 
 import {
@@ -39,7 +49,16 @@ import {
   DEMO_MEASUREMENTS,
   DEMO_CAPABILITIES,
   DEMO_ADVISORIES,
-  DEMO_IDENTITY
+  DEMO_IDENTITY,
+  DEMO_STATION_CATALOGUE,
+  DEMO_OBSERVED_RANKINGS,
+  DEMO_ARCHIVE_CATALOGUE,
+  DEMO_ARCHIVE_EXPLORE,
+  DEMO_ARCHIVE_COMPARE,
+  DEMO_MODELS,
+  DEMO_MODEL_EVALUATION,
+  DEMO_PREDICTION_PAGE,
+  DEMO_GEOMETRY_RESPONSE
 } from './demoData';
 
 class MemoryStorage {
@@ -663,6 +682,251 @@ export class BreatheWiseApiClient {
     }
     return this.request<NotificationView>(`/alerts/${notificationId}/read`, {
       method: 'POST'
+    });
+  }
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 Methods: Station Catalogue & Observed Rankings
+  // ----------------------------------------------------------------------
+
+  async getStationCatalogue(cityId: string = 'delhi', issueAt?: string | null): Promise<ApiResult<StationCatalogue>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_STATION_CATALOGUE,
+        meta: { contract_version: '1.2.0', data_mode: 'demo', request_id: 'demo-req', source: 'demo_fixture' },
+        status: 200
+      };
+    }
+    const query = new URLSearchParams({ city_id: cityId });
+    if (issueAt) query.set('issue_at', issueAt);
+    return this.request<StationCatalogue>(`/station-catalogue?${query.toString()}`);
+  }
+
+  async getObservedRankings(
+    cityId: string = 'delhi',
+    pollutant: Pollutant = 'pm25',
+    limit: number = 20,
+    includeStale: boolean = false,
+    issueAt?: string | null
+  ): Promise<ApiResult<ObservedRankings>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_OBSERVED_RANKINGS,
+        meta: { contract_version: '1.2.0', data_mode: 'demo', request_id: 'demo-req', source: 'demo_fixture' },
+        status: 200
+      };
+    }
+    const query = new URLSearchParams({
+      city_id: cityId,
+      pollutant,
+      limit: String(limit),
+      include_stale: String(includeStale)
+    });
+    if (issueAt) query.set('issue_at', issueAt);
+    return this.request<ObservedRankings>(`/observed-rankings?${query.toString()}`);
+  }
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 Methods: Audited Recorded-Clock Archive
+  // ----------------------------------------------------------------------
+
+  async getArchiveCatalogue(): Promise<ApiResult<ArchiveCatalogue>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_ARCHIVE_CATALOGUE,
+        meta: {
+          contract_version: '1.2.0',
+          data_mode: 'demo',
+          request_id: 'demo-req',
+          source: 'demo_fixture'
+        },
+        status: 200
+      };
+    }
+    return this.request<ArchiveCatalogue>('/archive/catalogue');
+  }
+
+  async getArchiveExplore(
+    stationId: string,
+    pollutant: Pollutant,
+    start: string,
+    end: string,
+    aggregation: 'daily' | 'monthly' = 'daily',
+    minCount?: number,
+    minCoverage?: number
+  ): Promise<ApiResult<ArchiveExplore>> {
+    if (this.isDemoMode) {
+      const isCo = pollutant === 'co';
+      const exploreData: ArchiveExplore = isCo
+        ? {
+            ...DEMO_ARCHIVE_EXPLORE,
+            station_id: stationId,
+            pollutant: 'co',
+            unit: 'mg/m³',
+            distribution: {
+              ...DEMO_ARCHIVE_EXPLORE.distribution,
+              minimum: 0.2,
+              p05: 0.4,
+              p25: 0.8,
+              median: 1.4,
+              mean: 1.6,
+              p75: 2.1,
+              p95: 3.8,
+              maximum: 5.2,
+              stddev: 0.9
+            },
+            points: DEMO_ARCHIVE_EXPLORE.points.map(p => ({
+              ...p,
+              value: p.value !== null ? Number((p.value * 0.01).toFixed(2)) : null
+            }))
+          }
+        : {
+            ...DEMO_ARCHIVE_EXPLORE,
+            station_id: stationId,
+            pollutant
+          };
+      return {
+        ok: true,
+        data: exploreData,
+        meta: {
+          contract_version: '1.2.0',
+          data_mode: 'demo',
+          request_id: 'demo-req',
+          source: 'demo_fixture'
+        },
+        status: 200
+      };
+    }
+    const query = new URLSearchParams({
+      station_id: stationId,
+      pollutant,
+      start,
+      end,
+      aggregation
+    });
+    if (minCount !== undefined) query.set('min_count', String(minCount));
+    if (minCoverage !== undefined) query.set('min_coverage', String(minCoverage));
+    return this.request<ArchiveExplore>(`/archive/explore?${query.toString()}`);
+  }
+
+  async getArchiveCompare(
+    stationIds: string[],
+    pollutant: Pollutant,
+    start: string,
+    end: string,
+    aggregation: 'daily' | 'monthly' = 'daily',
+    clockAssumption: 'same_recorded_clock' = 'same_recorded_clock'
+  ): Promise<ApiResult<ArchiveCompare>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_ARCHIVE_COMPARE,
+        meta: {
+          contract_version: '1.2.0',
+          data_mode: 'demo',
+          request_id: 'demo-req',
+          source: 'demo_fixture'
+        },
+        status: 200
+      };
+    }
+    const queryParts = stationIds.map(id => `station_ids=${encodeURIComponent(id)}`);
+    queryParts.push(`pollutant=${encodeURIComponent(pollutant)}`);
+    queryParts.push(`start=${encodeURIComponent(start)}`);
+    queryParts.push(`end=${encodeURIComponent(end)}`);
+    queryParts.push(`aggregation=${encodeURIComponent(aggregation)}`);
+    queryParts.push(`clock_assumption=${encodeURIComponent(clockAssumption)}`);
+    return this.request<ArchiveCompare>(`/archive/compare?${queryParts.join('&')}`);
+  }
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 Methods: Model Registry & Evaluation
+  // ----------------------------------------------------------------------
+
+  async getModels(): Promise<ApiResult<ModelCatalogue>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_MODELS,
+        meta: { contract_version: '1.2.0', data_mode: 'demo', request_id: 'demo-req', source: 'demo_fixture' },
+        status: 200
+      };
+    }
+    return this.request<ModelCatalogue>('/models');
+  }
+
+  async getModelEvaluation(modelVersion: string, horizonH?: number | null): Promise<ApiResult<ModelEvaluation>> {
+    if (this.isDemoMode) {
+      return {
+        ok: false,
+        error: {
+          code: 'EVALUATION_UNAVAILABLE',
+          message: 'Evaluation metrics are unavailable in demo mode. Connect to live API to inspect audited experimental model evaluation results.',
+          retryable: false
+        },
+        status: 503
+      };
+    }
+    const query = horizonH !== undefined && horizonH !== null ? `?horizon_h=${horizonH}` : '';
+    return this.request<ModelEvaluation>(`/models/${encodeURIComponent(modelVersion)}/evaluation${query}`);
+  }
+
+  async getModelPredictions(
+    modelVersion: string,
+    horizonH: number = 1,
+    split: 'test' | 'validation' | 'rolling_2022' | 'rolling_2023' = 'test',
+    limit: number = 100,
+    offset: number = 0
+  ): Promise<ApiResult<PredictionPage>> {
+    if (this.isDemoMode) {
+      return {
+        ok: false,
+        error: {
+          code: 'PREDICTIONS_UNAVAILABLE',
+          message: 'Held-out test predictions are unavailable in demo mode. Connect to live API to view audited prediction rows.',
+          retryable: false
+        },
+        status: 503
+      };
+    }
+    const query = new URLSearchParams({
+      horizon_h: String(horizonH),
+      split,
+      limit: String(limit),
+      offset: String(offset)
+    });
+    return this.request<PredictionPage>(`/models/${encodeURIComponent(modelVersion)}/predictions?${query.toString()}`);
+  }
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 Methods: Route Geometry
+  // ----------------------------------------------------------------------
+
+  async getRouteGeometry(
+    origin: Coordinates,
+    destination: Coordinates,
+    mode: 'driving' | 'walking' | 'cycling' = 'driving',
+    alternatives: number = 3
+  ): Promise<ApiResult<GeometryResponse>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_GEOMETRY_RESPONSE,
+        meta: { contract_version: '1.2.0', data_mode: 'demo', request_id: 'demo-req', source: 'demo_fixture' },
+        status: 200
+      };
+    }
+    return this.request<GeometryResponse>('/routes/geometry', {
+      method: 'POST',
+      body: JSON.stringify({
+        origin,
+        destination,
+        mode,
+        alternatives
+      })
     });
   }
 }

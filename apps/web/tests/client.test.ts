@@ -240,4 +240,217 @@ describe('BreatheWise API Client — Contract 1.1.0 & Regression Tests', () => {
       await apiClient.deleteAlertRule(ruleRes.data.id);
     }
   });
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 Additive Endpoints Tests
+  // ----------------------------------------------------------------------
+
+  it('CONTRACT 1.2.0: getStationCatalogue returns structured station intake and pollutant availability', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getStationCatalogue('delhi');
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.city_id).toBe('delhi');
+      expect(res.data.stations.length).toBeGreaterThan(0);
+      const anandVihar = res.data.stations.find(s => s.id === 'delhi-anand-vihar');
+      expect(anandVihar).toBeDefined();
+      expect(anandVihar?.pollutants.length).toBeGreaterThan(0);
+      const pm25Availability = anandVihar?.pollutants.find(p => p.pollutant === 'pm25');
+      expect(pm25Availability?.coverage_state).toBe('reported_complete');
+      expect(pm25Availability?.freshness).toBe('fresh');
+      expect(pm25Availability?.status).toBe('available');
+    }
+  });
+
+  it('CONTRACT 1.2.0: getObservedRankings returns ranked concentration rows with explicit scientific caveats', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getObservedRankings('delhi', 'pm25', 10);
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.city_id).toBe('delhi');
+      expect(res.data.pollutant).toBe('pm25');
+      expect(res.data.ranking_kind).toBe('observed_concentration');
+      expect(res.data.rows.length).toBeGreaterThan(0);
+      expect(res.data.rows[0].rank).toBe(1);
+      expect(res.data.rows[0].station.id).toBeDefined();
+      expect(res.data.rows[0].measurement.value).toBeGreaterThan(0);
+      expect(res.data.limitations.some(lim => lim.toLowerCase().includes('not predicted hotspots'))).toBe(true);
+    }
+  });
+
+  it('CONTRACT 1.2.0: getArchiveCatalogue returns eligible historical stations with recorded-clock metadata', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getArchiveCatalogue();
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.dataset_id).toBe('delhi_observed_archive_v1');
+      expect(res.data.dataset_mode).toBe('recorded_clock');
+      expect(res.data.clock_basis).toBe('source_naive_clock_unverified');
+      expect(res.data.timezone).toBeNull();
+      expect(res.data.stations.length).toBeGreaterThan(0);
+      const site301 = res.data.stations.find(s => s.station_id === 'site_301');
+      expect(site301).toBeDefined();
+      expect(site301?.pollutants.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('CONTRACT 1.2.0: getArchiveExplore returns bucketed points and distribution statistics', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getArchiveExplore(
+      'site_301',
+      'pm25',
+      '2023-11-01T00:00:00',
+      '2023-11-08T00:00:00',
+      'daily'
+    );
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.station_id).toBe('site_301');
+      expect(res.data.dataset_mode).toBe('recorded_clock');
+      expect(res.data.distribution).toBeDefined();
+      expect(res.data.distribution.mean).toBeGreaterThan(0);
+      expect(res.data.distribution.median).toBeGreaterThan(0);
+      expect(res.data.points.length).toBeGreaterThan(0);
+      expect(res.data.points[0].meets_requested_sufficiency).toBe(true);
+    }
+  });
+
+  it('CONTRACT 1.2.0: getArchiveCompare strictly enforces clock_assumption=same_recorded_clock and returns pair agreement', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getArchiveCompare(
+      ['site_301', 'site_113'],
+      'pm25',
+      '2023-11-01T00:00:00',
+      '2023-11-08T00:00:00',
+      'daily',
+      'same_recorded_clock'
+    );
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.clock_assumption).toBe('same_recorded_clock');
+      expect(res.data.alignment_status).toBe('conditional_same_recorded_clock_only');
+      expect(res.data.forecast_evaluation).toBe(false);
+      expect(res.data.pair_agreement.length).toBeGreaterThan(0);
+      expect(res.data.pair_agreement[0].mean_absolute_difference).toBeGreaterThan(0);
+      expect(res.data.pair_agreement[0].interpretation).toContain('not forecast evaluation');
+    }
+  });
+
+  it('CONTRACT 1.2.0: getModels lists native diagnostic and retrospective models', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getModels();
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.models.length).toBeGreaterThanOrEqual(2);
+      const diagnostic = res.data.models.find(m => m.kind === 'native_diagnostic');
+      expect(diagnostic).toBeDefined();
+      expect(diagnostic?.native_diagnostics_ready).toBe(true);
+      expect(diagnostic?.live_forecast_ready).toBe(false);
+
+      const retrospective = res.data.models.find(m => m.kind === 'retrospective_forecast');
+      expect(retrospective).toBeDefined();
+      expect(retrospective?.retrospective_evaluation_ready).toBe(true);
+      expect(retrospective?.live_forecast_ready).toBe(false);
+    }
+  });
+
+  it('CONTRACT 1.2.0: getModelEvaluation returns 503 EVALUATION_UNAVAILABLE in demo mode (no invented evaluation numbers)', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getModelEvaluation('delhi-recorded-pm25-v1');
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.status).toBe(503);
+      expect(res.error.code).toBe('EVALUATION_UNAVAILABLE');
+      expect(res.error.message).toContain('unavailable in demo mode');
+    }
+  });
+
+  it('CONTRACT 1.2.0: getModelEvaluation queries live endpoint and handles verified evaluation response', async () => {
+    apiClient.setDemoMode(false);
+    const originalFetch = globalThis.fetch;
+    const mockEval = {
+      model_version: 'delhi-recorded-pm25-v1',
+      dataset_mode: 'recorded_clock',
+      dataset_sha256: '43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df',
+      live_forecast_ready: false,
+      publication_time_known: false,
+      retrospective_only: true,
+      preprocessing: 'no fit/scaling/imputation',
+      target_transform: 'identity',
+      target_unit: 'µg/m³',
+      station_ids: ['site_301'],
+      supported_horizons: [1, 3, 6, 12, 24],
+      input_availability_assumption: 'same_recorded_clock_causal_lags_only',
+      limitations: ['Retrospective recorded-clock experiment only'],
+      features: { target: [], lag: [] },
+      splits: [{ name: 'test', start_recorded_at: '2025-01-01T00:00:00', end_recorded_at_exclusive: '2026-11-01T00:00:00' }],
+      rolling_backtests: {},
+      horizons: [
+        {
+          horizon_h: 1,
+          splits: {
+            test: {
+              all_available: {
+                lightgbm: { count: 14718, mae: 18.977, rmse: 30.193, bias: -0.434 },
+                persistence: { count: 14718, mae: 20.892, rmse: 33.127, bias: -0.049 }
+              },
+              common_baseline_cohort: {
+                lightgbm: { count: 13977, mae: 18.913, rmse: 30.125, bias: -0.306 },
+                persistence: { count: 13977, mae: 20.870, rmse: 33.119, bias: 0.070 }
+              },
+              high_pollution_definition: 'observed target >= 150 µg/m³',
+              high_pollution_threshold_ugm3: 150,
+              high_pollution_observed_target_ge_150: {
+                lightgbm: { count: 2492, mae: 33.919, rmse: 50.778, bias: -9.203 }
+              }
+            }
+          }
+        }
+      ]
+    };
+
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        data: mockEval,
+        meta: { contract_version: '1.2.0', data_mode: 'live', request_id: 'req-eval', source: 'db' }
+      })
+    });
+    globalThis.fetch = fetchMock;
+
+    try {
+      const res = await apiClient.getModelEvaluation('delhi-recorded-pm25-v1');
+      expect(fetchMock).toHaveBeenCalled();
+      expect(fetchMock.mock.calls[0][0]).toContain('/models/delhi-recorded-pm25-v1/evaluation');
+      expect(res.ok).toBe(true);
+      if (res.ok) {
+        expect(res.data.model_version).toBe('delhi-recorded-pm25-v1');
+        expect(res.data.horizons[0].splits['test'].common_baseline_cohort.lightgbm.mae).toBe(18.913);
+      }
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it('CONTRACT 1.2.0: getRouteGeometry returns GeoJSON LineString alternatives and distance/duration with exposure gated', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getRouteGeometry(
+      { latitude: 28.6328, longitude: 77.2197 },
+      { latitude: 28.6280, longitude: 77.3649 },
+      'driving',
+      2
+    );
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.exposure_ready).toBe(false);
+      expect(res.data.provider).toBe('demo_corridor_fixture');
+      expect(res.data.attribution).toContain('Demonstration corridor geometries');
+      expect(res.data.routes.length).toBeGreaterThan(0);
+      expect(res.data.routes[0].distance_m).toBeGreaterThan(0);
+      expect(res.data.routes[0].estimated_duration_s).toBeGreaterThan(0);
+      expect(res.data.routes[0].geometry.type).toBe('LineString');
+      expect(res.data.routes[0].geometry.coordinates.length).toBeGreaterThan(1);
+    }
+  });
 });

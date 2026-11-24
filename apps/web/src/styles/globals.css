@@ -80,3 +80,26 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-strong);
 }
+
+/* Leaflet Container & Layer Scoping */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 10 !important;
+  font-family: inherit;
+  background-color: #0f172a;
+}
+
+.leaflet-pane {
+  z-index: 10 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 20 !important;
+}
+
+.custom-station-marker {
+  background: transparent;
+  border: none;
+}

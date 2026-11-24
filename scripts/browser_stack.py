@@ -30,6 +30,9 @@ def main():
     os.environ["DATABASE_URL"] = f"sqlite:///{directory / 'test.db'}"
     os.environ["DATA_ROOT"] = str(directory / "data")
     os.environ["DATA_MODE"] = "demo"
+    os.environ["ARCHIVE_ROOT"] = str(directory / "archive-unavailable")
+    os.environ["FORECAST_REGISTRY_ROOT"] = str(directory / "models-unavailable")
+    os.environ["ROUTING_BASE_URL"] = ""
     from alembic import command
     from alembic.config import Config
     from breathewise.core.auth import provision_session

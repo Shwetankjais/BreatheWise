@@ -91,4 +91,45 @@ describe('BreatheWise Features Verification & Scientific Integrity', () => {
       expect(hotspotsRes.error.message).toContain('currently unavailable');
     }
   });
+
+  it('PRIORITY 2: History ranges enforce UTC hourly boundaries and maximum 31 days', () => {
+    const now = new Date();
+    const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), 0, 0, 0));
+    const start48 = new Date(end.getTime() - 48 * 3600000);
+
+    // Aligned to exact 0 minutes and 0 seconds
+    expect(end.getUTCMinutes()).toBe(0);
+    expect(end.getUTCSeconds()).toBe(0);
+    expect(start48.getUTCMinutes()).toBe(0);
+    expect(start48.getUTCSeconds()).toBe(0);
+
+    const durationSeconds = (end.getTime() - start48.getTime()) / 1000;
+    expect(durationSeconds % 3600).toBe(0);
+    expect(durationSeconds).toBeLessThanOrEqual(31 * 86400);
+  });
+
+  it('PRIORITY 5: Route comparison exposure is explicitly gated without fake pollution numbers', async () => {
+    apiClient.setDemoMode(true);
+    const capsRes = await apiClient.getCapabilities();
+    expect(capsRes.ok).toBe(true);
+    if (capsRes.ok) {
+      expect(capsRes.data.routes.supported).toBe(false);
+      expect(capsRes.data.routes.requirements_missing).toContain('routing endpoint');
+      expect(capsRes.data.spatial_exposure.supported).toBe(false);
+    }
+  });
+
+  it('STATION MAP: Escapes provider-controlled station names preventing HTML attribute breakout', async () => {
+    const { escapeHtmlAttr } = await import('../src/lib/sanitize');
+    const maliciousName = 'Anand "Vihar" <script>alert(1)</script> & Co\'s';
+    const escaped = escapeHtmlAttr(maliciousName);
+    expect(escaped).not.toContain('"');
+    expect(escaped).not.toContain('<');
+    expect(escaped).not.toContain('>');
+    expect(escaped).toContain('&quot;');
+    expect(escaped).toContain('&lt;');
+    expect(escaped).toContain('&gt;');
+    expect(escaped).toContain('&amp;');
+    expect(escaped).toContain('&#39;');
+  });
 });

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   City,
   StationView,
@@ -7,9 +7,13 @@ import {
   Capabilities,
   Pollutant,
   ForecastPoint,
-  ApiResult
+  ApiResult,
+  StationCatalogue,
+  ObservedRankings,
+  CatalogueStation
 } from '../../lib/api/types';
-import { calculateSubIndex, AQI_THEMES, formatToIST, formatTimeAgo } from '../../lib/aqi';
+import { apiClient } from '../../lib/api/client';
+import { calculateSubIndex, formatToIST, formatTimeAgo } from '../../lib/aqi';
 import { StationMap } from '../../components/map/StationMap';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -51,16 +55,75 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   onOpenAlertModal
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterMode, setFilterMode] = useState<'all' | 'has_pollutant' | 'fresh_only'>('all');
   const [mobileTab, setMobileTab] = useState<'map' | 'list'>('map');
+  const [compareStationIds, setCompareStationIds] = useState<string[]>([]);
+  const [directoryTab, setDirectoryTab] = useState<'directory' | 'rankings'>('directory');
+  const [observedRankings, setObservedRankings] = useState<ObservedRankings | null>(null);
+  const [isLoadingRankings, setIsLoadingRankings] = useState(false);
+  const [stationCatalogue, setStationCatalogue] = useState<StationCatalogue | null>(null);
 
-  // Filter stations based on search query
+  // Fetch Station Catalogue (Contract 1.2.0)
+  useEffect(() => {
+    let isMounted = true;
+    apiClient.getStationCatalogue(selectedCity.id).then(res => {
+      if (!isMounted) return;
+      if (res.ok) {
+        setStationCatalogue(res.data);
+      } else {
+        setStationCatalogue(null);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCity.id, isDemoMode]);
+
+  // Fetch Observed Rankings (Contract 1.2.0)
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingRankings(true);
+    apiClient.getObservedRankings(selectedCity.id, selectedPollutant, 20).then(res => {
+      if (!isMounted) return;
+      setIsLoadingRankings(false);
+      if (res.ok) {
+        setObservedRankings(res.data);
+      } else {
+        setObservedRankings(null);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCity.id, selectedPollutant, isDemoMode]);
+
+  const catalogueStation = useMemo(() => {
+    if (!selectedStation || !stationCatalogue) return null;
+    return stationCatalogue.stations.find(s => s.id === selectedStation.id) || null;
+  }, [selectedStation, stationCatalogue]);
+
+  // Filter stations based on search query and active filter mode
   const filteredStations = useMemo(() => {
-    if (!searchQuery.trim()) return stations;
-    const q = searchQuery.toLowerCase();
-    return stations.filter(
-      s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)
-    );
-  }, [stations, searchQuery]);
+    return stations.filter(station => {
+      // Search query filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesQuery = station.name.toLowerCase().includes(q) || station.id.toLowerCase().includes(q);
+        if (!matchesQuery) return false;
+      }
+
+      // Filter mode
+      const m = latestMap[station.id];
+      if (filterMode === 'has_pollutant') {
+        return Boolean(m && m.pollutant === selectedPollutant && m.value !== null);
+      }
+      if (filterMode === 'fresh_only') {
+        return Boolean(m && !m.stale && m.value !== null);
+      }
+
+      return true;
+    });
+  }, [stations, searchQuery, filterMode, latestMap, selectedPollutant]);
 
   // Determine current measurement to display for selected pollutant
   const measurementToDisplay = useMemo(() => {
@@ -76,6 +139,25 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   }, [measurementToDisplay, selectedPollutant]);
 
   const forecastData = forecastResult && forecastResult.ok ? forecastResult.data : null;
+
+  // Multi-station comparison handlers
+  const handleToggleCompare = (stationId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCompareStationIds(prev => {
+      if (prev.includes(stationId)) {
+        return prev.filter(id => id !== stationId);
+      }
+      if (prev.length >= 3) {
+        alert('You can compare a maximum of 3 stations at a time.');
+        return prev;
+      }
+      return [...prev, stationId];
+    });
+  };
+
+  const comparedStations = useMemo(() => {
+    return stations.filter(s => compareStationIds.includes(s.id));
+  }, [stations, compareStationIds]);
 
   return (
     <div className="space-y-6">
@@ -128,6 +210,92 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </button>
       </div>
 
+      {/* Multi-Station Side-by-Side Comparison Drawer (When 2+ stations selected) */}
+      {comparedStations.length > 0 && (
+        <Card className="border-2 border-teal-600/40 bg-teal-50/20">
+          <CardHeader className="py-3 px-4 bg-white/80 border-b border-teal-100 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-sm font-bold text-slate-900">
+                Side-by-Side Station Comparison ({comparedStations.length} / 3 selected)
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Comparing current observed {selectedPollutant.toUpperCase()} telemetry across selected monitoring sites
+              </CardDescription>
+            </div>
+            <button
+              onClick={() => setCompareStationIds([])}
+              className="text-xs text-slate-500 hover:text-slate-800 font-semibold underline cursor-pointer"
+            >
+              Clear Comparison
+            </button>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {comparedStations.map(stn => {
+                const m = latestMap[stn.id];
+                const hasValue = m && m.pollutant === selectedPollutant && m.value !== null;
+                const val = hasValue ? m.value : null;
+
+                return (
+                  <div key={stn.id} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="text-[10px] font-bold uppercase text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">
+                          {stn.source}
+                        </span>
+                        <h4 className="font-bold text-xs text-slate-900 mt-1">{stn.name}</h4>
+                        <div className="text-[10px] text-slate-400 font-mono">
+                          {stn.latitude.toFixed(3)}° N, {stn.longitude.toFixed(3)}° E
+                        </div>
+                      </div>
+                      <button
+                        onClick={e => handleToggleCompare(stn.id, e)}
+                        className="text-slate-400 hover:text-red-500 text-xs p-1 cursor-pointer"
+                        title="Remove from comparison"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                      <div className="text-[10px] font-semibold text-slate-500 uppercase">
+                        Hourly {selectedPollutant.toUpperCase()}
+                      </div>
+                      {val !== null && m ? (
+                        <>
+                          <div className="text-xl font-extrabold text-slate-900 mt-0.5">
+                            {val.toFixed(1)} <span className="text-xs font-semibold text-slate-600">{m.unit}</span>
+                          </div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">
+                            Observed {formatTimeAgo(m.measured_at)} ({formatToIST(m.measured_at)})
+                          </div>
+                          <div className={`text-[10px] font-semibold mt-0.5 ${m.stale ? 'text-amber-700' : 'text-emerald-700'}`}>
+                            {m.stale ? '⚠️ Stale Reading' : '✓ Fresh Reading'}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-xs text-slate-400 italic mt-1">
+                          No {selectedPollutant.toUpperCase()} data
+                        </div>
+                      )}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onSelectStation(stn)}
+                      className="w-full text-xs"
+                    >
+                      Focus on Map
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Main Grid: Left Map/List, Right Detail & Forecast */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (7 cols): Map and Station List */}
@@ -141,75 +309,225 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               centerLat={stations[0]?.latitude || 28.6139}
               centerLon={stations[0]?.longitude || 77.2090}
               cityName={selectedCity.name}
+              selectedPollutant={selectedPollutant}
             />
           </div>
 
-          {/* Station Directory */}
+          {/* Station Directory & Observed Rankings */}
           <Card className={`${mobileTab === 'list' ? 'block' : 'hidden sm:block'}`}>
             <CardHeader className="py-3 px-4">
-              <div className="flex items-center justify-between gap-3">
-                <CardTitle className="text-sm">
-                  Active CAAQMS Stations ({filteredStations.length})
-                </CardTitle>
-                <div className="relative w-48 sm:w-64">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search stations..."
-                    className="w-full text-xs rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                  />
+              <div className="space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setDirectoryTab('directory')}
+                      className={`text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
+                        directoryTab === 'directory'
+                          ? 'border-teal-600 text-slate-900'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      Active CAAQMS Stations ({filteredStations.length} / {stations.length})
+                    </button>
+                    <span className="text-slate-300">|</span>
+                    <button
+                      onClick={() => setDirectoryTab('rankings')}
+                      className={`text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
+                        directoryTab === 'rankings'
+                          ? 'border-teal-600 text-slate-900'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      Observed Rankings ({observedRankings?.rows.length ?? 0})
+                    </button>
+                  </div>
+
+                  {directoryTab === 'directory' && (
+                    <div className="relative w-full sm:w-60">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder="Search by station name..."
+                        className="w-full text-xs rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                      />
+                    </div>
+                  )}
                 </div>
+
+                {directoryTab === 'directory' ? (
+                  /* Filter Pills */
+                  <div className="flex items-center gap-1.5 pt-1 border-t border-slate-100 text-xs">
+                    <span className="text-[11px] text-slate-500 font-semibold mr-1">Filter:</span>
+                    <button
+                      onClick={() => setFilterMode('all')}
+                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                        filterMode === 'all'
+                          ? 'bg-slate-800 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      All Stations
+                    </button>
+                    <button
+                      onClick={() => setFilterMode('has_pollutant')}
+                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                        filterMode === 'has_pollutant'
+                          ? 'bg-teal-700 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      Has {selectedPollutant.toUpperCase()}
+                    </button>
+                    <button
+                      onClick={() => setFilterMode('fresh_only')}
+                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                        filterMode === 'fresh_only'
+                          ? 'bg-emerald-700 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      Fresh Only (&lt;2h)
+                    </button>
+                  </div>
+                ) : (
+                  <div className="pt-1 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+                    <span>
+                      Observed {selectedPollutant.toUpperCase()} rankings • Cutoff: {observedRankings?.input_cutoff_at ? formatToIST(observedRankings.input_cutoff_at) : 'Current'}
+                    </span>
+                    <span className="text-teal-700 font-semibold text-[10px] uppercase">
+                      Observed Concentration Ranking
+                    </span>
+                  </div>
+                )}
               </div>
             </CardHeader>
-            <div className="divide-y divide-slate-100 max-h-56 overflow-y-auto">
-              {filteredStations.map(station => {
-                const isSelected = station.id === selectedStation?.id;
-                const m = latestMap[station.id];
-                const hasMatchingMeasurement = Boolean(m && m.pollutant === selectedPollutant);
-                const stnVal = hasMatchingMeasurement && m ? m.value : null;
-                const stnSubIndex = stnVal !== null ? calculateSubIndex(selectedPollutant, stnVal) : 0;
-
-                return (
-                  <button
-                    key={station.id}
-                    onClick={() => {
-                      onSelectStation(station);
-                      setMobileTab('map');
-                    }}
-                    className={`w-full p-3 text-left flex items-center justify-between transition-colors cursor-pointer ${
-                      isSelected ? 'bg-teal-50/70 border-l-4 border-teal-600' : 'hover:bg-slate-50'
-                    }`}
-                  >
-                    <div>
-                      <div className="text-xs font-bold text-slate-900">{station.name}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        {station.source} • Lat: {station.latitude.toFixed(3)}, Lon: {station.longitude.toFixed(3)}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      {hasMatchingMeasurement && m ? (
-                        <div className="text-right">
-                          <div className="text-xs font-bold text-slate-800">
-                            {m.value.toFixed(1)} {m.unit}
-                          </div>
-                          <div className="text-[10px] text-slate-400">
-                            {m.observation_age_minutes}m ago
+            {directoryTab === 'rankings' ? (
+              <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+                {isLoadingRankings ? (
+                  <div className="p-4 text-center text-xs text-slate-400">Loading observed concentration rankings...</div>
+                ) : observedRankings && observedRankings.rows.length > 0 ? (
+                  observedRankings.rows.map(row => {
+                    const isSelected = row.station.id === selectedStation?.id;
+                    const stn = stations.find(s => s.id === row.station.id) || row.station;
+                    return (
+                      <div
+                        key={row.rank}
+                        onClick={() => {
+                          onSelectStation(stn);
+                          setMobileTab('map');
+                        }}
+                        className={`w-full p-3 text-left flex items-center justify-between transition-colors cursor-pointer ${
+                          isSelected ? 'bg-teal-50/70 border-l-4 border-teal-600' : 'hover:bg-slate-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">
+                            #{row.rank}
+                          </span>
+                          <div>
+                            <div className="text-xs font-bold text-slate-900">{row.station.name}</div>
+                            <div className="text-[11px] text-slate-500 mt-0.5">
+                              Observed {formatTimeAgo(row.measurement.measured_at)} ({formatToIST(row.measurement.measured_at)})
+                            </div>
                           </div>
                         </div>
-                      ) : (
-                        <span className="text-[10px] text-slate-400 italic">No {selectedPollutant.toUpperCase()}</span>
-                      )}
-                      {hasMatchingMeasurement && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                          Idx {stnSubIndex}
-                        </span>
-                      )}
+
+                        <div className="flex items-center gap-2">
+                          <div className="text-right">
+                            <div className="text-xs font-extrabold text-slate-900">
+                              {row.measurement.value.toFixed(1)} {row.measurement.unit}
+                            </div>
+                            <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
+                              row.coverage_state === 'reported_complete'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}>
+                              {row.coverage_state}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="p-4 text-center text-xs text-slate-400">
+                    No reported rankings available for {selectedPollutant.toUpperCase()} in {selectedCity.name}.
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+                {filteredStations.map(station => {
+                  const isSelected = station.id === selectedStation?.id;
+                  const isCompared = compareStationIds.includes(station.id);
+                  const m = latestMap[station.id];
+                  const hasMatchingMeasurement = Boolean(m && m.pollutant === selectedPollutant);
+                  const stnVal = hasMatchingMeasurement && m ? m.value : null;
+                  const stnSubIndex = stnVal !== null ? calculateSubIndex(selectedPollutant, stnVal) : 0;
+
+                  return (
+                    <div
+                      key={station.id}
+                      onClick={() => {
+                        onSelectStation(station);
+                        setMobileTab('map');
+                      }}
+                      className={`w-full p-3 text-left flex items-center justify-between transition-colors cursor-pointer ${
+                        isSelected ? 'bg-teal-50/70 border-l-4 border-teal-600' : 'hover:bg-slate-50'
+                      }`}
+                    >
+                      <div>
+                        <div className="text-xs font-bold text-slate-900">{station.name}</div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {station.source} • Lat: {station.latitude.toFixed(3)}, Lon: {station.longitude.toFixed(3)}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          {hasMatchingMeasurement && m ? (
+                            <>
+                              <div className="text-xs font-bold text-slate-800">
+                                {m.value.toFixed(1)} {m.unit}
+                              </div>
+                              <div className="text-[10px] text-slate-400">
+                                {m.observation_age_minutes}m ago
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 italic">No {selectedPollutant.toUpperCase()}</span>
+                          )}
+                        </div>
+
+                        {hasMatchingMeasurement && (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                            Idx {stnSubIndex}
+                          </span>
+                        )}
+
+                        <button
+                          onClick={e => handleToggleCompare(station.id, e)}
+                          className={`text-[10px] font-bold px-2 py-1 rounded transition-colors cursor-pointer ${
+                            isCompared
+                              ? 'bg-teal-600 text-white'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                          title="Add to side-by-side comparison"
+                        >
+                          {isCompared ? '✓ Comparing' : '+ Compare'}
+                        </button>
+                      </div>
                     </div>
-                  </button>
-                );
-              })}
+                  );
+                })}
+              </div>
+            )}
+            <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 leading-relaxed">
+              <strong>Ranking Distinction Notice: </strong>
+              {directoryTab === 'rankings'
+                ? 'Observed rankings sort monitors strictly by latest reported concentration. These are NOT predicted hotspots, forecasts, area-wide concentration or a common-time city average.'
+                : 'Station directory sorts and filters monitors by actual observational intake. Emerging hotspot ranking requires verified operational multi-horizon inference (currently gated).'}
             </div>
           </Card>
         </div>
@@ -311,6 +629,38 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     <span className="font-bold">Standard Notice: </span>
                     Reported hourly sub-index ({subIndex}) evaluates single-pollutant 1-hour concentration against CPCB NAQI breakpoint tables. Official CPCB AQI requires defined averaging (24-hour for PM2.5, PM10, NO2, SO2, NH3, Pb; 8-hour for CO and O3; 1-hour for O3 peak) with at least three monitored pollutants including one particulate parameter, plus data sufficiency thresholds (at least 16 hours of 24h period). Single-hour categories are indicative only and do not constitute an official CPCB AQI.
                   </div>
+
+                  {/* Verified Station Catalogue Sensor Availability Breakdown (Contract 1.2.0) */}
+                  {catalogueStation && (
+                    <div className="mt-3 p-3 rounded-lg border border-slate-200 bg-white space-y-2">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-bold text-slate-800">Verified Station Catalogue Sensor Intake</span>
+                        <span className="text-slate-500 font-mono text-[10px]">
+                          Cutoff: {stationCatalogue?.input_cutoff_at ? formatToIST(stationCatalogue.input_cutoff_at) : 'Current'}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {catalogueStation.pollutants.map(p => (
+                          <span
+                            key={p.pollutant}
+                            className={`text-[10px] font-semibold px-2 py-0.5 rounded border flex items-center gap-1 ${
+                              p.status === 'available'
+                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                : 'bg-slate-100 text-slate-600 border-slate-200'
+                            }`}
+                          >
+                            <span>{p.pollutant.toUpperCase()}</span>
+                            <span className="text-[9px] opacity-75">[{p.coverage_state}]</span>
+                          </span>
+                        ))}
+                      </div>
+                      {catalogueStation.provider_revision_pending && (
+                        <div className="text-[10px] text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-200">
+                          ⚠️ Provider revision pending for recent sensor readings.
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardHeader>
               </Card>
 

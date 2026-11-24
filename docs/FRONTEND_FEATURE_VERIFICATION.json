@@ -1,0 +1,269 @@
+{
+  "verified_at": "2026-11-24T05:23:33.588Z",
+  "scope": "Actual configured observation DB, archive, experiment registry and route provider/cache; transparent same-origin test proxy",
+  "profiles": [
+    {
+      "viewport": "desktop",
+      "checks": [
+        {
+          "name": "actual station marker values match observed API",
+          "passed": true,
+          "stations": 4,
+          "ranked_values": [
+            {
+              "id": "openaq-8472",
+              "value": 155,
+              "stale": true
+            },
+            {
+              "id": "openaq-8365",
+              "value": 136,
+              "stale": true
+            },
+            {
+              "id": "openaq-50",
+              "value": 133,
+              "stale": true
+            },
+            {
+              "id": "openaq-235",
+              "value": 87,
+              "stale": true
+            }
+          ],
+          "fresh_only_rank_count": 0,
+          "excluded_stale_count": 4
+        },
+        {
+          "name": "archive buckets, mean and recorded-clock semantics",
+          "passed": true,
+          "valid": 740,
+          "expected": 744,
+          "points": 31,
+          "mean": 56.434000000000005,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        {
+          "name": "CO archive filter is available",
+          "passed": true
+        },
+        {
+          "name": "CO source units preserved in screen",
+          "passed": true
+        },
+        {
+          "name": "conditional exact recorded-clock comparison matches screen",
+          "passed": true,
+          "matched_hours": 732,
+          "mean_absolute_difference": 24.46551912568306
+        },
+        {
+          "name": "live UTC stays separate from archive clock",
+          "passed": true
+        },
+        {
+          "name": "model baseline table uses common sample cohort",
+          "passed": true,
+          "expected_common_count": 13977,
+          "expected_common_mae": 18.91331214063145,
+          "displayed_row": "+1h\t13977\t18.9 \u00b5g/m\u00b3\t30.1 \u00b5g/m\u00b3\t20.9 \u00b5g/m\u00b3\t47.9 \u00b5g/m\u00b3\t+9.4%\t33.9 \u00b5g/m\u00b3 (N=3277)"
+        },
+        {
+          "name": "retrospective model remains non-live",
+          "passed": true,
+          "version": "delhi-recorded-pm25-v1",
+          "source_station_ids": [
+            "site_301"
+          ]
+        },
+        {
+          "name": "actual heldout prediction displayed",
+          "passed": true,
+          "target_at_recorded": "2025-01-01 00:00:00",
+          "predicted": 275.2965356634587,
+          "observed": 251
+        },
+        {
+          "name": "live selection of retrospective model is rejected",
+          "passed": true
+        },
+        {
+          "name": "provider alternatives match screen and remain exposure/traffic unavailable",
+          "passed": true,
+          "provider": "OSRM",
+          "routes": [
+            {
+              "distance_m": 17140.5,
+              "estimated_duration_s": 1160.5,
+              "geometry_points": 313
+            },
+            {
+              "distance_m": 19017.9,
+              "estimated_duration_s": 1240.6,
+              "geometry_points": 306
+            }
+          ]
+        }
+      ],
+      "api_paths": [
+        "GET /api/v1/advisories?pollutant=pm25 ->200",
+        "GET /api/v1/cities ->200",
+        "GET /api/v1/capabilities ->200",
+        "GET /api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25 ->503",
+        "GET /api/v1/stations?city_id=delhi ->200",
+        "GET /api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "GET /api/v1/station-catalogue?city_id=delhi ->200",
+        "GET /api/v1/stations/openaq-235/forecast?pollutant=pm25 ->503",
+        "GET /api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "GET /api/v1/history?station_id=openaq-235&start=2026-11-22T05%3A00%3A00.000Z&end=2026-11-24T05%3A00%3A00.000Z&pollutant=pm25 ->200",
+        "GET /api/v1/archive/catalogue ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2023-11-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->422",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=co&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/compare?station_ids=site_301&station_ids=site_113&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily&clock_assumption=same_recorded_clock ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/evaluation ->200",
+        "GET /api/v1/models ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=1&split=test&limit=25&offset=0 ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=3&split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/routes/geometry ->200"
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "checks": [
+        {
+          "name": "actual station marker values match observed API",
+          "passed": true,
+          "stations": 4,
+          "ranked_values": [
+            {
+              "id": "openaq-8472",
+              "value": 155,
+              "stale": true
+            },
+            {
+              "id": "openaq-8365",
+              "value": 136,
+              "stale": true
+            },
+            {
+              "id": "openaq-50",
+              "value": 133,
+              "stale": true
+            },
+            {
+              "id": "openaq-235",
+              "value": 87,
+              "stale": true
+            }
+          ],
+          "fresh_only_rank_count": 0,
+          "excluded_stale_count": 4
+        },
+        {
+          "name": "archive buckets, mean and recorded-clock semantics",
+          "passed": true,
+          "valid": 740,
+          "expected": 744,
+          "points": 31,
+          "mean": 56.434000000000005,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        {
+          "name": "CO archive filter is available",
+          "passed": true
+        },
+        {
+          "name": "CO source units preserved in screen",
+          "passed": true
+        },
+        {
+          "name": "conditional exact recorded-clock comparison matches screen",
+          "passed": true,
+          "matched_hours": 732,
+          "mean_absolute_difference": 24.46551912568306
+        },
+        {
+          "name": "live UTC stays separate from archive clock",
+          "passed": true
+        },
+        {
+          "name": "model baseline table uses common sample cohort",
+          "passed": true,
+          "expected_common_count": 13977,
+          "expected_common_mae": 18.91331214063145,
+          "displayed_row": "+1h\t13977\t18.9 \u00b5g/m\u00b3\t30.1 \u00b5g/m\u00b3\t20.9 \u00b5g/m\u00b3\t47.9 \u00b5g/m\u00b3\t+9.4%\t33.9 \u00b5g/m\u00b3 (N=3277)"
+        },
+        {
+          "name": "retrospective model remains non-live",
+          "passed": true,
+          "version": "delhi-recorded-pm25-v1",
+          "source_station_ids": [
+            "site_301"
+          ]
+        },
+        {
+          "name": "actual heldout prediction displayed",
+          "passed": true,
+          "target_at_recorded": "2025-01-01 00:00:00",
+          "predicted": 275.2965356634587,
+          "observed": 251
+        },
+        {
+          "name": "live selection of retrospective model is rejected",
+          "passed": true
+        },
+        {
+          "name": "provider alternatives match screen and remain exposure/traffic unavailable",
+          "passed": true,
+          "provider": "OSRM",
+          "routes": [
+            {
+              "distance_m": 17140.5,
+              "estimated_duration_s": 1160.5,
+              "geometry_points": 313
+            },
+            {
+              "distance_m": 19017.9,
+              "estimated_duration_s": 1240.6,
+              "geometry_points": 306
+            }
+          ]
+        }
+      ],
+      "api_paths": [
+        "GET /api/v1/advisories?pollutant=pm25 ->200",
+        "GET /api/v1/cities ->200",
+        "GET /api/v1/capabilities ->200",
+        "GET /api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25 ->503",
+        "GET /api/v1/stations?city_id=delhi ->200",
+        "GET /api/v1/station-catalogue?city_id=delhi ->200",
+        "GET /api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "GET /api/v1/stations/openaq-235/forecast?pollutant=pm25 ->503",
+        "GET /api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "GET /api/v1/history?station_id=openaq-235&start=2026-11-22T05%3A00%3A00.000Z&end=2026-11-24T05%3A00%3A00.000Z&pollutant=pm25 ->200",
+        "GET /api/v1/archive/catalogue ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2023-11-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->422",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=co&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/compare?station_ids=site_301&station_ids=site_113&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily&clock_assumption=same_recorded_clock ->200",
+        "GET /api/v1/models ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/evaluation ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=1&split=test&limit=25&offset=0 ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=3&split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/routes/geometry ->200"
+      ]
+    }
+  ],
+  "changed_runtime_paths": [],
+  "snapshot_unchanged": true,
+  "passed": true
+}
