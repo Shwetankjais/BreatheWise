@@ -9,7 +9,7 @@ ROOT = next(
     (
         p
         for p in Path(__file__).resolve().parents
-        if (p / "pyproject.toml").exists() and (p / "docs/MODEL_STATIC_AUDIT.json").exists()
+        if (p / "pyproject.toml").exists()
     ),
     Path.cwd(),
 )
@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     forecast_registry_root: Path = ROOT / "work/forecast-experiment"
     routing_base_url: str = ""
     model_artifact_path: Path = ROOT / "artifacts/models/zero_input_aq_weather_model.joblib"
+
+    @property
+    def cors_origins(self) -> list[str]:
+        if not self.web_origin or self.web_origin.strip() == "*":
+            return ["*"]
+        return [o.strip() for o in self.web_origin.split(",") if o.strip()]
 
 
 @lru_cache

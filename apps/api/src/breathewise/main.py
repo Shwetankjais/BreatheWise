@@ -34,9 +34,9 @@ def create_app():
     )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[get_settings().web_origin],
-        allow_methods=["GET", "POST", "PATCH", "DELETE"],
-        allow_headers=["Authorization", "Content-Type"],
+        allow_origins=get_settings().cors_origins,
+        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
     )
 
     @app.middleware("http")

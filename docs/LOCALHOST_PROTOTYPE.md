@@ -1,13 +1,13 @@
 # BreatheWise localhost prototype
 
-Run inside `/Users/shwetankjaiswal/Desktop/BreatheWise`. This workflow uses the existing real-data SQLite cache `work/delhi-live.db`, live data mode, local audited archive and ignored model registry. PostgreSQL17 is separately tested in CI; Docker or a production database is not required for this local prototype. No production deployment or paid service is configured.
+Run inside the repository root. This workflow uses the existing real-data SQLite cache `work/delhi-live.db`, live data mode, local audited archive and ignored model registry. PostgreSQL17 is separately tested in CI; Docker or a production database is not required for this local prototype. No production deployment or paid service is configured.
 
 ## Start and stop
 
-Dependencies are already installed in the shared checkout. On a fresh checkout, run `make setup` and install the isolated forecast runtime only when actually using model training/native execution. Local ignored datasets/models and `.env` credentials do not arrive through Git.
+Dependencies are installed via `uv` and `npm`. On a fresh checkout, run `make setup` and install the isolated forecast runtime only when actually using model training/native execution. Local ignored datasets/models and `.env` credentials do not arrive through Git.
 
 ```sh
-cd /Users/shwetankjaiswal/Desktop/BreatheWise
+cd /path/to/BreatheWise
 UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/local_prototype.py prepare
 UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/local_prototype.py start
 UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/local_prototype.py status
@@ -28,7 +28,7 @@ The expected final status is `not_running`. The command never kills a PID merely
 
 `prepare`/`start` select `DATABASE_URL=sqlite:///.../work/delhi-live.db` by default and `DATA_MODE=live`. An explicit process-environment DATABASE_URL overrides this selected local default. Existing `.env` secrets are preserved. The workflow applies current additive Alembic migrations before serving, verifies configured archive/model artifacts and writes a nonsecret preparation summary to private `work/prototype/prepared.json`.
 
-Required configured archive source is `ARCHIVE_ROOT/data/cleaned/pollutants/Aanad Vihar.parquet`; the existing ARCHIVE_ROOT is `/Users/shwetankjaiswal/Desktop/NIErnaya_data/AirScope_India_final`. Recorded-clock archive timestamps stay naive/qualified and are never silently converted to UTC. The model registry is `FORECAST_REGISTRY_ROOT` (default `work/forecast-experiment`). Required checked existing versions are `delhi-recorded-pm25-hourly-v2` and `delhi-openaq-pm25-hourly-v1`, including native model/prediction hashes and issue-purged evaluation supplement integrity. New availability-aware experimental artifacts have their own version/readiness and must not replace these original experiments.
+Required configured archive source is `ARCHIVE_ROOT/data/cleaned/pollutants/Aanad Vihar.parquet`; configure `ARCHIVE_ROOT` in your `.env` to point to your local archive folder (default `data/archive`). Recorded-clock archive timestamps stay naive/qualified and are never silently converted to UTC. The model registry is `FORECAST_REGISTRY_ROOT` (default `work/forecast-experiment`). Required checked existing versions are `delhi-recorded-pm25-hourly-v2` and `delhi-openaq-pm25-hourly-v1`, including native model/prediction hashes and issue-purged evaluation supplement integrity. New availability-aware experimental artifacts have their own version/readiness and must not replace these original experiments.
 
 Existing local `OPENAQ_API_KEY` remains server-only. `prepare` reports only whether it is configured. Routing uses the existing configured OSRM service/cache; geometry readiness remains separate from exposure readiness. No API request initiates unbounded provider discovery or training.
 
@@ -71,10 +71,11 @@ Public health/live-planner, calibrated intervals/probabilities, street-level exp
 
 ## Availability-aware experimental model
 
-Preparation now also verifies delhi-openaq-pm25-delay3h-v2 with its independent manifest loader. On this verified Mac, start with the already installed isolated runtime library explicitly configured:
+Preparation now also verifies delhi-openaq-pm25-delay3h-v2 with its independent manifest loader. If running on macOS with Homebrew or conda, set the OpenMP library path if prompted by LightGBM:
 
 ```sh
-BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/local_prototype.py start
+# On macOS (Homebrew example: brew install libomp)
+BREATHEWISE_OPENMP_LIBRARY=$(brew --prefix libomp 2>/dev/null)/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/local_prototype.py start
 ```
 
 Linux environments with a working LightGBM runtime do not need the Mac-specific library variable. This does not install or modify global libraries. The new model is trained under a simulated3h historical publication-delay scenario, allows only the independently evaluated latest complete input age3/4h regime, and separately enforces actual first-seen cutoffs during serving. Its v1 draft was preserved but is unaccepted; only correctedv2 respects3h target-label publication in fit/selection availability. An experimental model existing does not mean current inputs qualify. Actual current required hours are partial, so the persisted learned run is AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE with zero forecasts. The next external condition is a complete verified observation at nominalissue−3h or−4h actually received by cutoff, with compatible known history; older freshness limits are unchanged.
@@ -86,9 +87,9 @@ Historical replay planning is implemented separately at /activity-plan/replay fr
 
 ```sh
 # Uses existing local credentials; refreshes only the bounded selected Delhi cohort.
-BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/prototype_cycle.py
+uv run --locked python scripts/prototype_cycle.py
 # Offline/cache-only replay of the same real intake: no provider requests.
-BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/prototype_cycle.py --no-refresh
+uv run --locked python scripts/prototype_cycle.py --no-refresh
 ```
 
 This is a once-command with a whole-command overlap guard, existing per-job locks/retries and idempotent scheduledissue keys. It refreshes bounded observations, evaluates owned in-app alerts, then attempts the separatelytrained learned shadow model for the current nominal UTC:end30 issue. Actual generation time remains separate and all targets must remain future. Exit1 can honestly mean partial provider revisions or a retained model/input rejection; inspect JSON event reasons, not just exitstatus. It never zero-fills or substitutes demo results. Actual cache-only execution returnedalerts0 and retained the same rejected learned run without a duplicate. No recurring scheduler is installed.

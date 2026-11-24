@@ -453,4 +453,29 @@ describe('BreatheWise API Client — Contract 1.1.0 & Regression Tests', () => {
       expect(res.data.routes[0].geometry.coordinates.length).toBeGreaterThan(1);
     }
   });
+
+  it('CONFIGURABLE API: getBaseUrl returns configured or default API base, and normalizes paths', async () => {
+    expect(apiClient.getBaseUrl()).toMatch(/\/api\/v1$/);
+    const originalFetch = globalThis.fetch;
+    let requestedUrl = '';
+    globalThis.fetch = vi.fn(async (url: RequestInfo | URL) => {
+      requestedUrl = String(url);
+      return new Response(JSON.stringify({ ok: true, meta: { data_mode: 'live', contract_version: '1.4.0', request_id: 'test' }, data: [] }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    });
+    try {
+      apiClient.setDemoMode(false);
+      // Calling request with leading /api/v1 should not duplicate /api/v1
+      await apiClient.request('/api/v1/stations?city_id=delhi');
+      expect(requestedUrl).toBe(`${apiClient.getBaseUrl()}/stations?city_id=delhi`);
+
+      // Calling request without /api/v1 should prepend baseUrl
+      await apiClient.request('/cities');
+      expect(requestedUrl).toBe(`${apiClient.getBaseUrl()}/cities`);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
 });

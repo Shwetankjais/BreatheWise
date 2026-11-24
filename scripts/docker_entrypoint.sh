@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+echo "[BreatheWise API] Starting up in ${DATA_MODE:-live} mode..."
+
+# Apply database migrations if DATABASE_URL is set
+if [ -n "$DATABASE_URL" ]; then
+    echo "[BreatheWise API] Running database migrations..."
+    alembic upgrade head || {
+        echo "[BreatheWise API] Migration warning; continuing with schema..."
+    }
+fi
+
+# In demo mode, if database has no stations, seed demo fixtures
+if [ "${DATA_MODE}" = "demo" ]; then
+    if [ -f "packages/contracts/fixtures/demo-import.json" ]; then
+        echo "[BreatheWise API] Ensuring demo fixture availability..."
+        python scripts/data_cli.py seed-demo 2>/dev/null || true
+    fi
+fi
+
+PORT="${PORT:-8000}"
+echo "[BreatheWise API] Serving on 0.0.0.0:${PORT}..."
+exec uvicorn breathewise.main:create_app --factory --host 0.0.0.0 --port "$PORT"

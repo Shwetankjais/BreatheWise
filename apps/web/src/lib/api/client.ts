@@ -94,10 +94,17 @@ function getStorage() {
   return memoryStore;
 }
 
+const metaEnv = typeof import.meta !== 'undefined' ? (import.meta as unknown as { env?: Record<string, string> }).env : undefined;
+const configuredBase = metaEnv?.VITE_API_BASE_URL
+  ? String(metaEnv.VITE_API_BASE_URL).trim().replace(/\/+$/, '')
+  : '';
+
 export class BreatheWiseApiClient {
   private isDemoMode = false;
   private sessionToken: string | null = null;
-  private readonly baseUrl = '/api/v1';
+  private readonly baseUrl: string = configuredBase
+    ? (configuredBase.endsWith('/api/v1') ? configuredBase : `${configuredBase}/api/v1`)
+    : '/api/v1';
 
   // Storage keys
   private readonly KEY_SESSION = 'breathewise_session_token';
@@ -127,6 +134,10 @@ export class BreatheWiseApiClient {
     } else {
       storage.removeItem(this.KEY_SESSION);
     }
+  }
+
+  getBaseUrl(): string {
+    return this.baseUrl;
   }
 
   getDemoMode(): boolean {
@@ -195,8 +206,16 @@ export class BreatheWiseApiClient {
     }
 
     try {
-      const normalizedPath = path.startsWith(this.baseUrl) ? path.slice(this.baseUrl.length) : path;
-      const res = await fetch(`${this.baseUrl}${normalizedPath}`, {
+      let cleanPath = path;
+      if (cleanPath.startsWith(this.baseUrl)) {
+        cleanPath = cleanPath.slice(this.baseUrl.length);
+      } else if (cleanPath.startsWith('/api/v1')) {
+        cleanPath = cleanPath.slice('/api/v1'.length);
+      }
+      if (!cleanPath.startsWith('/')) {
+        cleanPath = `/${cleanPath}`;
+      }
+      const res = await fetch(`${this.baseUrl}${cleanPath}`, {
         ...options,
         headers
       });
