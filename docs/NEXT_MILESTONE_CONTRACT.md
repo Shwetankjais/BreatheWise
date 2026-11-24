@@ -1,3 +1,13 @@
+# Active next milestone — 24 November 2026
+
+Accepted baseline5cd7127. Allocation Codex55%/Antigravity45%; file ownership unchanged. Frontend may continue independently; no new dependency request is present in its latest handoff.
+
+Existing implemented1.2.0 APIs already support model-version selection, per-horizon evaluation and bounded held-out playback via /models, /models/{version}/evaluation?horizon_h=N and /models/{version}/predictions?horizon_h=N&split=test&limit=100&offset=0. New hourly recorded-clock v2 will advertise all24 explicitly evaluated horizons only after artifacts pass integrity checks. Existing v1 remains unchanged. Recorded-clock playback never implies live forecasting or an activity trajectory.
+
+Planned additive1.3.0 contract (not yet implemented at publication): read-only GET /forecast-runs?station_id=...&limit=... and GET /forecast-runs/{id}, exposing persisted experimental/shadow run status, UTC issue/cutoff/target times, model identity, baseline method, provenance, rejected-input reasons and observed matches. Generation is an administrator CLI, not a public mutation API. Public forecast/planning gates remain closed. Generated types will publish after implementation. No frontend install/config pause is needed for these additions.
+
+Historical1.2.0 interface follows.
+
 # Next milestone — additive contract1.2.0
 
 Accepted baseline: be63911, existing1.1.0 routes remain compatible. Generated OpenAPI/TypeScript1.2.0 will publish typed new endpoints as each slice is implemented. Antigravity may build independent views from this interface now; source ownership unchanged. No frontend dependency/config rewrite required.
