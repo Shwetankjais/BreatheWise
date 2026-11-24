@@ -80,3 +80,15 @@ BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/wo
 Linux environments with a working LightGBM runtime do not need the Mac-specific library variable. This does not install or modify global libraries. The new model is trained under a simulated3h historical publication-delay scenario, allows only the independently evaluated latest complete input age3/4h regime, and separately enforces actual first-seen cutoffs during serving. Its v1 draft was preserved but is unaccepted; only correctedv2 respects3h target-label publication in fit/selection availability. An experimental model existing does not mean current inputs qualify. Actual current required hours are partial, so the persisted learned run is AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE with zero forecasts. The next external condition is a complete verified observation at nominalissue−3h or−4h actually received by cutoff, with compatible known history; older freshness limits are unchanged.
 
 Historical replay planning is implemented separately at /activity-plan/replay from complete single-issue saved forecasts. Use /models/{version}/replay-issues to find eligible trajectories. This is a historical concentration-time comparison, not current safe-time advice; public live planner remains disabled.
+
+
+## One repeatable refresh/worker command
+
+```sh
+# Uses existing local credentials; refreshes only the bounded selected Delhi cohort.
+BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/prototype_cycle.py
+# Offline/cache-only replay of the same real intake: no provider requests.
+BREATHEWISE_OPENMP_LIBRARY=/opt/anaconda3/lib/libomp.dylib UV_CACHE_DIR="$PWD/work/uv-cache" uv run --locked python scripts/prototype_cycle.py --no-refresh
+```
+
+This is a once-command with a whole-command overlap guard, existing per-job locks/retries and idempotent scheduledissue keys. It refreshes bounded observations, evaluates owned in-app alerts, then attempts the separatelytrained learned shadow model for the current nominal UTC:end30 issue. Actual generation time remains separate and all targets must remain future. Exit1 can honestly mean partial provider revisions or a retained model/input rejection; inspect JSON event reasons, not just exitstatus. It never zero-fills or substitutes demo results. Actual cache-only execution returnedalerts0 and retained the same rejected learned run without a duplicate. No recurring scheduler is installed.
