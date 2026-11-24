@@ -6,8 +6,10 @@ from pydantic import Field
 
 class ModelSummary(StrictModel):
     model_version: str
-    kind: Literal["native_diagnostic", "retrospective_forecast"]
-    dataset_mode: Literal["diagnostic", "recorded_clock", "utc_provider_history"]
+    kind: Literal["native_diagnostic", "retrospective_forecast", "experimental_forecast"]
+    dataset_mode: Literal[
+        "diagnostic", "recorded_clock", "utc_provider_history", "utc_availability_scenario"
+    ]
     timezone: str | None = None
     clock_basis: str | None = None
     evaluation_cohort: str | None = None
@@ -21,6 +23,7 @@ class ModelSummary(StrictModel):
     artifact_hashes: dict[str, str] = {}
     supported_horizons: list[int] = []
     live_supported_horizons: list[int] = []
+    experimental_shadow_ready: bool | None = None
     native_diagnostics_ready: bool = False
     retrospective_evaluation_ready: bool = False
     live_forecast_ready: Literal[False] = False

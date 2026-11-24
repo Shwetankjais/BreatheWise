@@ -1,16 +1,20 @@
-"""Prospective UTC persistence baseline logging; never public learned-model inference."""
+"""Experimental UTC baseline/learned shadow logging; public forecasting remains gated."""
 
 import hashlib
 import json
 import math
+import os
+import subprocess
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
-from breathewise.core.config import get_settings
+from breathewise.core.config import ROOT, get_settings
 from breathewise.core.errors import ServiceError
 from breathewise.core.time import utc
 from breathewise.db.models import ForecastRun, Observation, ShadowPrediction, Station
 from breathewise.jobs.locking import cycle_lock
+from breathewise.ml.availability_experiment import MODEL_VERSION as AVAILABILITY_VERSION
+from breathewise.ml.availability_experiment import SCENARIO as AVAILABILITY_SCENARIO
 from breathewise.schemas.shadow import (
     ForecastRunDetail,
     ForecastRunPage,
@@ -86,6 +90,8 @@ def run_shadow(engine, station_id, model_version, issue_at, input_cutoff, *, now
                 run.error_code = code
                 return run.id, True
 
+            if model_version == AVAILABILITY_VERSION:
+                return run_availability_shadow(db, run, reject, issue, cutoff, generated)
             if model_version != BASELINE_VERSION:
                 return reject(
                     "MODEL_CLOCK_INCOMPATIBLE"
@@ -340,3 +346,233 @@ def detail(db, run_id):
             )
         )
     return ForecastRunDetail(run=run_view(db, run), predictions=points)
+
+
+def availability_prediction(folder, issue, observations):
+    """Invoke only the existing isolated model runtime, with bounded JSON and no network."""
+    runtime = ROOT / "tools/forecast-experiment/.venv/bin/python"
+    if not runtime.is_file():
+        raise ValueError("AVAILABILITY_RUNTIME_UNAVAILABLE")
+    command = [
+        str(runtime),
+        str(ROOT / "scripts/predict_availability.py"),
+        "--model-dir",
+        str(folder),
+    ]
+    if os.environ.get("BREATHEWISE_OPENMP_LIBRARY"):
+        command += ["--openmp-library", os.environ["BREATHEWISE_OPENMP_LIBRARY"]]
+    try:
+        result = subprocess.run(
+            command,
+            input=json.dumps(
+                {"issue_at": issue.isoformat(), "observations": observations}, allow_nan=False
+            ),
+            text=True,
+            capture_output=True,
+            timeout=120,
+            check=False,
+            cwd=ROOT,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        raise ValueError("AVAILABILITY_RUNTIME_UNAVAILABLE") from None
+    if result.returncode or len(result.stdout) > 2_000_000:
+        raise ValueError("AVAILABILITY_MODEL_INPUT_INVALID")
+    try:
+        payload = json.loads(result.stdout)
+    except (ValueError, TypeError):
+        raise ValueError("AVAILABILITY_MODEL_OUTPUT_INVALID") from None
+    if (
+        not isinstance(payload, dict)
+        or payload.get("model_version") != AVAILABILITY_VERSION
+        or not isinstance(payload.get("points"), list)
+        or len(payload["points"]) != 24
+    ):
+        raise ValueError("AVAILABILITY_MODEL_OUTPUT_INVALID")
+    return payload
+
+
+def run_availability_shadow(db, run, reject, issue, cutoff, generated):
+    """New learned age3..4h regime; does not alter baseline or older model gates."""
+    run.provenance = {
+        "operation": "shadow",
+        "forecast_kind": "learned_availability_scenario",
+        "actual_issue_at": generated.isoformat(),
+        "nominal_model_issue_at": issue.isoformat(),
+        "clock_basis": "UTC_hour_ending",
+        "generation_delay_seconds": (generated - issue).total_seconds(),
+        "historical_publication_times_known": False,
+        "availability_scenario": AVAILABILITY_SCENARIO,
+        "rules": {
+            "feature_cutoff_lag_h": 3,
+            "latest_input_age_hours": [3, 4],
+            "max_generation_delay_minutes_exclusive": 60,
+            "actual_first_seen_lte_cutoff": True,
+            "public_live_forecast_ready": False,
+            "activity_planning_ready": False,
+        },
+    }
+    if cutoff > issue or issue > generated:
+        return reject("INVALID_INPUT_CUTOFF")
+    if generated - issue >= timedelta(hours=1):
+        return reject("SCHEDULED_ISSUE_EXPIRED")
+    if (issue.minute, issue.second, issue.microsecond) != (30, 0, 0):
+        return reject("SHADOW_INTERVAL_PHASE_MISMATCH")
+    station = db.get(Station, run.station_id)
+    if (
+        station is None
+        or station.data_mode != get_settings().data_mode
+        or run.station_id != "openaq-235"
+    ):
+        return reject("AVAILABILITY_STATION_UNSUPPORTED")
+    if station.data_mode not in {"live", "demo"}:
+        return reject("PROSPECTIVE_INPUTS_REQUIRED")
+    metadata = next(
+        (x for x in load_cache().get("stations", []) if x.get("location_id") == 235), {}
+    )
+    if station.data_mode == "live":
+        if (
+            metadata.get("selected_sensors", {}).get("pm25") != 12235610
+            or metadata.get("verification_status") == "verification_failed"
+        ):
+            return reject("SHADOW_PROVIDER_IDENTITY_UNVERIFIED")
+        try:
+            verified = aware(datetime.fromisoformat(metadata["verified_at"]))
+        except (ValueError, KeyError, TypeError):
+            return reject("SHADOW_PROVIDER_IDENTITY_UNVERIFIED")
+        if verified > generated or generated - verified > timedelta(hours=24):
+            return reject("SHADOW_PROVIDER_VERIFICATION_STALE")
+    feature_cutoff = issue - timedelta(hours=3)
+    raw = db.scalars(
+        select(Observation)
+        .where(
+            Observation.station_id == run.station_id,
+            Observation.pollutant == "pm25",
+            Observation.measured_at <= feature_cutoff,
+            Observation.measured_at >= issue - timedelta(hours=172),
+            Observation.available_at <= cutoff,
+        )
+        .order_by(Observation.measured_at)
+    ).all()
+    pending = set()
+    for revision in metadata.get("pending_revisions", []):
+        if revision.get("pollutant") == "pm25":
+            try:
+                pending.add(aware(datetime.fromisoformat(revision["measured_at"])))
+            except (ValueError, KeyError, TypeError):
+                return reject("SHADOW_PROVIDER_REVISION_INVALID")
+    observations = []
+    excluded = {"incomplete": 0, "revision_pending": 0}
+    for row in raw:
+        if utc(row.measured_at) in pending:
+            excluded["revision_pending"] += 1
+            continue
+        if any(
+            x in row.quality_flags
+            for x in [
+                "provider_partial_hour",
+                "provider_coverage_unknown",
+                "provider_revision_pending",
+                "provider_verification_failed",
+            ]
+        ):
+            excluded["incomplete"] += 1
+            continue
+        if not math.isfinite(row.value) or row.value < 0 or row.unit != "µg/m³":
+            return reject("SHADOW_INPUT_INCOMPATIBLE")
+        if (
+            station.data_mode == "live"
+            and row.source.rsplit("; ", 1)[-1] != "https://api.openaq.org/v3/locations/235"
+        ):
+            return reject("SHADOW_INPUT_SOURCE_MISMATCH")
+        observations.append(
+            {
+                "observation_id": row.id,
+                "station_id": run.station_id,
+                "measured_at": utc(row.measured_at).isoformat(),
+                "available_at": utc(row.available_at).isoformat(),
+                "value": row.value,
+                "unit": row.unit,
+                "source": row.source,
+                "quality_flags": row.quality_flags,
+            }
+        )
+    encoded = json.dumps(observations, sort_keys=True, allow_nan=False)
+    run.input_sha256 = hashlib.sha256(encoded.encode()).hexdigest()
+    run.provenance = {
+        **run.provenance,
+        "feature_cutoff": feature_cutoff.isoformat(),
+        "input_observation_count": len(observations),
+        "input_observation_ids": [x["observation_id"] for x in observations],
+        "excluded_inputs_as_missing": excluded,
+        "pending_revision_timestamps": [x.isoformat() for x in sorted(pending)],
+        "provider_sensor_id": 12235610,
+    }
+    eligible = [
+        x
+        for x in observations
+        if issue - aware(datetime.fromisoformat(x["measured_at"]))
+        in [timedelta(hours=3), timedelta(hours=4)]
+    ]
+    if not eligible:
+        return reject("AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE")
+    latest = max(eligible, key=lambda x: x["measured_at"])
+    run.provenance = {
+        **run.provenance,
+        "input": latest,
+        "latest_input_age_h": (
+            issue - aware(datetime.fromisoformat(latest["measured_at"]))
+        ).total_seconds()
+        / 3600,
+    }
+    try:
+        prediction = availability_prediction(
+            get_settings().forecast_registry_root / AVAILABILITY_VERSION, issue, observations
+        )
+    except ValueError as exc:
+        return reject(str(exc))
+    points = prediction["points"]
+    for horizon, point in enumerate(points, 1):
+        try:
+            target = aware(datetime.fromisoformat(point["target_at"]))
+            value = float(point["concentration"])
+            if (
+                point["horizon_h"] != horizon
+                or target != issue + timedelta(hours=horizon)
+                or target <= generated
+                or not math.isfinite(value)
+                or value < 0
+                or point["unit"] != "µg/m³"
+            ):
+                raise ValueError()
+        except (ValueError, TypeError, KeyError):
+            return reject("AVAILABILITY_MODEL_OUTPUT_INVALID")
+    run.provenance = {
+        **run.provenance,
+        "prediction_method": "24 separately trained native LightGBM models; simulated3h historical delay, actual-known serving cutoff",
+        "model_availability_scenario": prediction.get("availability_scenario"),
+    }
+    for point in points:
+        db.add(
+            ShadowPrediction(
+                run_id=run.id,
+                horizon_h=point["horizon_h"],
+                target_at=aware(datetime.fromisoformat(point["target_at"])),
+                concentration=point["concentration"],
+                unit=point["unit"],
+                quality_flags=[
+                    "shadow_only",
+                    "learned_model",
+                    "simulated_historical_publication_delay",
+                    "actual_first_seen_cutoff",
+                    "no_calibrated_uncertainty",
+                ]
+                + (
+                    ["provider_revision_inputs_excluded_as_missing"]
+                    if excluded["revision_pending"]
+                    else []
+                ),
+            )
+        )
+    run.status = "succeeded"
+    run.error_code = None
+    return run.id, True

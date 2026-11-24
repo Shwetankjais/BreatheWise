@@ -234,3 +234,142 @@ def test_live_shadow_requires_fresh_verified_identity_and_source(backend, monkey
     )
     with Session(engine()) as db:
         assert db.get(ForecastRun, fourth).error_code == "SHADOW_INPUT_SOURCE_MISMATCH"
+
+
+@pytest.mark.parametrize("input_age", [3, 4])
+def test_learned_availability_model_has_separate_trained_age_regime(
+    backend, monkeypatch, input_age
+):
+    from breathewise.db.models import Station
+    from breathewise.services import shadow
+
+    issue = datetime(2026, 11, 20, 7, 30, tzinfo=UTC)
+    with Session(engine()) as db, db.begin():
+        db.add(
+            Station(
+                id="openaq-235",
+                name="Synthetic availability mechanics",
+                city_id="delhi",
+                latitude=28.6,
+                longitude=77.3,
+                source="synthetic",
+                data_mode="demo",
+            )
+        )
+        db.flush()
+        db.add(
+            Observation(
+                station_id="openaq-235",
+                pollutant="pm25",
+                measured_at=issue - timedelta(hours=input_age),
+                available_at=issue - timedelta(minutes=1),
+                value=0,
+                unit="µg/m³",
+                original_value=0,
+                original_unit="ug/m3",
+                source="synthetic",
+                quality_flags=[],
+            )
+        )
+
+    def fake_native(folder, nominal, observations):
+        assert nominal == issue and len(observations) == 1 and observations[0]["value"] == 0
+        assert observations[0]["available_at"] < issue.isoformat()
+        return {
+            "model_version": shadow.AVAILABILITY_VERSION,
+            "availability_scenario": shadow.AVAILABILITY_SCENARIO,
+            "points": [
+                {
+                    "horizon_h": h,
+                    "target_at": (issue + timedelta(hours=h)).isoformat(),
+                    "concentration": float(h),
+                    "unit": "µg/m³",
+                }
+                for h in range(1, 25)
+            ],
+        }
+
+    monkeypatch.setattr(shadow, "availability_prediction", fake_native)
+    rid, _ = run_shadow(
+        engine(),
+        "openaq-235",
+        shadow.AVAILABILITY_VERSION,
+        issue,
+        issue,
+        now=issue + timedelta(minutes=45),
+    )
+    data = backend[0].get("/api/v1/forecast-runs/" + rid).json()["data"]
+    assert data["run"]["status"] == "succeeded" and len(data["predictions"]) == 24
+    assert data["run"]["provenance"]["latest_input_age_h"] == input_age
+    assert data["run"]["provenance"]["forecast_kind"] == "learned_availability_scenario"
+    assert data["predictions"][0]["lead_time_seconds"] == 900
+    assert "learned_model" in data["predictions"][0]["quality_flags"]
+    assert "persistence_baseline" not in data["predictions"][0]["quality_flags"]
+    assert not data["run"]["public_live_forecast_ready"]
+    # Existing baseline remains age120m / scheduling15m; no wider compatibility claim.
+    baseline, _ = run_shadow(
+        engine(), "openaq-235", BASELINE_VERSION, issue, issue, now=issue + timedelta(minutes=5)
+    )
+    assert (
+        backend[0].get("/api/v1/forecast-runs/" + baseline).json()["data"]["run"]["error_code"]
+        == "SHADOW_INPUT_STALE"
+    )
+
+
+@pytest.mark.parametrize(
+    ("age", "available_offset", "flags"),
+    [(5, -1, []), (3, 1, []), (3, -1, ["provider_partial_hour"])],
+)
+def test_learned_availability_rejects_inputs_outside_trained_actual_known_regime(
+    backend, monkeypatch, age, available_offset, flags
+):
+    from breathewise.db.models import Station
+    from breathewise.services import shadow
+
+    issue = datetime(2026, 11, 20, 7, 30, tzinfo=UTC)
+    with Session(engine()) as db, db.begin():
+        db.add(
+            Station(
+                id="openaq-235",
+                name="Synthetic availability failure",
+                city_id="delhi",
+                latitude=28.6,
+                longitude=77.3,
+                source="synthetic",
+                data_mode="demo",
+            )
+        )
+        db.flush()
+        db.add(
+            Observation(
+                station_id="openaq-235",
+                pollutant="pm25",
+                measured_at=issue - timedelta(hours=age),
+                available_at=issue + timedelta(minutes=available_offset),
+                value=30,
+                unit="µg/m³",
+                original_value=30,
+                original_unit="ug/m3",
+                source="synthetic",
+                quality_flags=flags,
+            )
+        )
+    monkeypatch.setattr(
+        shadow,
+        "availability_prediction",
+        lambda *args: pytest.fail("Must not invoke model on ineligible inputs"),
+    )
+    rid, _ = run_shadow(
+        engine(),
+        "openaq-235",
+        shadow.AVAILABILITY_VERSION,
+        issue,
+        issue,
+        now=issue + timedelta(minutes=5),
+    )
+    data = backend[0].get("/api/v1/forecast-runs/" + rid).json()["data"]
+    assert (
+        data["run"]["error_code"] == "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE"
+        and data["predictions"] == []
+    )
+    assert data["run"]["input_sha256"]

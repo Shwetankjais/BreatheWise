@@ -860,6 +860,226 @@
         "title": "ArchiveStation",
         "type": "object"
       },
+      "AvailabilityEvaluation": {
+        "additionalProperties": false,
+        "properties": {
+          "activity_planning_ready": {
+            "const": false,
+            "default": false,
+            "title": "Activity Planning Ready",
+            "type": "boolean"
+          },
+          "availability_scenario": {
+            "$ref": "#/components/schemas/AvailabilityScenario"
+          },
+          "clock_basis": {
+            "const": "UTC",
+            "default": "UTC",
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "dataset_mode": {
+            "const": "utc_availability_scenario",
+            "default": "utc_availability_scenario",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "dataset_sha256": {
+            "title": "Dataset Sha256",
+            "type": "string"
+          },
+          "evaluation_cohort": {
+            "const": "issue_time_purged_availability_scenario",
+            "default": "issue_time_purged_availability_scenario",
+            "title": "Evaluation Cohort",
+            "type": "string"
+          },
+          "experimental_shadow_ready": {
+            "title": "Experimental Shadow Ready",
+            "type": "boolean"
+          },
+          "features": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/FeatureDefinition"
+              },
+              "type": "array"
+            },
+            "title": "Features",
+            "type": "object"
+          },
+          "historical_delay_simulated": {
+            "const": true,
+            "default": true,
+            "title": "Historical Delay Simulated",
+            "type": "boolean"
+          },
+          "historical_publication_time_known": {
+            "const": false,
+            "default": false,
+            "title": "Historical Publication Time Known",
+            "type": "boolean"
+          },
+          "horizons": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonEvaluation"
+            },
+            "title": "Horizons",
+            "type": "array"
+          },
+          "input_availability_assumption": {
+            "title": "Input Availability Assumption",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "missing_input_behavior": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Missing Input Behavior",
+            "type": "object"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "preprocessing": {
+            "title": "Preprocessing",
+            "type": "string"
+          },
+          "public_live_forecast_ready": {
+            "const": false,
+            "default": false,
+            "title": "Public Live Forecast Ready",
+            "type": "boolean"
+          },
+          "retrospective_only": {
+            "const": true,
+            "default": true,
+            "title": "Retrospective Only",
+            "type": "boolean"
+          },
+          "rolling_backtests": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/HorizonEvaluation"
+              },
+              "type": "array"
+            },
+            "title": "Rolling Backtests",
+            "type": "object"
+          },
+          "sensor_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Sensor Ids",
+            "type": "array"
+          },
+          "splits": {
+            "items": {
+              "$ref": "#/components/schemas/UtcSplit"
+            },
+            "title": "Splits",
+            "type": "array"
+          },
+          "station_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Station Ids",
+            "type": "array"
+          },
+          "supported_horizons": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Supported Horizons",
+            "type": "array"
+          },
+          "target_unit": {
+            "title": "Target Unit",
+            "type": "string"
+          },
+          "timezone": {
+            "const": "UTC",
+            "default": "UTC",
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_version",
+          "experimental_shadow_ready",
+          "station_ids",
+          "sensor_ids",
+          "dataset_sha256",
+          "target_unit",
+          "supported_horizons",
+          "availability_scenario",
+          "splits",
+          "horizons",
+          "rolling_backtests",
+          "features",
+          "input_availability_assumption",
+          "preprocessing",
+          "missing_input_behavior",
+          "limitations"
+        ],
+        "title": "AvailabilityEvaluation",
+        "type": "object"
+      },
+      "AvailabilityScenario": {
+        "additionalProperties": false,
+        "properties": {
+          "first_seen_serving_rule": {
+            "title": "First Seen Serving Rule",
+            "type": "string"
+          },
+          "historical_availability_observed": {
+            "const": false,
+            "default": false,
+            "title": "Historical Availability Observed",
+            "type": "boolean"
+          },
+          "latest_input_policy": {
+            "title": "Latest Input Policy",
+            "type": "string"
+          },
+          "maximum_latest_input_age_hours": {
+            "title": "Maximum Latest Input Age Hours",
+            "type": "integer"
+          },
+          "minimum_input_age_hours": {
+            "title": "Minimum Input Age Hours",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "older_missing_policy": {
+            "title": "Older Missing Policy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "minimum_input_age_hours",
+          "maximum_latest_input_age_hours",
+          "latest_input_policy",
+          "older_missing_policy",
+          "first_seen_serving_rule"
+        ],
+        "title": "AvailabilityScenario",
+        "type": "object"
+      },
       "BoundaryRowCounts": {
         "additionalProperties": false,
         "properties": {
@@ -918,6 +1138,16 @@
           "evaluation": {
             "$ref": "#/components/schemas/Capability"
           },
+          "experimental_shadow_forecast": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Capability"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "history": {
             "$ref": "#/components/schemas/Capability"
           },
@@ -935,6 +1165,16 @@
           },
           "population_coverage": {
             "$ref": "#/components/schemas/Capability"
+          },
+          "replay_activity_planning": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Capability"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "retrospective_evaluation": {
             "$ref": "#/components/schemas/Capability"
@@ -1295,6 +1535,22 @@
         "title": "Envelope[ArchiveExplore]",
         "type": "object"
       },
+      "Envelope_AvailabilityEvaluation_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AvailabilityEvaluation"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[AvailabilityEvaluation]",
+        "type": "object"
+      },
       "Envelope_Capabilities_": {
         "properties": {
           "data": {
@@ -1565,6 +1821,38 @@
           "data"
         ],
         "title": "Envelope[Readiness]",
+        "type": "object"
+      },
+      "Envelope_ReplayIssuePage_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReplayIssuePage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ReplayIssuePage]",
+        "type": "object"
+      },
+      "Envelope_ReplayPlan_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReplayPlan"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ReplayPlan]",
         "type": "object"
       },
       "Envelope_RuleView_": {
@@ -2738,7 +3026,7 @@
       "Metadata": {
         "properties": {
           "contract_version": {
-            "default": "1.3.0",
+            "default": "1.4.0",
             "title": "Contract Version",
             "type": "string"
           },
@@ -2993,7 +3281,8 @@
             "enum": [
               "diagnostic",
               "recorded_clock",
-              "utc_provider_history"
+              "utc_provider_history",
+              "utc_availability_scenario"
             ],
             "title": "Dataset Mode",
             "type": "string"
@@ -3031,6 +3320,17 @@
             ],
             "title": "Evaluation Path"
           },
+          "experimental_shadow_ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experimental Shadow Ready"
+          },
           "feature_count": {
             "anyOf": [
               {
@@ -3045,7 +3345,8 @@
           "kind": {
             "enum": [
               "native_diagnostic",
-              "retrospective_forecast"
+              "retrospective_forecast",
+              "experimental_forecast"
             ],
             "title": "Kind",
             "type": "string"
@@ -3671,6 +3972,546 @@
           "end_recorded_at_exclusive"
         ],
         "title": "RecordedSplit",
+        "type": "object"
+      },
+      "ReplayIssue": {
+        "additionalProperties": false,
+        "properties": {
+          "complete_hours": {
+            "default": 24,
+            "title": "Complete Hours",
+            "type": "integer"
+          },
+          "issue_at": {
+            "title": "Issue At",
+            "type": "string"
+          },
+          "split": {
+            "title": "Split",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_at",
+          "station_id",
+          "split"
+        ],
+        "title": "ReplayIssue",
+        "type": "object"
+      },
+      "ReplayIssuePage": {
+        "additionalProperties": false,
+        "properties": {
+          "clock_basis": {
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "dataset_mode": {
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "evaluation_cohort": {
+            "const": "fixed_model_issue_time_purged",
+            "default": "fixed_model_issue_time_purged",
+            "title": "Evaluation Cohort",
+            "type": "string"
+          },
+          "forecast_artifact_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Artifact Sha256"
+          },
+          "historical_publication_time_known": {
+            "const": false,
+            "default": false,
+            "title": "Historical Publication Time Known",
+            "type": "boolean"
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/ReplayIssue"
+            },
+            "title": "Issues",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "public_future_planning_ready": {
+            "const": false,
+            "default": false,
+            "title": "Public Future Planning Ready",
+            "type": "boolean"
+          },
+          "retrospective_only": {
+            "const": true,
+            "default": true,
+            "title": "Retrospective Only",
+            "type": "boolean"
+          },
+          "source_dataset_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Dataset Sha256"
+          },
+          "split": {
+            "title": "Split",
+            "type": "string"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "total_count": {
+            "title": "Total Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "model_version",
+          "dataset_mode",
+          "clock_basis",
+          "timezone",
+          "split",
+          "limit",
+          "offset",
+          "total_count",
+          "issues",
+          "limitations"
+        ],
+        "title": "ReplayIssuePage",
+        "type": "object"
+      },
+      "ReplayPlan": {
+        "additionalProperties": false,
+        "properties": {
+          "candidate_count": {
+            "default": 0,
+            "title": "Candidate Count",
+            "type": "integer"
+          },
+          "clock_basis": {
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "coverage_hours": {
+            "title": "Coverage Hours",
+            "type": "integer"
+          },
+          "dataset_mode": {
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "duration_minutes": {
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "eligible_count": {
+            "default": 0,
+            "title": "Eligible Count",
+            "type": "integer"
+          },
+          "evaluation_cohort": {
+            "const": "fixed_model_issue_time_purged",
+            "default": "fixed_model_issue_time_purged",
+            "title": "Evaluation Cohort",
+            "type": "string"
+          },
+          "forecast_artifact_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forecast Artifact Sha256"
+          },
+          "historical_publication_time_known": {
+            "const": false,
+            "default": false,
+            "title": "Historical Publication Time Known",
+            "type": "boolean"
+          },
+          "issue_at": {
+            "title": "Issue At",
+            "type": "string"
+          },
+          "label": {
+            "const": "Historical forecast exposure comparison, not current safe-time advice",
+            "default": "Historical forecast exposure comparison, not current safe-time advice",
+            "title": "Label",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "max_window_mean_ugm3": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Window Mean Ugm3"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "public_future_planning_ready": {
+            "const": false,
+            "default": false,
+            "title": "Public Future Planning Ready",
+            "type": "boolean"
+          },
+          "required_hours": {
+            "default": 24,
+            "title": "Required Hours",
+            "type": "integer"
+          },
+          "retrospective_only": {
+            "const": true,
+            "default": true,
+            "title": "Retrospective Only",
+            "type": "boolean"
+          },
+          "sensitivity": {
+            "enum": [
+              "general",
+              "sensitive"
+            ],
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "sensitivity_rule": {
+            "title": "Sensitivity Rule",
+            "type": "string"
+          },
+          "source_dataset_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Dataset Sha256"
+          },
+          "split": {
+            "title": "Split",
+            "type": "string"
+          },
+          "station_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Station Id"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "unavailable",
+              "no_suitable_window"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "target_observations_used_for_ranking": {
+            "const": false,
+            "default": false,
+            "title": "Target Observations Used For Ranking",
+            "type": "boolean"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "trajectory": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/ReplayTrajectoryPoint"
+            },
+            "title": "Trajectory",
+            "type": "array"
+          },
+          "windows": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/ReplayWindow"
+            },
+            "title": "Windows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "code",
+          "message",
+          "model_version",
+          "issue_at",
+          "dataset_mode",
+          "clock_basis",
+          "timezone",
+          "split",
+          "coverage_hours",
+          "duration_minutes",
+          "sensitivity",
+          "sensitivity_rule",
+          "method",
+          "max_window_mean_ugm3",
+          "limitations"
+        ],
+        "title": "ReplayPlan",
+        "type": "object"
+      },
+      "ReplayPlanRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "duration_minutes": {
+            "maximum": 1440.0,
+            "minimum": 60.0,
+            "multipleOf": 60.0,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "earliest_start_h": {
+            "default": 0,
+            "maximum": 23.0,
+            "minimum": 0.0,
+            "title": "Earliest Start H",
+            "type": "integer"
+          },
+          "issue_at": {
+            "format": "date-time",
+            "title": "Issue At",
+            "type": "string"
+          },
+          "latest_end_h": {
+            "default": 24,
+            "maximum": 24.0,
+            "minimum": 1.0,
+            "title": "Latest End H",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 5,
+            "maximum": 24.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "max_window_mean_ugm3": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Window Mean Ugm3"
+          },
+          "model_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Model Version",
+            "type": "string"
+          },
+          "sensitivity": {
+            "default": "general",
+            "enum": [
+              "general",
+              "sensitive"
+            ],
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "split": {
+            "default": "test",
+            "maxLength": 40,
+            "title": "Split",
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_version",
+          "issue_at",
+          "duration_minutes"
+        ],
+        "title": "ReplayPlanRequest",
+        "type": "object"
+      },
+      "ReplayTrajectoryPoint": {
+        "additionalProperties": false,
+        "properties": {
+          "concentration": {
+            "title": "Concentration",
+            "type": "number"
+          },
+          "horizon_h": {
+            "title": "Horizon H",
+            "type": "integer"
+          },
+          "interval_end_at": {
+            "title": "Interval End At",
+            "type": "string"
+          },
+          "interval_start_at": {
+            "title": "Interval Start At",
+            "type": "string"
+          },
+          "unit": {
+            "const": "\u00b5g/m\u00b3",
+            "default": "\u00b5g/m\u00b3",
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "horizon_h",
+          "interval_start_at",
+          "interval_end_at",
+          "concentration"
+        ],
+        "title": "ReplayTrajectoryPoint",
+        "type": "object"
+      },
+      "ReplayWindow": {
+        "additionalProperties": false,
+        "properties": {
+          "concentration_time": {
+            "title": "Concentration Time",
+            "type": "number"
+          },
+          "concentration_time_unit": {
+            "const": "\u00b5g\u00b7h/m\u00b3",
+            "default": "\u00b5g\u00b7h/m\u00b3",
+            "title": "Concentration Time Unit",
+            "type": "string"
+          },
+          "duration_minutes": {
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "end_at": {
+            "title": "End At",
+            "type": "string"
+          },
+          "end_horizon_h": {
+            "title": "End Horizon H",
+            "type": "integer"
+          },
+          "mean_concentration": {
+            "title": "Mean Concentration",
+            "type": "number"
+          },
+          "peak_concentration": {
+            "title": "Peak Concentration",
+            "type": "number"
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          },
+          "ranking_score": {
+            "title": "Ranking Score",
+            "type": "number"
+          },
+          "start_at": {
+            "title": "Start At",
+            "type": "string"
+          },
+          "start_horizon_h": {
+            "title": "Start Horizon H",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rank",
+          "start_horizon_h",
+          "end_horizon_h",
+          "start_at",
+          "end_at",
+          "duration_minutes",
+          "concentration_time",
+          "mean_concentration",
+          "peak_concentration",
+          "ranking_score"
+        ],
+        "title": "ReplayWindow",
         "type": "object"
       },
       "RouteGeometry": {
@@ -4447,7 +5288,7 @@
   },
   "info": {
     "title": "BreatheWise API",
-    "version": "1.3.0"
+    "version": "1.4.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -4525,6 +5366,84 @@
           }
         },
         "summary": "Activity Plan"
+      }
+    },
+    "/api/v1/activity-plan/replay": {
+      "post": {
+        "operationId": "plan_api_v1_activity_plan_replay_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ReplayPlan_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Plan"
       }
     },
     "/api/v1/advisories": {
@@ -6480,6 +7399,101 @@
         "summary": "Catalogue"
       }
     },
+    "/api/v1/models/{model_version}/availability-evaluation": {
+      "get": {
+        "operationId": "evaluation_api_v1_models__model_version__availability_evaluation_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_version",
+            "required": true,
+            "schema": {
+              "title": "Model Version",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizon_h",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Horizon H"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_AvailabilityEvaluation_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Evaluation"
+      }
+    },
     "/api/v1/models/{model_version}/evaluation": {
       "get": {
         "operationId": "evaluation_api_v1_models__model_version__evaluation_get",
@@ -6745,6 +7759,120 @@
           }
         },
         "summary": "Predictions"
+      }
+    },
+    "/api/v1/models/{model_version}/replay-issues": {
+      "get": {
+        "operationId": "issues_api_v1_models__model_version__replay_issues_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_version",
+            "required": true,
+            "schema": {
+              "title": "Model Version",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "split",
+            "required": false,
+            "schema": {
+              "default": "test",
+              "maxLength": 40,
+              "title": "Split",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000000,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ReplayIssuePage_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Issues"
       }
     },
     "/api/v1/models/{model_version}/utc-evaluation": {

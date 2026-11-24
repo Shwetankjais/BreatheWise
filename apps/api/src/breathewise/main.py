@@ -11,10 +11,12 @@ from breathewise.api import (
     account,
     alerts,
     archive,
+    availability_models,
     catalogue,
     environment,
     models,
     observations,
+    replay_planning,
     routing,
     shadow,
     system,
@@ -94,6 +96,8 @@ def create_app():
     app.include_router(archive.router, prefix="/api/v1")
     app.include_router(catalogue.router, prefix="/api/v1")
     app.include_router(shadow.router, prefix="/api/v1")
+    app.include_router(replay_planning.router, prefix="/api/v1")
+    app.include_router(availability_models.router, prefix="/api/v1")
     return app
 
 

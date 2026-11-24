@@ -1,18 +1,18 @@
 # Two-agent execution plan
 
 ## Allocation
-The split is a planning allocation of engineering responsibility, not a guarantee of elapsed time or lines of code. Active allocation is Codex55%/Antigravity45%; all existing file ownership and sole Codex Git-write authority remain unchanged.
+The split is a planning allocation of engineering responsibility, not a guarantee of elapsed time or lines of code. Active allocation is Codex40%/Antigravity60%; all existing file ownership and sole Codex Git-write authority remain unchanged.
 
 | Work package | Owner | Weight |
 |---|---|---:|
-| Repository foundation, architecture, contracts and CI | Codex | 10 |
-| Data ingestion, database, geographic coverage | Codex | 15 |
-| Existing-model loading, feature parity, forecasts, evaluation | Codex | 15 |
+| Repository foundation, architecture, contracts and CI | Codex | 5 |
+| Data ingestion, database, geographic coverage | Codex | 10 |
+| Existing-model loading, feature parity, forecasts, evaluation | Codex | 10 |
 | Planner, routes, advisories, alerts and domain APIs | Codex | 10 |
 | Combined integration, operational checks and release | Codex | 5 |
-| Research-informed visual system, layouts and motion | Antigravity | 10 |
-| Map, forecasts, planning, exploration and settings UI | Antigravity | 25 |
-| Responsive/accessibility/browser refinement | Antigravity | 10 |
+| Research-informed visual system, layouts and motion | Antigravity | 15 |
+| Map, forecasts, planning, exploration and settings UI | Antigravity | 30 |
+| Responsive/accessibility/browser refinement | Antigravity | 15 |
 
 ## Parallel workstreams and evidence checkpoints
 Both agents start immediately. The checkpoints below track integration readiness; they are not sequential permission gates for entire workstreams. The orchestrator guides priorities and resolves dependencies under ORCHESTRATOR.md.

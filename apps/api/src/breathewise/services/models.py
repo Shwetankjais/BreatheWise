@@ -113,6 +113,9 @@ def catalogue():
                     ],
                 )
             )
+    from breathewise.services.availability_models import summary as availability_summary
+
+    rows.append(availability_summary())
     return ModelCatalogue(models=rows)
 
 

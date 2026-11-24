@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/activity-plan/replay": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Plan */
+        post: operations["plan_api_v1_activity_plan_replay_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/advisories": {
         parameters: {
             query?: never;
@@ -346,6 +363,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/models/{model_version}/availability-evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Evaluation */
+        get: operations["evaluation_api_v1_models__model_version__availability_evaluation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/models/{model_version}/evaluation": {
         parameters: {
             query?: never;
@@ -372,6 +406,23 @@ export interface paths {
         };
         /** Predictions */
         get: operations["predictions_api_v1_models__model_version__predictions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/models/{model_version}/replay-issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Issues */
+        get: operations["issues_api_v1_models__model_version__replay_issues_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1052,6 +1103,121 @@ export interface components {
             /** Station Id */
             station_id: string;
         };
+        /** AvailabilityEvaluation */
+        AvailabilityEvaluation: {
+            /**
+             * Activity Planning Ready
+             * @default false
+             * @constant
+             */
+            activity_planning_ready: false;
+            availability_scenario: components["schemas"]["AvailabilityScenario"];
+            /**
+             * Clock Basis
+             * @default UTC
+             * @constant
+             */
+            clock_basis: "UTC";
+            /**
+             * Dataset Mode
+             * @default utc_availability_scenario
+             * @constant
+             */
+            dataset_mode: "utc_availability_scenario";
+            /** Dataset Sha256 */
+            dataset_sha256: string;
+            /**
+             * Evaluation Cohort
+             * @default issue_time_purged_availability_scenario
+             * @constant
+             */
+            evaluation_cohort: "issue_time_purged_availability_scenario";
+            /** Experimental Shadow Ready */
+            experimental_shadow_ready: boolean;
+            /** Features */
+            features: {
+                [key: string]: components["schemas"]["FeatureDefinition"][];
+            };
+            /**
+             * Historical Delay Simulated
+             * @default true
+             * @constant
+             */
+            historical_delay_simulated: true;
+            /**
+             * Historical Publication Time Known
+             * @default false
+             * @constant
+             */
+            historical_publication_time_known: false;
+            /** Horizons */
+            horizons: components["schemas"]["HorizonEvaluation"][];
+            /** Input Availability Assumption */
+            input_availability_assumption: string;
+            /** Limitations */
+            limitations: string[];
+            /** Missing Input Behavior */
+            missing_input_behavior: {
+                [key: string]: string;
+            };
+            /** Model Version */
+            model_version: string;
+            /** Preprocessing */
+            preprocessing: string;
+            /**
+             * Public Live Forecast Ready
+             * @default false
+             * @constant
+             */
+            public_live_forecast_ready: false;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /** Rolling Backtests */
+            rolling_backtests: {
+                [key: string]: components["schemas"]["HorizonEvaluation"][];
+            };
+            /** Sensor Ids */
+            sensor_ids: number[];
+            /** Splits */
+            splits: components["schemas"]["UtcSplit"][];
+            /** Station Ids */
+            station_ids: string[];
+            /** Supported Horizons */
+            supported_horizons: number[];
+            /** Target Unit */
+            target_unit: string;
+            /**
+             * Timezone
+             * @default UTC
+             * @constant
+             */
+            timezone: "UTC";
+        };
+        /** AvailabilityScenario */
+        AvailabilityScenario: {
+            /** First Seen Serving Rule */
+            first_seen_serving_rule: string;
+            /**
+             * Historical Availability Observed
+             * @default false
+             * @constant
+             */
+            historical_availability_observed: false;
+            /** Latest Input Policy */
+            latest_input_policy: string;
+            /** Maximum Latest Input Age Hours */
+            maximum_latest_input_age_hours: number;
+            /** Minimum Input Age Hours */
+            minimum_input_age_hours: number;
+            /** Name */
+            name: string;
+            /** Older Missing Policy */
+            older_missing_policy: string;
+        };
         /** BoundaryRowCounts */
         BoundaryRowCounts: {
             /** Original Rows */
@@ -1080,12 +1246,14 @@ export interface components {
              */
             declared_artifact_horizons: number[];
             evaluation: components["schemas"]["Capability"];
+            experimental_shadow_forecast?: components["schemas"]["Capability"] | null;
             history: components["schemas"]["Capability"];
             model_forecast: components["schemas"]["Capability"];
             native_diagnostics?: components["schemas"]["Capability"];
             observations: components["schemas"]["Capability"];
             observed_rankings?: components["schemas"]["Capability"];
             population_coverage: components["schemas"]["Capability"];
+            replay_activity_planning?: components["schemas"]["Capability"] | null;
             retrospective_evaluation?: components["schemas"]["Capability"];
             route_geometry?: components["schemas"]["Capability"];
             routes: components["schemas"]["Capability"];
@@ -1211,6 +1379,11 @@ export interface components {
             data: components["schemas"]["ArchiveExplore"];
             meta: components["schemas"]["Metadata"];
         };
+        /** Envelope[AvailabilityEvaluation] */
+        Envelope_AvailabilityEvaluation_: {
+            data: components["schemas"]["AvailabilityEvaluation"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** Envelope[Capabilities] */
         Envelope_Capabilities_: {
             data: components["schemas"]["Capabilities"];
@@ -1294,6 +1467,16 @@ export interface components {
         /** Envelope[Readiness] */
         Envelope_Readiness_: {
             data: components["schemas"]["Readiness"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ReplayIssuePage] */
+        Envelope_ReplayIssuePage_: {
+            data: components["schemas"]["ReplayIssuePage"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ReplayPlan] */
+        Envelope_ReplayPlan_: {
+            data: components["schemas"]["ReplayPlan"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[RuleView] */
@@ -1797,7 +1980,7 @@ export interface components {
         Metadata: {
             /**
              * Contract Version
-             * @default 1.3.0
+             * @default 1.4.0
              */
             contract_version: string;
             /**
@@ -1915,20 +2098,22 @@ export interface components {
              * Dataset Mode
              * @enum {string}
              */
-            dataset_mode: "diagnostic" | "recorded_clock" | "utc_provider_history";
+            dataset_mode: "diagnostic" | "recorded_clock" | "utc_provider_history" | "utc_availability_scenario";
             /** Dataset Sha256 */
             dataset_sha256?: string | null;
             /** Evaluation Cohort */
             evaluation_cohort?: string | null;
             /** Evaluation Path */
             evaluation_path?: string | null;
+            /** Experimental Shadow Ready */
+            experimental_shadow_ready?: boolean | null;
             /** Feature Count */
             feature_count?: number | null;
             /**
              * Kind
              * @enum {string}
              */
-            kind: "native_diagnostic" | "retrospective_forecast";
+            kind: "native_diagnostic" | "retrospective_forecast" | "experimental_forecast";
             /** Limitations */
             limitations: string[];
             /**
@@ -2212,6 +2397,265 @@ export interface components {
             name: string;
             /** Start Recorded At */
             start_recorded_at: string;
+        };
+        /** ReplayIssue */
+        ReplayIssue: {
+            /**
+             * Complete Hours
+             * @default 24
+             */
+            complete_hours: number;
+            /** Issue At */
+            issue_at: string;
+            /** Split */
+            split: string;
+            /** Station Id */
+            station_id: string;
+        };
+        /** ReplayIssuePage */
+        ReplayIssuePage: {
+            /** Clock Basis */
+            clock_basis: string;
+            /** Dataset Mode */
+            dataset_mode: string;
+            /**
+             * Evaluation Cohort
+             * @default fixed_model_issue_time_purged
+             * @constant
+             */
+            evaluation_cohort: "fixed_model_issue_time_purged";
+            /** Forecast Artifact Sha256 */
+            forecast_artifact_sha256?: string | null;
+            /**
+             * Historical Publication Time Known
+             * @default false
+             * @constant
+             */
+            historical_publication_time_known: false;
+            /** Issues */
+            issues: components["schemas"]["ReplayIssue"][];
+            /** Limit */
+            limit: number;
+            /** Limitations */
+            limitations: string[];
+            /** Model Version */
+            model_version: string;
+            /** Offset */
+            offset: number;
+            /**
+             * Public Future Planning Ready
+             * @default false
+             * @constant
+             */
+            public_future_planning_ready: false;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /** Source Dataset Sha256 */
+            source_dataset_sha256?: string | null;
+            /** Split */
+            split: string;
+            /** Timezone */
+            timezone: string | null;
+            /** Total Count */
+            total_count: number;
+        };
+        /** ReplayPlan */
+        ReplayPlan: {
+            /**
+             * Candidate Count
+             * @default 0
+             */
+            candidate_count: number;
+            /** Clock Basis */
+            clock_basis: string;
+            /** Code */
+            code: string;
+            /** Coverage Hours */
+            coverage_hours: number;
+            /** Dataset Mode */
+            dataset_mode: string;
+            /** Duration Minutes */
+            duration_minutes: number;
+            /**
+             * Eligible Count
+             * @default 0
+             */
+            eligible_count: number;
+            /**
+             * Evaluation Cohort
+             * @default fixed_model_issue_time_purged
+             * @constant
+             */
+            evaluation_cohort: "fixed_model_issue_time_purged";
+            /** Forecast Artifact Sha256 */
+            forecast_artifact_sha256?: string | null;
+            /**
+             * Historical Publication Time Known
+             * @default false
+             * @constant
+             */
+            historical_publication_time_known: false;
+            /** Issue At */
+            issue_at: string;
+            /**
+             * Label
+             * @default Historical forecast exposure comparison, not current safe-time advice
+             * @constant
+             */
+            label: "Historical forecast exposure comparison, not current safe-time advice";
+            /** Limitations */
+            limitations: string[];
+            /** Max Window Mean Ugm3 */
+            max_window_mean_ugm3: number | null;
+            /** Message */
+            message: string;
+            /** Method */
+            method: string;
+            /** Model Version */
+            model_version: string;
+            /**
+             * Public Future Planning Ready
+             * @default false
+             * @constant
+             */
+            public_future_planning_ready: false;
+            /**
+             * Required Hours
+             * @default 24
+             */
+            required_hours: number;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /**
+             * Sensitivity
+             * @enum {string}
+             */
+            sensitivity: "general" | "sensitive";
+            /** Sensitivity Rule */
+            sensitivity_rule: string;
+            /** Source Dataset Sha256 */
+            source_dataset_sha256?: string | null;
+            /** Split */
+            split: string;
+            /** Station Id */
+            station_id?: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "unavailable" | "no_suitable_window";
+            /**
+             * Target Observations Used For Ranking
+             * @default false
+             * @constant
+             */
+            target_observations_used_for_ranking: false;
+            /** Timezone */
+            timezone: string | null;
+            /**
+             * Trajectory
+             * @default []
+             */
+            trajectory: components["schemas"]["ReplayTrajectoryPoint"][];
+            /**
+             * Windows
+             * @default []
+             */
+            windows: components["schemas"]["ReplayWindow"][];
+        };
+        /** ReplayPlanRequest */
+        ReplayPlanRequest: {
+            /** Duration Minutes */
+            duration_minutes: number;
+            /**
+             * Earliest Start H
+             * @default 0
+             */
+            earliest_start_h: number;
+            /**
+             * Issue At
+             * Format: date-time
+             */
+            issue_at: string;
+            /**
+             * Latest End H
+             * @default 24
+             */
+            latest_end_h: number;
+            /**
+             * Limit
+             * @default 5
+             */
+            limit: number;
+            /** Max Window Mean Ugm3 */
+            max_window_mean_ugm3?: number | null;
+            /** Model Version */
+            model_version: string;
+            /**
+             * Sensitivity
+             * @default general
+             * @enum {string}
+             */
+            sensitivity: "general" | "sensitive";
+            /**
+             * Split
+             * @default test
+             */
+            split: string;
+        };
+        /** ReplayTrajectoryPoint */
+        ReplayTrajectoryPoint: {
+            /** Concentration */
+            concentration: number;
+            /** Horizon H */
+            horizon_h: number;
+            /** Interval End At */
+            interval_end_at: string;
+            /** Interval Start At */
+            interval_start_at: string;
+            /**
+             * Unit
+             * @default µg/m³
+             * @constant
+             */
+            unit: "µg/m³";
+        };
+        /** ReplayWindow */
+        ReplayWindow: {
+            /** Concentration Time */
+            concentration_time: number;
+            /**
+             * Concentration Time Unit
+             * @default µg·h/m³
+             * @constant
+             */
+            concentration_time_unit: "µg·h/m³";
+            /** Duration Minutes */
+            duration_minutes: number;
+            /** End At */
+            end_at: string;
+            /** End Horizon H */
+            end_horizon_h: number;
+            /** Mean Concentration */
+            mean_concentration: number;
+            /** Peak Concentration */
+            peak_concentration: number;
+            /** Rank */
+            rank: number;
+            /** Ranking Score */
+            ranking_score: number;
+            /** Start At */
+            start_at: string;
+            /** Start Horizon H */
+            start_horizon_h: number;
         };
         /** RouteGeometry */
         RouteGeometry: {
@@ -2614,6 +3058,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    plan_api_v1_activity_plan_replay_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReplayPlanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ReplayPlan_"];
                 };
             };
             /** @description Unauthorized */
@@ -4087,6 +4600,75 @@ export interface operations {
             };
         };
     };
+    evaluation_api_v1_models__model_version__availability_evaluation_get: {
+        parameters: {
+            query?: {
+                horizon_h?: number | null;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AvailabilityEvaluation_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     evaluation_api_v1_models__model_version__evaluation_get: {
         parameters: {
             query?: {
@@ -4182,6 +4764,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PredictionPage_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    issues_api_v1_models__model_version__replay_issues_get: {
+        parameters: {
+            query?: {
+                split?: string;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ReplayIssuePage_"];
                 };
             };
             /** @description Unauthorized */

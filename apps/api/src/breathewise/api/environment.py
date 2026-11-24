@@ -53,6 +53,17 @@ def forecast(
     horizons: Annotated[list[int] | None, Query()] = None,
     model_version: str | None = None,
 ):
+    from breathewise.ml.availability_experiment import MODEL_VERSION as availability_version
+
+    if model_version == availability_version:
+        from breathewise.services.availability_models import manifest as availability_manifest
+
+        availability_manifest(model_version)
+        raise ServiceError(
+            409,
+            "MODEL_EXPERIMENTAL_ONLY",
+            "Selected learned model is experimental shadow-only; public live forecasting is unvalidated",
+        )
     if horizons is not None and (not horizons or any(h not in [1, 3, 6, 12, 24] for h in horizons)):
         raise ServiceError(
             409,

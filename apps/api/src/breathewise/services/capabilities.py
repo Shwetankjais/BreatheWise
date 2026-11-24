@@ -38,6 +38,8 @@ class Capabilities(BaseModel):
     retrospective_evaluation: Capability = Field(default_factory=Capability)
     route_geometry: Capability = Field(default_factory=Capability)
     shadow_forecast_runs: Capability = Field(default_factory=Capability)
+    replay_activity_planning: Capability | None = None
+    experimental_shadow_forecast: Capability | None = None
     declared_artifact_horizons: list[int] = [1, 3, 6, 12, 24]
     verified_forecast_horizons: list[int] = []
     verified_forecast_pollutants: list[str] = []
@@ -138,6 +140,30 @@ def capabilities() -> Capabilities:
     if settings.routing_base_url:
         result.routes.requirements_missing = ["validated spatial estimator and coverage"]
         result.routes.method = "Road geometry available separately through route_geometry; pollution comparison unavailable"
+    replay_versions = [
+        m.model_version
+        for m in models
+        if m.kind == "retrospective_forecast"
+        and m.retrospective_evaluation_ready
+        and m.supported_horizons == list(range(1, 25))
+    ]
+    result.replay_activity_planning = Capability(
+        supported=bool(replay_versions),
+        method="historical single-issue forecast-only concentration-time window ranking; not current advice",
+        supported_scope=replay_versions,
+        requirements_missing=[]
+        if replay_versions
+        else ["registered complete24h historical forecast trajectories"],
+    )
+    scenario_versions = [m.model_version for m in models if m.experimental_shadow_ready]
+    result.experimental_shadow_forecast = Capability(
+        supported=bool(scenario_versions) and db_ready,
+        method="independently trained simulated-delay UTC learned shadow; actual run inputs separately gated",
+        supported_scope=scenario_versions,
+        requirements_missing=[]
+        if scenario_versions and db_ready
+        else ["registered availability-aware artifacts and migrated database"],
+    )
     result.shadow_forecast_runs = Capability(
         supported=db_ready,
         method="persisted experimental UTC run/status and exact observed matching; no public inference",
