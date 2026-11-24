@@ -9,8 +9,7 @@ import {
   ForecastPoint,
   ApiResult,
   StationCatalogue,
-  ObservedRankings,
-  CatalogueStation
+  ObservedRankings
 } from '../../lib/api/types';
 import { apiClient } from '../../lib/api/client';
 import { calculateSubIndex, formatToIST, formatTimeAgo } from '../../lib/aqi';
@@ -35,6 +34,29 @@ interface OverviewViewProps {
   onSelectPollutant: (pollutant: Pollutant) => void;
   onOpenSavePlaceModal: (station: StationView) => void;
   onOpenAlertModal: (station: StationView) => void;
+  onNavigateToTab?: (tabId: string) => void;
+}
+
+function haversineDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function formatToUTC(isoString: string): string {
+  try {
+    const d = new Date(isoString);
+    if (isNaN(d.getTime())) return isoString;
+    return d.toISOString().replace('.000Z', 'Z').replace('T', ' ');
+  } catch {
+    return isoString;
+  }
 }
 
 export const OverviewView: React.FC<OverviewViewProps> = ({
@@ -43,16 +65,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   selectedStation,
   onSelectStation,
   latestMap,
-  currentMeasurement,
+  currentMeasurement: _currentMeasurement,
   forecastResult,
-  capabilities,
+  capabilities: _capabilities,
   isDemoMode,
   isLoadingForecast,
   isLoadingLatest,
   selectedPollutant,
   onSelectPollutant,
   onOpenSavePlaceModal,
-  onOpenAlertModal
+  onOpenAlertModal,
+  onNavigateToTab
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMode, setFilterMode] = useState<'all' | 'has_pollutant' | 'fresh_only'>('all');
@@ -62,6 +85,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   const [observedRankings, setObservedRankings] = useState<ObservedRankings | null>(null);
   const [isLoadingRankings, setIsLoadingRankings] = useState(false);
   const [stationCatalogue, setStationCatalogue] = useState<StationCatalogue | null>(null);
+
+  // Geolocation state
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationNotice, setLocationNotice] = useState<{
+    type: 'success' | 'denied' | 'error';
+    message: string;
+    distanceKm?: number;
+  } | null>(null);
 
   // Fetch Station Catalogue (Contract 1.2.0)
   useEffect(() => {
@@ -102,17 +133,70 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     return stationCatalogue.stations.find(s => s.id === selectedStation.id) || null;
   }, [selectedStation, stationCatalogue]);
 
+  // Geolocation Handler
+  const handleLocateNearestStation = () => {
+    if (!navigator.geolocation) {
+      setLocationNotice({
+        type: 'error',
+        message: 'Geolocation is not supported by your browser. Please select a monitoring station from the directory.'
+      });
+      return;
+    }
+    setIsLocating(true);
+    setLocationNotice(null);
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        setIsLocating(false);
+        const { latitude, longitude } = pos.coords;
+        if (!stations.length) return;
+
+        let nearest = stations[0];
+        let minDist = haversineDistanceKm(latitude, longitude, nearest.latitude, nearest.longitude);
+
+        for (let i = 1; i < stations.length; i++) {
+          const dist = haversineDistanceKm(latitude, longitude, stations[i].latitude, stations[i].longitude);
+          if (dist < minDist) {
+            minDist = dist;
+            nearest = stations[i];
+          }
+        }
+
+        onSelectStation(nearest);
+        setLocationNotice({
+          type: 'success',
+          message: `Nearest monitor located: ${nearest.name} (${minDist.toFixed(1)} km from your current location).`,
+          distanceKm: minDist
+        });
+      },
+      err => {
+        setIsLocating(false);
+        let msg = 'Unable to retrieve location. Defaulting to station directory.';
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = 'Location permission was denied. Defaulting to station directory / Anand Vihar.';
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          msg = 'Location information is currently unavailable. Defaulting to station directory.';
+        } else if (err.code === err.TIMEOUT) {
+          msg = 'Location request timed out. Defaulting to station directory.';
+        }
+        setLocationNotice({
+          type: 'denied',
+          message: msg
+        });
+      },
+      { timeout: 10000, enableHighAccuracy: false }
+    );
+  };
+
   // Filter stations based on search query and active filter mode
   const filteredStations = useMemo(() => {
     return stations.filter(station => {
-      // Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesQuery = station.name.toLowerCase().includes(q) || station.id.toLowerCase().includes(q);
         if (!matchesQuery) return false;
       }
 
-      // Filter mode
       const m = latestMap[station.id];
       if (filterMode === 'has_pollutant') {
         return Boolean(m && m.pollutant === selectedPollutant && m.value !== null);
@@ -161,61 +245,44 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Parameter Selection Ribbon */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-            <span>Observed Parameter:</span>
-            <span className="text-teal-700 font-extrabold uppercase">{selectedPollutant}</span>
+      {/* Geolocation Notice Banner */}
+      {locationNotice && (
+        <div
+          role="status"
+          className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs ${
+            locationNotice.type === 'success'
+              ? 'bg-[#F0FDFA] border-[#99F6E4] text-[#0F766E]'
+              : 'bg-[#FBF4E6] border-[#E8D1A0] text-[#78350F]'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            {locationNotice.type === 'success' ? (
+              <svg className="w-4 h-4 shrink-0 text-[#0D9488]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 shrink-0 text-[#E29E2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            )}
+            <span className="font-semibold">{locationNotice.message}</span>
           </div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Select a pollutant to query latest station observations and forecast horizons.
-          </p>
+          <button
+            onClick={() => setLocationNotice(null)}
+            className="text-xs font-bold opacity-60 hover:opacity-100 p-1 cursor-pointer"
+            aria-label="Dismiss notice"
+          >
+            ✕
+          </button>
         </div>
+      )}
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {(['pm25', 'pm10', 'no2', 'so2', 'o3', 'co'] as Pollutant[]).map(p => (
-            <button
-              key={p}
-              onClick={() => onSelectPollutant(p)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors cursor-pointer shrink-0 ${
-                selectedPollutant === p
-                  ? 'bg-teal-700 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-              }`}
-            >
-              {p === 'pm25' ? 'PM2.5' : p === 'pm10' ? 'PM10' : p.toUpperCase()}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Mobile Tab Switcher */}
-      <div className="sm:hidden flex rounded-lg bg-slate-200/80 p-1">
-        <button
-          onClick={() => setMobileTab('map')}
-          className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-            mobileTab === 'map' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
-          }`}
-        >
-          Geospatial Map
-        </button>
-        <button
-          onClick={() => setMobileTab('list')}
-          className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-            mobileTab === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
-          }`}
-        >
-          Station Directory ({stations.length})
-        </button>
-      </div>
-
-      {/* Multi-Station Side-by-Side Comparison Drawer (When 2+ stations selected) */}
+      {/* Multi-Station Side-by-Side Comparison Drawer */}
       {comparedStations.length > 0 && (
-        <Card className="border-2 border-teal-600/40 bg-teal-50/20">
-          <CardHeader className="py-3 px-4 bg-white/80 border-b border-teal-100 flex flex-row items-center justify-between">
+        <Card className="border-2 border-[#0D9488]/40 bg-[#F0FDFA]/30">
+          <CardHeader className="py-3 px-4 bg-[#FFFDF9] border-b border-[#CCFBF1] flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-bold text-[#1C1A1F]">
                 Side-by-Side Station Comparison ({comparedStations.length} / 3 selected)
               </CardTitle>
               <CardDescription className="text-xs">
@@ -224,7 +291,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
             <button
               onClick={() => setCompareStationIds([])}
-              className="text-xs text-slate-500 hover:text-slate-800 font-semibold underline cursor-pointer"
+              className="text-xs text-[#6E675D] hover:text-[#1C1A1F] font-semibold underline cursor-pointer p-1"
             >
               Clear Comparison
             </button>
@@ -237,44 +304,44 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 const val = hasValue ? m.value : null;
 
                 return (
-                  <div key={stn.id} className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs space-y-2">
+                  <div key={stn.id} className="p-3.5 bg-[#FFFDF9] rounded-xl border border-[#DDD3BC] shadow-xs space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="text-[10px] font-bold uppercase text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">
+                        <span className="text-[10px] font-bold uppercase text-[#0D9488] bg-[#F0FDFA] px-1.5 py-0.5 rounded border border-[#99F6E4]">
                           {stn.source}
                         </span>
-                        <h4 className="font-bold text-xs text-slate-900 mt-1">{stn.name}</h4>
-                        <div className="text-[10px] text-slate-400 font-mono">
+                        <h4 className="font-bold text-xs text-[#1C1A1F] mt-1">{stn.name}</h4>
+                        <div className="text-[10px] text-[#968F83] font-mono">
                           {stn.latitude.toFixed(3)}° N, {stn.longitude.toFixed(3)}° E
                         </div>
                       </div>
                       <button
                         onClick={e => handleToggleCompare(stn.id, e)}
-                        className="text-slate-400 hover:text-red-500 text-xs p-1 cursor-pointer"
+                        className="text-[#968F83] hover:text-[#C3583C] text-xs p-1 cursor-pointer"
                         title="Remove from comparison"
                       >
                         ✕
                       </button>
                     </div>
 
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                      <div className="text-[10px] font-semibold text-slate-500 uppercase">
+                    <div className="p-2.5 rounded-lg bg-[#F7F3E9] border border-[#DDD3BC]">
+                      <div className="text-[10px] font-semibold text-[#6E675D] uppercase">
                         Hourly {selectedPollutant.toUpperCase()}
                       </div>
                       {val !== null && m ? (
                         <>
-                          <div className="text-xl font-extrabold text-slate-900 mt-0.5">
-                            {val.toFixed(1)} <span className="text-xs font-semibold text-slate-600">{m.unit}</span>
+                          <div className="text-xl font-extrabold text-[#1C1A1F] mt-0.5">
+                            {val.toFixed(1)} <span className="text-xs font-semibold text-[#6E675D]">{m.unit}</span>
                           </div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="text-[10px] text-[#6E675D] mt-0.5">
                             Observed {formatTimeAgo(m.measured_at)} ({formatToIST(m.measured_at)})
                           </div>
-                          <div className={`text-[10px] font-semibold mt-0.5 ${m.stale ? 'text-amber-700' : 'text-emerald-700'}`}>
+                          <div className={`text-[10px] font-semibold mt-0.5 ${m.stale ? 'text-[#C88A2E]' : 'text-[#16A34A]'}`}>
                             {m.stale ? '⚠️ Stale Reading' : '✓ Fresh Reading'}
                           </div>
                         </>
                       ) : (
-                        <div className="text-xs text-slate-400 italic mt-1">
+                        <div className="text-xs text-[#968F83] italic mt-1">
                           No {selectedPollutant.toUpperCase()} data
                         </div>
                       )}
@@ -284,7 +351,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                       variant="outline"
                       size="sm"
                       onClick={() => onSelectStation(stn)}
-                      className="w-full text-xs"
+                      className="w-full text-xs min-h-[38px]"
                     >
                       Focus on Map
                     </Button>
@@ -296,10 +363,134 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </Card>
       )}
 
-      {/* Main Grid: Left Map/List, Right Detail & Forecast */}
+      {/* Main Map-Centered Dashboard Grid matching Reference Image 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column (7 cols): Map and Station List */}
-        <div className="lg:col-span-7 space-y-4">
+        {/* Left Column (3 cols on lg): Parameters, Replay Insights & Sensor Health */}
+        <div className="lg:col-span-3 space-y-4">
+          {/* Card 1: Parameter Selection matching Reference */}
+          <Card className="border-[#DDD3BC]">
+            <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+              <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                Parameter
+              </CardTitle>
+              <CardDescription className="text-[11px] text-[#6E675D]">
+                Select criteria pollutant for telemetry & model metrics
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-3.5">
+              <div className="grid grid-cols-2 gap-2">
+                {(['pm25', 'pm10', 'no2', 'so2', 'o3', 'co'] as Pollutant[]).map(p => {
+                  const isSelected = selectedPollutant === p;
+                  return (
+                    <button
+                      key={p}
+                      onClick={() => onSelectPollutant(p)}
+                      className={`min-h-[44px] px-3 py-2 text-xs font-extrabold rounded-xl border transition-all cursor-pointer text-center ${
+                        isSelected
+                          ? 'bg-[#FBF4E6] text-[#8C5D14] border-2 border-[#E29E2E] shadow-xs'
+                          : 'bg-[#FFFDF9] text-[#4A453E] border-[#DDD3BC] hover:bg-[#F2ECE0]'
+                      }`}
+                    >
+                      {p === 'pm25' ? 'PM2.5' : p === 'pm10' ? 'PM10' : p.toUpperCase()}
+                    </button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Card 2: Low-Exposure Replay Windows matching Reference */}
+          <Card className="border-[#DDD3BC]">
+            <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+              <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                Low-Exposure Windows
+              </CardTitle>
+              <CardDescription className="text-[11px] text-[#6E675D]">
+                Contract 1.4 historical replay ranking
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-3.5 space-y-2.5 text-xs">
+              <div className="p-3 rounded-xl bg-[#DCFCE7] border border-[#86EFAC] text-[#14532D]">
+                <div className="font-bold text-[11px] uppercase tracking-wider">Lowest Exposure Window</div>
+                <div className="text-sm font-extrabold mt-0.5">12:00 PM – 2:00 PM</div>
+                <div className="text-[10px] opacity-80 mt-0.5">Score: 373.0 µg·h/m³ (Rank #1)</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FEE2E2] border border-[#FCA5A5] text-[#7F1D1D]">
+                <div className="font-bold text-[11px] uppercase tracking-wider">Peak Vulnerability Warning</div>
+                <div className="text-sm font-extrabold mt-0.5">7:00 AM – 9:00 AM</div>
+                <div className="text-[10px] opacity-80 mt-0.5">Peak concentration: 197.3 µg/m³</div>
+              </div>
+
+              <p className="text-[10px] text-[#7A7368] italic leading-tight pt-1">
+                Historical comparison only; not prospective health or activity advice.
+              </p>
+
+              {onNavigateToTab && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onNavigateToTab('planner')}
+                  className="w-full text-xs min-h-[38px] border-[#DDD3BC] hover:border-[#E29E2E]"
+                >
+                  Open Replay Planner →
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Card 3: ML Gaps & Insights matching Reference */}
+          <Card className="border-[#DDD3BC]">
+            <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+              <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                ML Gaps & Insights
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3.5 space-y-2.5 text-xs text-[#3D3934]">
+              <div className="p-2.5 bg-[#FFFDF9] rounded-xl border border-[#DDD3BC]">
+                <div className="font-bold text-[#1C1A1F] text-[11px]">Model Certainty</div>
+                <div className="text-[11px] text-[#6E675D] mt-0.5">
+                  Live serving model gated (`503 MODEL_UNAVAILABLE`). Evaluated on held-out test splits.
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-[#FFFDF9] rounded-xl border border-[#DDD3BC]">
+                <div className="font-bold text-[#1C1A1F] text-[11px]">Sensor Coverage</div>
+                <div className="text-[11px] text-[#6E675D] mt-0.5">
+                  {selectedCity.observed_station_count} CAAQMS monitors active across {selectedCity.name}.
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Center Column (6 cols on lg): Interactive AQ Map & Station Directory */}
+        <div className="lg:col-span-6 space-y-4">
+          {/* Map Header with Geolocation & Search */}
+          <div className="bg-[#FFFDF9] p-3.5 rounded-2xl border border-[#DDD3BC] shadow-xs flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A]" />
+              <h2 className="text-sm sm:text-base font-extrabold text-[#1C1A1F]">
+                Interactive AQ Map
+              </h2>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLocateNearestStation}
+              isLoading={isLocating}
+              className="min-h-[40px] px-3 text-xs border-[#DDD3BC] hover:border-[#E29E2E] text-[#1C1A1F]"
+              title="Locate nearest station using browser geolocation"
+            >
+              <svg className="w-4 h-4 text-[#C88A2E] mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z" />
+              </svg>
+              <span>Find Nearest Monitor</span>
+            </Button>
+          </div>
+
+          {/* Interactive Map */}
           <div className={`${mobileTab === 'map' ? 'block' : 'hidden sm:block'}`}>
             <StationMap
               stations={stations}
@@ -313,29 +504,49 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             />
           </div>
 
+          {/* Mobile Switcher (Map vs List) */}
+          <div className="sm:hidden flex rounded-xl bg-[#F2ECE0] p-1 border border-[#DDD3BC]">
+            <button
+              onClick={() => setMobileTab('map')}
+              className={`flex-1 min-h-[44px] py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                mobileTab === 'map' ? 'bg-[#FFFDF9] text-[#1C1A1F] shadow-xs font-bold border border-[#DDD3BC]' : 'text-[#6E675D]'
+              }`}
+            >
+              Geospatial Map
+            </button>
+            <button
+              onClick={() => setMobileTab('list')}
+              className={`flex-1 min-h-[44px] py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                mobileTab === 'list' ? 'bg-[#FFFDF9] text-[#1C1A1F] shadow-xs font-bold border border-[#DDD3BC]' : 'text-[#6E675D]'
+              }`}
+            >
+              Station Directory ({stations.length})
+            </button>
+          </div>
+
           {/* Station Directory & Observed Rankings */}
-          <Card className={`${mobileTab === 'list' ? 'block' : 'hidden sm:block'}`}>
-            <CardHeader className="py-3 px-4">
+          <Card className={`${mobileTab === 'list' ? 'block' : 'hidden sm:block'} border-[#DDD3BC]`}>
+            <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
               <div className="space-y-2">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setDirectoryTab('directory')}
-                      className={`text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
+                      className={`min-h-[44px] text-xs sm:text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
                         directoryTab === 'directory'
-                          ? 'border-teal-600 text-slate-900'
-                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-[#E29E2E] text-[#1C1A1F]'
+                          : 'border-transparent text-[#6E675D] hover:text-[#1C1A1F]'
                       }`}
                     >
                       Active CAAQMS Stations ({filteredStations.length} / {stations.length})
                     </button>
-                    <span className="text-slate-300">|</span>
+                    <span className="text-[#DDD3BC]">|</span>
                     <button
                       onClick={() => setDirectoryTab('rankings')}
-                      className={`text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
+                      className={`min-h-[44px] text-xs sm:text-sm font-bold pb-0.5 border-b-2 transition-colors cursor-pointer ${
                         directoryTab === 'rankings'
-                          ? 'border-teal-600 text-slate-900'
-                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                          ? 'border-[#E29E2E] text-[#1C1A1F]'
+                          : 'border-transparent text-[#6E675D] hover:text-[#1C1A1F]'
                       }`}
                     >
                       Observed Rankings ({observedRankings?.rows.length ?? 0})
@@ -348,54 +559,53 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                         type="text"
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
-                        placeholder="Search by station name..."
-                        className="w-full text-xs rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                        placeholder="Search stations..."
+                        className="w-full text-xs rounded-xl border border-[#DDD3BC] bg-[#FFFDF9] px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#E29E2E]"
                       />
                     </div>
                   )}
                 </div>
 
                 {directoryTab === 'directory' ? (
-                  /* Filter Pills */
-                  <div className="flex items-center gap-1.5 pt-1 border-t border-slate-100 text-xs">
-                    <span className="text-[11px] text-slate-500 font-semibold mr-1">Filter:</span>
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#EBE3D3] text-xs">
+                    <span className="text-[11px] text-[#6E675D] font-semibold mr-1">Filter:</span>
                     <button
                       onClick={() => setFilterMode('all')}
-                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer min-h-[36px] ${
                         filterMode === 'all'
-                          ? 'bg-slate-800 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          ? 'bg-[#1C1A1F] text-white'
+                          : 'bg-[#F2ECE0] text-[#4A453E] hover:bg-[#EBE3D3]'
                       }`}
                     >
                       All Stations
                     </button>
                     <button
                       onClick={() => setFilterMode('has_pollutant')}
-                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer min-h-[36px] ${
                         filterMode === 'has_pollutant'
-                          ? 'bg-teal-700 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          ? 'bg-[#E29E2E] text-[#1C1A1F] font-bold'
+                          : 'bg-[#F2ECE0] text-[#4A453E] hover:bg-[#EBE3D3]'
                       }`}
                     >
                       Has {selectedPollutant.toUpperCase()}
                     </button>
                     <button
                       onClick={() => setFilterMode('fresh_only')}
-                      className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer min-h-[36px] ${
                         filterMode === 'fresh_only'
-                          ? 'bg-emerald-700 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          ? 'bg-[#16A34A] text-white font-bold'
+                          : 'bg-[#F2ECE0] text-[#4A453E] hover:bg-[#EBE3D3]'
                       }`}
                     >
                       Fresh Only (&lt;2h)
                     </button>
                   </div>
                 ) : (
-                  <div className="pt-1 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+                  <div className="pt-1 border-t border-[#EBE3D3] text-[11px] text-[#6E675D] flex items-center justify-between">
                     <span>
                       Observed {selectedPollutant.toUpperCase()} rankings • Cutoff: {observedRankings?.input_cutoff_at ? formatToIST(observedRankings.input_cutoff_at) : 'Current'}
                     </span>
-                    <span className="text-teal-700 font-semibold text-[10px] uppercase">
+                    <span className="text-[#C88A2E] font-semibold text-[10px] uppercase">
                       Observed Concentration Ranking
                     </span>
                   </div>
@@ -403,9 +613,9 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
             </CardHeader>
             {directoryTab === 'rankings' ? (
-              <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+              <div className="divide-y divide-[#EBE3D3] max-h-72 overflow-y-auto">
                 {isLoadingRankings ? (
-                  <div className="p-4 text-center text-xs text-slate-400">Loading observed concentration rankings...</div>
+                  <div className="p-4 text-center text-xs text-[#968F83]">Loading observed concentration rankings...</div>
                 ) : observedRankings && observedRankings.rows.length > 0 ? (
                   observedRankings.rows.map(row => {
                     const isSelected = row.station.id === selectedStation?.id;
@@ -417,17 +627,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                           onSelectStation(stn);
                           setMobileTab('map');
                         }}
-                        className={`w-full p-3 text-left flex items-center justify-between transition-colors cursor-pointer ${
-                          isSelected ? 'bg-teal-50/70 border-l-4 border-teal-600' : 'hover:bg-slate-50'
+                        className={`w-full p-3.5 text-left flex items-center justify-between transition-colors cursor-pointer min-h-[44px] ${
+                          isSelected ? 'bg-[#FBF4E6] border-l-4 border-[#E29E2E]' : 'hover:bg-[#FAF6EE]'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">
+                          <span className="w-6 h-6 rounded-full bg-[#EBE3D3] text-[#1C1A1F] font-bold text-xs flex items-center justify-center shrink-0">
                             #{row.rank}
                           </span>
                           <div>
-                            <div className="text-xs font-bold text-slate-900">{row.station.name}</div>
-                            <div className="text-[11px] text-slate-500 mt-0.5">
+                            <div className="text-xs font-bold text-[#1C1A1F]">{row.station.name}</div>
+                            <div className="max-w-full break-words text-xs text-[#6E675D] mt-0.5">
                               Observed {formatTimeAgo(row.measurement.measured_at)} ({formatToIST(row.measurement.measured_at)})
                             </div>
                           </div>
@@ -435,13 +645,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
                         <div className="flex items-center gap-2">
                           <div className="text-right">
-                            <div className="text-xs font-extrabold text-slate-900">
+                            <div className="text-xs font-extrabold text-[#1C1A1F]">
                               {row.measurement.value.toFixed(1)} {row.measurement.unit}
                             </div>
-                            <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
+                            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                               row.coverage_state === 'reported_complete'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                ? 'bg-[#DCFCE7] text-[#14532D] border border-[#86EFAC]'
+                                : 'bg-[#FEF3C7] text-[#78350F] border border-[#FDE68A]'
                             }`}>
                               {row.coverage_state}
                             </span>
@@ -451,13 +661,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     );
                   })
                 ) : (
-                  <div className="p-4 text-center text-xs text-slate-400">
+                  <div className="p-4 text-center text-xs text-[#968F83]">
                     No reported rankings available for {selectedPollutant.toUpperCase()} in {selectedCity.name}.
                   </div>
                 )}
               </div>
             ) : (
-              <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+              <div className="divide-y divide-[#EBE3D3] max-h-72 overflow-y-auto">
                 {filteredStations.map(station => {
                   const isSelected = station.id === selectedStation?.id;
                   const isCompared = compareStationIds.includes(station.id);
@@ -473,13 +683,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                         onSelectStation(station);
                         setMobileTab('map');
                       }}
-                      className={`w-full p-3 text-left flex items-center justify-between transition-colors cursor-pointer ${
-                        isSelected ? 'bg-teal-50/70 border-l-4 border-teal-600' : 'hover:bg-slate-50'
+                      className={`w-full p-3.5 text-left flex items-center justify-between transition-colors cursor-pointer min-h-[44px] ${
+                        isSelected ? 'bg-[#FBF4E6] border-l-4 border-[#E29E2E]' : 'hover:bg-[#FAF6EE]'
                       }`}
                     >
                       <div>
-                        <div className="text-xs font-bold text-slate-900">{station.name}</div>
-                        <div className="text-[11px] text-slate-500 mt-0.5">
+                        <div className="text-xs font-bold text-[#1C1A1F]">{station.name}</div>
+                        <div className="max-w-full break-words text-xs text-[#6E675D] mt-0.5">
                           {station.source} • Lat: {station.latitude.toFixed(3)}, Lon: {station.longitude.toFixed(3)}
                         </div>
                       </div>
@@ -488,30 +698,30 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                         <div className="text-right">
                           {hasMatchingMeasurement && m ? (
                             <>
-                              <div className="text-xs font-bold text-slate-800">
+                              <div className="text-xs font-bold text-[#1C1A1F]">
                                 {m.value.toFixed(1)} {m.unit}
                               </div>
-                              <div className="text-[10px] text-slate-400">
-                                {m.observation_age_minutes}m ago
+                              <div className="text-[10px] text-[#968F83]">
+                                {formatTimeAgo(m.measured_at)}
                               </div>
                             </>
                           ) : (
-                            <span className="text-[10px] text-slate-400 italic">No {selectedPollutant.toUpperCase()}</span>
+                            <span className="text-[10px] text-[#968F83] italic">No {selectedPollutant.toUpperCase()}</span>
                           )}
                         </div>
 
                         {hasMatchingMeasurement && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#F2ECE0] text-[#3D3934] border border-[#DDD3BC]">
                             Idx {stnSubIndex}
                           </span>
                         )}
 
                         <button
                           onClick={e => handleToggleCompare(station.id, e)}
-                          className={`text-[10px] font-bold px-2 py-1 rounded transition-colors cursor-pointer ${
+                          className={`min-h-[36px] text-[10px] font-bold px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                             isCompared
-                              ? 'bg-teal-600 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                              ? 'bg-[#E29E2E] text-[#1C1A1F]'
+                              : 'bg-[#F2ECE0] text-[#6E675D] hover:bg-[#EBE3D3]'
                           }`}
                           title="Add to side-by-side comparison"
                         >
@@ -523,55 +733,47 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 })}
               </div>
             )}
-            <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 leading-relaxed">
-              <strong>Ranking Distinction Notice: </strong>
-              {directoryTab === 'rankings'
-                ? 'Observed rankings sort monitors strictly by latest reported concentration. These are NOT predicted hotspots, forecasts, area-wide concentration or a common-time city average.'
-                : 'Station directory sorts and filters monitors by actual observational intake. Emerging hotspot ranking requires verified operational multi-horizon inference (currently gated).'}
-            </div>
           </Card>
         </div>
 
-        {/* Right Column (5 cols): Selected Station Detail & Forecast */}
-        <div className="lg:col-span-5 space-y-5">
+        {/* Right Column (3 cols on lg): Selected Station Detail & Predictive Trajectory */}
+        <div className="lg:col-span-3 space-y-4">
           {selectedStation ? (
             <>
-              {/* Station Detail Card */}
-              <Card className="border-t-4 border-teal-600">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-3">
+              {/* Station Detail Card matching Reference Image 2 */}
+              <Card className="border-[#DDD3BC] border-t-4 border-t-[#C88A2E]">
+                <CardHeader className="pb-3 bg-[#FAF6EE]">
+                  <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                        {selectedCity.name.toUpperCase()} • {selectedStation.source}
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C5D14]">
+                        {selectedCity.name} · {selectedStation.source}
                       </span>
-                      <h2 className="text-base sm:text-lg font-bold text-slate-900 mt-0.5">
+                      <h2 className="text-base font-extrabold text-[#1C1A1F] mt-0.5">
                         {selectedStation.name}
                       </h2>
-                      <p className="text-[11px] text-slate-500 mt-1">
-                        Coordinates: {selectedStation.latitude.toFixed(4)}° N, {selectedStation.longitude.toFixed(4)}° E
-                      </p>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
-                      <Tooltip content="Save this location to your account">
+                    <div className="flex items-center gap-1">
+                      <Tooltip content="Save location">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => onOpenSavePlaceModal(selectedStation)}
-                          className="h-8 px-2 text-slate-600 hover:text-teal-700"
+                          className="min-h-[36px] min-w-[36px] p-1.5 text-[#6E675D] hover:text-[#1C1A1F]"
+                          aria-label="Save place"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                           </svg>
                         </Button>
                       </Tooltip>
-
-                      <Tooltip content="Configure threshold alert rule">
+                      <Tooltip content="Set threshold alert">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => onOpenAlertModal(selectedStation)}
-                          className="h-8 px-2 text-slate-600 hover:text-amber-700"
+                          className="min-h-[36px] min-w-[36px] p-1.5 text-[#6E675D] hover:text-[#C88A2E]"
+                          aria-label="Set alert"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -581,174 +783,135 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     </div>
                   </div>
 
-                  {/* Observed Concentration Display */}
+                  {/* Observed Concentration Display matching Reference Image 2 */}
                   {isLoadingLatest ? (
-                    <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 text-center animate-pulse">
-                      Retrieving latest {selectedPollutant.toUpperCase()} observation...
+                    <div className="mt-3 p-4 rounded-xl bg-[#F7F3E9] border border-[#DDD3BC] text-xs text-[#6E675D] text-center animate-pulse">
+                      Retrieving latest observation...
                     </div>
                   ) : measurementToDisplay ? (
-                    <div className="mt-4 p-4 rounded-xl border border-slate-200 bg-slate-50/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="mt-3 p-3.5 rounded-xl border border-[#DDD3BC] bg-[#FFFDF9] space-y-2.5">
                       <div>
-                        <div className="text-[11px] font-bold uppercase tracking-wider text-teal-800">
-                          Reported Hourly {selectedPollutant.toUpperCase()} Concentration
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-[#6E675D]">
+                          Hourly {selectedPollutant.toUpperCase()} Concentration
                         </div>
-                        <div className="flex items-baseline gap-2 mt-0.5">
-                          <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        <div className="flex flex-wrap items-baseline gap-2 mt-0.5">
+                          <span className="text-3xl font-black text-[#1C1A1F] tracking-tight">
                             {measurementToDisplay.value.toFixed(1)}
                           </span>
-                          <span className="text-sm font-semibold text-slate-600">
+                          <span className="text-xs font-semibold text-[#6E675D]">
                             {measurementToDisplay.unit}
                           </span>
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 border border-slate-300">
-                            Indicative Sub-Index: {subIndex}
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-slate-500 mt-1">
-                          Averaging: 1-Hour reported sample ({measurementToDisplay.original_value} {measurementToDisplay.original_unit})
                         </div>
                       </div>
 
-                      <div className="text-right text-[11px] text-slate-500">
-                        <div className="font-semibold text-slate-700">Observed {formatTimeAgo(measurementToDisplay.measured_at)}</div>
-                        <div>{formatToIST(measurementToDisplay.measured_at)}</div>
-                        <div className="text-[10px] text-slate-600 mt-0.5">Source: {measurementToDisplay.source}</div>
-                        <div className={`text-[10px] font-semibold mt-0.5 ${measurementToDisplay.stale ? 'text-amber-700' : 'text-emerald-700'}`}>
-                          {measurementToDisplay.stale ? '⚠️ Stale Reading' : 'Fresh Intake'}
-                          {measurementToDisplay.quality_flags.length > 0 && ` • [${measurementToDisplay.quality_flags.join(', ')}]`}
+                      {/* Sub-Index Badge in Terracotta/Category */}
+                      <div>
+                        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FFEDD5] text-[#C3583C] border border-[#FDBA74] inline-block">
+                          Sub-Index: {subIndex} (Indicative)
+                        </span>
+                      </div>
+
+                      <div className="text-xs text-[#4A453E] border-t border-[#EBE3D3] pt-2 space-y-0.5">
+                        <div className="font-semibold text-[#1C1A1F]">Observed {formatTimeAgo(measurementToDisplay.measured_at)}</div>
+                        <div className="text-[11px] text-[#3D3934]">IST: {formatToIST(measurementToDisplay.measured_at)}</div>
+                        <div className="text-[10px] text-[#968F83] font-mono">UTC: {formatToUTC(measurementToDisplay.measured_at)}</div>
+                        <div className={`text-[10px] font-semibold pt-1 ${measurementToDisplay.stale ? 'text-[#C88A2E]' : 'text-[#16A34A]'}`}>
+                          {measurementToDisplay.stale ? '⚠️ Stale Reading' : '✓ Fresh Intake'}
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 text-center">
-                      No latest {selectedPollutant.toUpperCase()} observation reported for {selectedStation.name} in current telemetry.
-                    </div>
-                  )}
-
-                  {/* Single-Pollutant Sub-Index Clarification */}
-                  <div className="mt-3 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
-                    <span className="font-bold">Standard Notice: </span>
-                    Reported hourly sub-index ({subIndex}) evaluates single-pollutant 1-hour concentration against CPCB NAQI breakpoint tables. Official CPCB AQI requires defined averaging (24-hour for PM2.5, PM10, NO2, SO2, NH3, Pb; 8-hour for CO and O3; 1-hour for O3 peak) with at least three monitored pollutants including one particulate parameter, plus data sufficiency thresholds (at least 16 hours of 24h period). Single-hour categories are indicative only and do not constitute an official CPCB AQI.
-                  </div>
-
-                  {/* Verified Station Catalogue Sensor Availability Breakdown (Contract 1.2.0) */}
-                  {catalogueStation && (
-                    <div className="mt-3 p-3 rounded-lg border border-slate-200 bg-white space-y-2">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="font-bold text-slate-800">Verified Station Catalogue Sensor Intake</span>
-                        <span className="text-slate-500 font-mono text-[10px]">
-                          Cutoff: {stationCatalogue?.input_cutoff_at ? formatToIST(stationCatalogue.input_cutoff_at) : 'Current'}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {catalogueStation.pollutants.map(p => (
-                          <span
-                            key={p.pollutant}
-                            className={`text-[10px] font-semibold px-2 py-0.5 rounded border flex items-center gap-1 ${
-                              p.status === 'available'
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                : 'bg-slate-100 text-slate-600 border-slate-200'
-                            }`}
-                          >
-                            <span>{p.pollutant.toUpperCase()}</span>
-                            <span className="text-[9px] opacity-75">[{p.coverage_state}]</span>
-                          </span>
-                        ))}
-                      </div>
-                      {catalogueStation.provider_revision_pending && (
-                        <div className="text-[10px] text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-200">
-                          ⚠️ Provider revision pending for recent sensor readings.
-                        </div>
-                      )}
+                    <div className="mt-3 p-4 rounded-xl bg-[#F7F3E9] border border-[#DDD3BC] text-xs text-[#6E675D] text-center">
+                      No latest {selectedPollutant.toUpperCase()} observation reported for {selectedStation.name}.
                     </div>
                   )}
                 </CardHeader>
               </Card>
 
-              {/* Multi-Horizon ML Forecast Trajectory Panel */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-sm font-bold">
-                        Multi-Horizon Forecast Trajectory
-                      </CardTitle>
-                      <CardDescription className="text-xs">
-                        Declared horizons: [+1h, +3h, +6h, +12h, +24h]
-                      </CardDescription>
-                    </div>
-
-                    <div className="text-right text-[11px] text-slate-400">
-                      <div>Target: <span className="font-semibold text-slate-700">{selectedPollutant.toUpperCase()}</span></div>
-                      <div>Transform: <span className="font-mono text-[10px]">log1p / expm1</span></div>
-                    </div>
-                  </div>
+              {/* Forecast / Replay Trajectory Card matching Reference */}
+              <Card className="border-[#DDD3BC]">
+                <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                    Forecast & Replay Trajectory
+                  </CardTitle>
+                  <CardDescription className="text-[11px] text-[#6E675D]">
+                    Declared horizons [+1h, +3h, +6h, +12h, +24h]
+                  </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className="p-3.5 space-y-3">
                   {isLoadingForecast ? (
-                    <div className="py-8 text-center text-slate-400 text-xs">
-                      Checking forecast endpoint for {selectedPollutant.toUpperCase()}...
+                    <div className="py-6 text-center text-[#968F83] text-xs">
+                      Checking forecast endpoint...
                     </div>
                   ) : isDemoMode && forecastData && forecastData.points ? (
-                    <>
-                      {/* Discrete Forecast Horizons Steps in Demo Mode */}
-                      <div className="grid grid-cols-5 gap-2">
-                        {forecastData.points.map((pt: ForecastPoint) => {
-                          const ptSubIndex = calculateSubIndex(selectedPollutant, pt.predicted_concentration);
-
-                          return (
-                            <div
-                              key={pt.horizon_h}
-                              className="p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-center flex flex-col justify-between"
-                            >
-                              <div className="text-[11px] font-bold text-slate-500">
-                                +{pt.horizon_h}h
-                              </div>
-                              <div className="my-1.5">
-                                <div className="text-sm sm:text-base font-extrabold text-slate-900">
-                                  {pt.predicted_concentration.toFixed(1)}
-                                </div>
-                                <div className="text-[10px] text-slate-500">µg/m³</div>
-                              </div>
-                              <div className="text-[10px] font-semibold px-1 py-0.5 rounded bg-slate-200 text-slate-700 truncate">
-                                Idx: {ptSubIndex}
-                              </div>
-                              <div className="text-[9px] text-slate-400 mt-1">
-                                {new Date(pt.valid_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
-                        <span className="font-bold">Demo Fixture Disclosure: </span>
-                        Synthetic demonstration points at declared horizons [1, 3, 6, 12, 24h]. Operational model inference is not evaluated.
-                      </div>
-                    </>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {forecastData.points.map((pt: ForecastPoint) => (
+                        <div
+                          key={pt.horizon_h}
+                          className="p-2 rounded-lg border border-[#DDD3BC] bg-[#F7F3E9] text-center"
+                        >
+                          <div className="text-[10px] font-bold text-[#6E675D]">+{pt.horizon_h}h</div>
+                          <div className="text-xs font-extrabold text-[#1C1A1F] my-1">
+                            {pt.predicted_concentration.toFixed(0)}
+                          </div>
+                          <div className="text-[8px] text-[#968F83]">µg/m³</div>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
-                    /* Live Mode: Truthfully report 503 MODEL_UNAVAILABLE */
-                    <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-950 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-amber-900">503 MODEL_UNAVAILABLE</span>
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-200 text-amber-900">
-                          Inference Gated
+                    <div className="p-3 bg-[#FBF4E6] rounded-xl border border-[#E8D1A0] text-xs text-[#78350F] space-y-1.5">
+                      <div className="flex items-center gap-1.5 font-bold text-[#8C5D14]">
+                        <span>503 MODEL_UNAVAILABLE</span>
+                        <span className="text-[9px] px-1.5 py-0.2 bg-[#FDE68A] text-[#78350F] rounded font-semibold">
+                          Gated
                         </span>
                       </div>
-                      <p className="leading-relaxed">
-                        Preprocessing and golden predictions are not verified. Machine learning predictions are not currently generated on live observation feeds.
+                      <p className="text-[11px] leading-relaxed text-[#4A453E]">
+                        Operational forecasts require verified feature pipeline parity. For retrospective comparisons, inspect the Historical Replay Planner.
                       </p>
-                      <div className="text-[11px] text-slate-600 pt-1 border-t border-amber-200">
-                        Prerequisites: teammate HyperlocalAQPipeline class source & golden parity test.
-                      </div>
                     </div>
                   )}
                 </CardContent>
               </Card>
+
+              {/* Scenario Simulator Gating Card matching Reference */}
+              <Card className="border-[#DDD3BC]">
+                <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                    ML Scenario Simulator
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3.5 space-y-3 text-xs text-[#6E675D]">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-semibold text-[#1C1A1F]">
+                      <span>Hypothetical Weather</span>
+                      <span className="text-[#C88A2E]">Adjust Track (Gated)</span>
+                    </div>
+                    <div className="h-2 w-full bg-[#EBE3D3] rounded-full overflow-hidden">
+                      <div className="h-full w-1/2 bg-[#E29E2E] rounded-full opacity-60" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-semibold text-[#1C1A1F]">
+                      <span>Traffic Flow Advection</span>
+                      <span className="text-[#C88A2E]">Adjust Track (Gated)</span>
+                    </div>
+                    <div className="h-2 w-full bg-[#EBE3D3] rounded-full overflow-hidden">
+                      <div className="h-full w-1/3 bg-[#E29E2E] rounded-full opacity-60" />
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] text-[#7A7368] italic pt-1">
+                    409 SCENARIO_UNAVAILABLE: Weather simulation requires complete verified causal pipeline.
+                  </div>
+                </CardContent>
+              </Card>
             </>
           ) : (
-            <div className="p-8 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200">
-              Select a monitoring station on the map or directory to inspect observations.
+            <div className="p-8 text-center text-[#968F83] text-xs bg-[#FFFDF9] rounded-2xl border border-[#DDD3BC]">
+              Select a station on the map or directory to inspect observations.
             </div>
           )}
         </div>

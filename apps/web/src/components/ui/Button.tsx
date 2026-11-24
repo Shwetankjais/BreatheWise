@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'ochre';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 }
@@ -16,20 +16,21 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
+    'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
   const sizeClasses = {
-    sm: 'h-8 px-3 text-xs gap-1.5',
-    md: 'h-10 px-4 text-sm gap-2',
-    lg: 'h-11 px-6 text-base gap-2.5'
+    sm: 'min-h-[36px] sm:min-h-[32px] px-3 text-xs gap-1.5',
+    md: 'min-h-[44px] px-4 text-sm gap-2',
+    lg: 'min-h-[48px] px-6 text-base gap-2.5'
   }[size];
 
   const variantClasses = {
-    primary: 'bg-teal-600 text-white hover:bg-teal-700 shadow-sm',
-    secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200',
-    outline: 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50',
-    ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-    danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm'
+    primary: 'bg-[#0D9488] text-white hover:bg-[#0F766E] shadow-sm',
+    ochre: 'bg-[#C88A2E] text-white hover:bg-[#B27724] shadow-sm',
+    secondary: 'bg-[#F5F1EA] text-[#1C1E24] hover:bg-[#EDE8DF] border border-[#E5DFD3]',
+    outline: 'border border-[#D8CFBC] text-[#2D3139] bg-white hover:bg-[#FAF8F5] shadow-xs',
+    ghost: 'text-[#555C68] hover:bg-[#F5F1EA] hover:text-[#1C1E24]',
+    danger: 'bg-[#C3583C] text-white hover:bg-[#A8452D] shadow-sm'
   }[variant];
 
   return (

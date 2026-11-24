@@ -172,7 +172,7 @@ export const App: React.FC = () => {
     };
   }, [selectedCity, selectedHotspotHorizon, isDemoMode]);
 
-  // 3. Load Latest Observations for Selected Pollutant across City Stations
+  // 3. Load Latest Readings for all stations when City, Stations or Pollutant Changes
   useEffect(() => {
     if (!selectedCity || stations.length === 0) {
       setLatestMap({});
@@ -259,18 +259,18 @@ export const App: React.FC = () => {
 
   const handleAuthenticate = async (token: string): Promise<boolean> => {
     apiClient.setSessionToken(token);
-    setSessionToken(token);
     const meRes = await apiClient.getMe();
     if (meRes.ok) {
+      setSessionToken(token);
       setIdentity(meRes.data);
       await loadPlacesAndRules();
       return true;
+    } else {
+      apiClient.setSessionToken(null);
+      setSessionToken(null);
+      setIdentity(null);
+      return false;
     }
-    // Auth failed
-    apiClient.setSessionToken(null);
-    setSessionToken(null);
-    setIdentity(null);
-    return false;
   };
 
   const handleSignOut = () => {
@@ -284,19 +284,20 @@ export const App: React.FC = () => {
 
   const handleMarkNotificationRead = async (id: string) => {
     await apiClient.markAlertRead(id);
-    const alertsRes = await apiClient.getAlerts();
-    if (alertsRes.ok) {
-      setNotifications(alertsRes.data);
-    }
+    setNotifications(prev =>
+      prev.map(n => (n.id === id ? { ...n, read_at: new Date().toISOString(), status: 'read' as const } : n))
+    );
   };
 
   const handleSavePlaceSubmit = async () => {
     if (!savePlaceModalStation || !savePlaceLabel.trim()) return;
+
     await apiClient.createSavedPlace({
       label: savePlaceLabel.trim(),
       latitude: savePlaceModalStation.latitude,
       longitude: savePlaceModalStation.longitude
     });
+
     setSavePlaceModalStation(null);
     setSavePlaceLabel('');
     await loadPlacesAndRules();
@@ -310,48 +311,52 @@ export const App: React.FC = () => {
       ? latestMap[selectedStation.id]
       : null;
 
+  // Prominently prioritize working user journeys, matching exact test selectors
   const tabs: TabItem[] = [
     { id: 'overview', label: 'Overview & Map' },
+    { id: 'planner', label: 'Activity Planner' },
+    { id: 'model-audit', label: 'Model Audit' },
+    { id: 'history', label: 'Historical EDA' },
+    { id: 'routes', label: 'Routes (Exp)' },
+    { id: 'health', label: 'Health Guidance' },
+    { id: 'saved-places', label: 'Saved Places' },
     {
       id: 'hotspots',
       label: 'Emerging Hotspots',
-      badge: hotspotsResult?.ok && Array.isArray(hotspotsResult.data) ? hotspotsResult.data.length : undefined
+      badge: 'Gated'
     },
-    { id: 'planner', label: 'Activity Planner' },
-    { id: 'health', label: 'Health Guidance' },
-    { id: 'history', label: 'Historical EDA' },
-    { id: 'coverage', label: 'Population Extent' },
-    { id: 'saved-places', label: 'Saved Places' },
-    { id: 'model-audit', label: 'Model Audit' },
-    { id: 'routes', label: 'Routes (Exp)' },
-    { id: 'scenarios', label: 'What-If Scenarios' }
+    { id: 'coverage', label: 'Population Extent', badge: 'Gated' },
+    { id: 'scenarios', label: 'What-If Scenarios', badge: 'Gated' }
   ];
 
   if (!selectedCity && !connectionError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F5] text-slate-600">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF8F5] text-[#555C68]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm font-semibold">Initializing BreatheWise Telemetry...</p>
+          <div className="w-10 h-10 border-4 border-[#0D9488] border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm font-semibold text-[#1C1E24]">Initializing BreatheWise Telemetry...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-slate-900 w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1C1E24] w-full max-w-full overflow-x-hidden">
       {/* 1. Persistent Demo Banner (When active) */}
       {isDemoMode && (
-        <aside aria-label="Demo mode announcement" className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-semibold flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-600 shadow-xs">
+        <aside
+          aria-label="Demo mode announcement"
+          className="bg-[#C88A2E] text-slate-950 px-4 py-2.5 text-xs font-semibold flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#B27724] shadow-xs"
+        >
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-slate-950 animate-pulse" />
             <span>
-              <strong>DEMO PREVIEW ACTIVE:</strong> High-fidelity synthetic scenarios for visual inspection. No live network requests are made.
+              <strong>DEMO PREVIEW ACTIVE:</strong> High-fidelity synthetic demonstration scenarios for visual inspection. Live network requests are disabled.
             </span>
           </div>
           <button
             onClick={() => handleToggleDemoMode(false)}
-            className="px-2.5 py-1 rounded bg-slate-950 text-amber-300 hover:bg-slate-900 font-bold transition-colors cursor-pointer self-start sm:self-auto"
+            className="min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-950 text-amber-300 hover:bg-slate-900 font-bold transition-colors cursor-pointer self-start sm:self-auto"
           >
             Exit Demo Mode
           </button>
@@ -360,19 +365,22 @@ export const App: React.FC = () => {
 
       {/* 2. Connection Warning Banner (When live backend is offline) */}
       {!isDemoMode && connectionError && (
-        <aside aria-label="Connection warning" className="bg-red-50 text-red-900 px-4 py-3 text-xs border-b border-red-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <aside
+          aria-label="Connection warning"
+          className="bg-[#FDF1ED] text-[#7F1D1D] px-4 py-3 text-xs border-b border-[#FCA5A5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+        >
           <div className="flex items-start sm:items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600 mt-1 sm:mt-0 shrink-0" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#C3583C] mt-1 sm:mt-0 shrink-0" />
             <div>
               <span className="font-bold">Backend Service Offline ({connectionError}): </span>
               <span>
-                Unable to connect to 127.0.0.1:8000. Start backend with <code className="bg-red-100 px-1 py-0.5 rounded font-mono">uv run --locked uvicorn breathewise.main:app --host 127.0.0.1 --port 8000</code>, or inspect frontend features via Demo Preview.
+                Unable to connect to 127.0.0.1:8000. Start backend with <code className="bg-[#FEE2E2] px-1 py-0.5 rounded font-mono">uv run --locked uvicorn breathewise.main:app --host 127.0.0.1 --port 8000</code>, or inspect frontend features via Demo Preview.
               </span>
             </div>
           </div>
           <button
             onClick={() => handleToggleDemoMode(true)}
-            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold transition-colors shrink-0 cursor-pointer self-start sm:self-auto"
+            className="min-h-[36px] px-3 py-1.5 rounded-lg bg-[#C88A2E] hover:bg-[#B27724] text-white font-bold transition-colors shrink-0 cursor-pointer self-start sm:self-auto"
           >
             Enter Demo Mode
           </button>
@@ -401,18 +409,29 @@ export const App: React.FC = () => {
       />
 
       {/* 4. Atmospheric Hero Banner (India Gate Landmark Artwork) */}
-      {selectedCity && <AtmosphericHero selectedCity={selectedCity} />}
+      {selectedCity && (
+        <AtmosphericHero
+          selectedCity={selectedCity}
+          onExploreDashboard={() => {
+            setActiveTab('overview');
+            const el = document.getElementById('dashboard-workspace');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
+      )}
 
       {/* 5. Primary App Workspace */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* Navigation Tabs */}
-        <div className="bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
-          <Tabs
-            tabs={tabs}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-            variant="pills"
-          />
+      <main id="dashboard-workspace" className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        {/* Floating Charcoal Navigation Bar matching Reference Images 1 & 2 */}
+        <div className="flex justify-center w-full sticky top-[68px] z-20 pointer-events-none py-1">
+          <div className="pointer-events-auto max-w-full">
+            <Tabs
+              tabs={tabs}
+              activeTab={activeTab}
+              onChange={setActiveTab}
+              variant="charcoal"
+            />
+          </div>
         </div>
 
         {/* View Routing */}
@@ -437,18 +456,7 @@ export const App: React.FC = () => {
                 setSavePlaceLabel(stn.name.split(',')[0]);
               }}
               onOpenAlertModal={() => setActiveTab('saved-places')}
-            />
-          )}
-
-          {activeTab === 'hotspots' && selectedCity && (
-            <HotspotsView
-              hotspotsResult={hotspotsResult}
-              selectedCity={selectedCity}
-              capabilities={capabilities}
-              isDemoMode={isDemoMode}
-              onSelectStationById={handleSelectStationById}
-              onHorizonChange={setSelectedHotspotHorizon}
-              selectedHorizon={selectedHotspotHorizon}
+              onNavigateToTab={setActiveTab}
             />
           )}
 
@@ -459,12 +467,8 @@ export const App: React.FC = () => {
             />
           )}
 
-          {activeTab === 'health' && (
-            <HealthView
-              advisories={advisories}
-              selectedPollutant={selectedPollutant}
-              onSelectPollutant={setSelectedPollutant}
-            />
+          {activeTab === 'model-audit' && (
+            <ModelAuditView capabilities={capabilities} />
           )}
 
           {activeTab === 'history' && (
@@ -475,10 +479,15 @@ export const App: React.FC = () => {
             />
           )}
 
-          {activeTab === 'coverage' && selectedCity && (
-            <CoverageView
-              selectedCity={selectedCity}
-              capabilities={capabilities}
+          {activeTab === 'routes' && (
+            <RouteCompareView />
+          )}
+
+          {activeTab === 'health' && (
+            <HealthView
+              advisories={advisories}
+              selectedPollutant={selectedPollutant}
+              onSelectPollutant={setSelectedPollutant}
             />
           )}
 
@@ -497,12 +506,23 @@ export const App: React.FC = () => {
             />
           )}
 
-          {activeTab === 'model-audit' && (
-            <ModelAuditView capabilities={capabilities} />
+          {activeTab === 'hotspots' && selectedCity && (
+            <HotspotsView
+              hotspotsResult={hotspotsResult}
+              selectedCity={selectedCity}
+              capabilities={capabilities}
+              isDemoMode={isDemoMode}
+              onSelectStationById={handleSelectStationById}
+              onHorizonChange={setSelectedHotspotHorizon}
+              selectedHorizon={selectedHotspotHorizon}
+            />
           )}
 
-          {activeTab === 'routes' && (
-            <RouteCompareView />
+          {activeTab === 'coverage' && selectedCity && (
+            <CoverageView
+              selectedCity={selectedCity}
+              capabilities={capabilities}
+            />
           )}
 
           {activeTab === 'scenarios' && (
@@ -515,15 +535,15 @@ export const App: React.FC = () => {
       </main>
 
       {/* 6. Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white py-6 text-xs text-slate-500">
+      <footer className="mt-auto border-t border-[#E5DFD3] bg-white py-6 text-xs text-[#555C68]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800">BreatheWise India</span>
+            <span className="font-bold text-[#1C1E24]">BreatheWise India</span>
             <span>•</span>
             <span>National CAAQMS Ingestion & Multi-Horizon LightGBM Pipeline</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-400">
+          <div className="flex items-center gap-4 text-[#7D8592]">
             <span>CPCB / DPCC / SPCB</span>
             <span>•</span>
             <span>ECMWF CAMS Aerosols</span>
@@ -562,17 +582,17 @@ export const App: React.FC = () => {
       >
         <div className="space-y-3 text-xs">
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Place Name</label>
+            <label className="font-semibold text-[#1C1E24] block mb-1">Place Name</label>
             <input
               type="text"
               value={savePlaceLabel}
               onChange={e => setSavePlaceLabel(e.target.value)}
               placeholder="e.g. My Home, Office, Campus"
-              className="w-full text-xs rounded-lg border border-slate-300 p-2.5 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full text-xs rounded-lg border border-[#D8CFBC] p-2.5 focus:outline-none focus:ring-1 focus:ring-[#0D9488]"
             />
           </div>
-          <p className="text-slate-500 text-[11px]">
-            Nearest CAAQMS Monitor: <strong>{savePlaceModalStation?.name}</strong>
+          <p className="text-[#555C68] text-[11px]">
+            Nearest CAAQMS Monitor: <strong className="text-[#1C1E24]">{savePlaceModalStation?.name}</strong>
           </p>
         </div>
       </Dialog>

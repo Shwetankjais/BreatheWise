@@ -1,39 +1,64 @@
 /**
  * BreatheWise Design System Tokens
- * Public-health editorial palette for Indian atmospheric monitoring
+ * Public-health editorial palette inspired by reference visuals:
+ * Warm ivory surfaces, charcoal navigation, vintage ochre active controls, terracotta emphasis, stone borders
  */
 
 :root {
-  /* Canvas & Surfaces */
-  --bg-canvas: #FAF9F5;
+  --font-sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Canvas & Surfaces (Warm Ivory Reference) */
+  --bg-canvas: #F7F3E9;
   --bg-card: #FFFFFF;
-  --bg-subtle: #F4F3EE;
-  --bg-muted: #EBEAE5;
+  --bg-card-warm: #FFFDF9;
+  --bg-subtle: #F2ECE0;
+  --bg-muted: #EBE3D3;
   --bg-surface-elevated: #FFFFFF;
 
-  /* Ink / Text */
-  --ink-primary: #0F172A;
-  --ink-secondary: #334155;
-  --ink-muted: #64748B;
-  --ink-subtle: #94A3B8;
+  /* Ink / Text (Deep Charcoal & Editorial Ink) */
+  --ink-primary: #1C1A1F;
+  --ink-secondary: #3D3934;
+  --ink-muted: #6E675D;
+  --ink-subtle: #968F83;
   --ink-inverse: #FFFFFF;
 
-  /* Borders & Dividers */
-  --border-subtle: #E2E8F0;
-  --border-default: #CBD5E1;
-  --border-strong: #94A3B8;
+  /* Borders & Dividers (Warm Stone Reference) */
+  --border-subtle: #EBE3D3;
+  --border-default: #DDD3BC;
+  --border-strong: #C4B99F;
 
-  /* Brand / Primary Accent (Restrained Indian Teal) */
+  /* Brand / Primary Accent (Vintage Ochre & Restrained Teal) */
   --brand-primary: #0D9488;
   --brand-primary-hover: #0F766E;
   --brand-primary-light: #F0FDFA;
   --brand-primary-border: #99F6E4;
 
-  /* Atmospheric Palette (India Gate Golden Morning Haze) */
+  /* Vintage Ochre / Gold Controls (Key visual reference accent) */
+  --accent-ochre: #E29E2E;
+  --accent-ochre-hover: #C88A2E;
+  --accent-ochre-light: #FBF4E6;
+  --accent-ochre-border: #E8D1A0;
+  --accent-ochre-text: #8C5D14;
+
+  /* Terracotta (Warning & High Concentration Emphasis) */
+  --accent-terracotta: #C3583C;
+  --accent-terracotta-hover: #AA462C;
+  --accent-terracotta-light: #FDF2EE;
+  --accent-terracotta-border: #F6CFC3;
+
+  /* Charcoal Floating Navigation (Signature Reference Element) */
+  --nav-charcoal-bg: #1E1C21;
+  --nav-charcoal-border: #332F38;
+  --nav-charcoal-text: #A8A1B0;
+  --nav-charcoal-active-bg: #352E22;
+  --nav-charcoal-active-text: #F3BC4C;
+  --nav-charcoal-active-border: #C88A2E;
+
+  /* Atmospheric Palette */
   --haze-warm-glow: #FDF6E2;
-  --haze-terracotta: #C2410C;
-  --haze-sandstone: #D97706;
-  --haze-sky-mist: #E0E7FF;
+  --haze-terracotta: #C3583C;
+  --haze-sandstone: #E29E2E;
+  --haze-sky-mist: #EAE6DB;
 
   /* CPCB Official AQI Categories & Semantic Colors */
   --aqi-good-bg: #DCFCE7;
@@ -49,7 +74,7 @@
   --aqi-moderate-bg: #FEF3C7;
   --aqi-moderate-text: #78350F;
   --aqi-moderate-border: #FDE68A;
-  --aqi-moderate-accent: #D97706;
+  --aqi-moderate-accent: #E29E2E;
 
   --aqi-poor-bg: #FFEDD5;
   --aqi-poor-text: #7C2D12;
@@ -71,13 +96,17 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
-  --shadow-warm: 0 8px 24px -4px rgba(217, 119, 6, 0.12);
+  /* Shadows (Warm Tint) */
+  --shadow-sm: 0 1px 3px 0 rgba(28, 26, 31, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(28, 26, 31, 0.08), 0 2px 4px -2px rgba(226, 158, 46, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(28, 26, 31, 0.10), 0 4px 8px -4px rgba(226, 158, 46, 0.06);
+  --shadow-floating-nav: 0 8px 32px 0 rgba(10, 8, 14, 0.35);
+
+  /* Touch Targets (Minimum 44px) */
+  --touch-target-min: 44px;
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -150,14 +150,10 @@ export const ModelAuditView: React.FC<ModelAuditViewProps> = ({ capabilities }) 
   }, [selectedModelSummary, evaluation]);
 
   const availableSplits = useMemo(() => {
-    if (evaluation?.splits && evaluation.splits.length > 0) {
-      return evaluation.splits.map(s => s.name);
-    }
-    if (selectedModelSummary?.dataset_mode === 'utc_provider_history') {
-      return ['test', 'validation', 'rolling_2025_q4', 'rolling_2026_q1'];
-    }
-    return ['test', 'validation', 'rolling_2022', 'rolling_2023'];
-  }, [evaluation, selectedModelSummary]);
+    if (!evaluation) return [];
+    const heldout = evaluation.splits.map(s => s.name).filter(name => name === 'test' || name === 'validation');
+    return [...new Set([...heldout, ...Object.keys(evaluation.rolling_backtests)])];
+  }, [evaluation]);
 
   // Synchronize horizon and split bounds when model changes
   useEffect(() => {
@@ -667,7 +663,7 @@ export const ModelAuditView: React.FC<ModelAuditViewProps> = ({ capabilities }) 
                   <div className="text-[11px] font-bold text-slate-800 mt-1">
                     {evaluation?.input_availability_assumption || (isUtcModel ? 'verified_openaq_utc_lags_only' : 'same_recorded_clock_causal_lags_only')}
                   </div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">Strict causality; no future leakage</div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Feature-time rules only; historical publication availability remains unverified</div>
                 </div>
               </div>
 

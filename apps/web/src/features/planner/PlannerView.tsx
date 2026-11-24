@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReplayPlanner } from './ReplayPlanner';
 import { StationView, Capabilities } from '../../lib/api/types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
 
@@ -17,22 +18,26 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
   return (
     <div className="space-y-6">
+      <ReplayPlanner supportedVersions={capabilities?.replay_activity_planning?.supported_scope || []} />
+      <details open className="rounded-xl border border-[#E5DFD3] bg-white p-4">
+        <summary className="cursor-pointer font-bold text-[#1C1E24] hover:text-[#0D9488] transition-colors">Why future activity planning is not available yet</summary>
+        <div className="mt-4 space-y-4">
       {/* Planner Header */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div className="bg-[#FAF8F5] p-5 rounded-xl border border-[#E5DFD3] shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-[#1C1E24]">
                 Personal Exposure & Outdoor Activity Planner
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
-              Comparative outdoor window ranking based on concentration-time inhalation exposure integrals.
+            <p className="text-xs sm:text-sm text-[#555C68] mt-1 max-w-2xl">
+              Comparative outdoor window ranking based on concentration-time exposure proxies.
             </p>
           </div>
 
-          <div className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-700 border border-slate-200">
+          <div className="text-xs font-semibold px-2.5 py-1 rounded bg-[#F5F1EA] text-[#555C68] border border-[#E5DFD3]">
             Status: {isSupported ? 'Operational' : 'Unavailable (Gated)'}
           </div>
         </div>
@@ -76,10 +81,12 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
           </div>
 
           <div className="p-3 bg-amber-100/60 rounded-lg text-[11px] leading-relaxed text-amber-950">
-            <strong>Exposure Science Constraint:</strong> An accurate concentration-time dose recommendation (in microgram-minutes) requires integrating the area under the curve across the user's intended activity duration. Mathematical smoothing across 6-hour or 12-hour gaps obscures rapid diurnal boundary layer transitions, creating false confidence during dangerous inversion spikes.
+            <strong>Exposure Science Constraint:</strong> A concentration-time comparison (in microgram-minutes) requires integrating the area under the curve across the user's intended activity duration. Mathematical smoothing across 6-hour or 12-hour gaps obscures rapid diurnal boundary layer transitions, creating false confidence during dangerous inversion spikes.
           </div>
         </CardContent>
       </Card>
+        </div>
+      </details>
     </div>
   );
 };

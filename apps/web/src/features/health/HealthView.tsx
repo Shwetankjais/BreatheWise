@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Advisory, Pollutant } from '../../lib/api/types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
 
@@ -8,95 +8,201 @@ interface HealthViewProps {
   onSelectPollutant: (pollutant: Pollutant) => void;
 }
 
+interface WHOStandard {
+  pollutant: Pollutant;
+  name: string;
+  averagingPeriod: string;
+  who2021Guideline: string;
+  interimTarget1: string;
+  healthRelevance: string;
+}
+
+const WHO_2021_STANDARDS: WHOStandard[] = [
+  {
+    pollutant: 'pm25',
+    name: 'PM2.5 (Fine particulate matter ≤ 2.5 µm)',
+    averagingPeriod: '24-Hour mean (Annual: 5 µg/m³)',
+    who2021Guideline: '15 µg/m³',
+    interimTarget1: '75 µg/m³',
+    healthRelevance: 'Penetrates deep into alveolar lung tissue and enters systemic circulation; associated with cardiovascular and respiratory morbidity.'
+  },
+  {
+    pollutant: 'pm10',
+    name: 'PM10 (Inhalable particulate matter ≤ 10 µm)',
+    averagingPeriod: '24-Hour mean (Annual: 15 µg/m³)',
+    who2021Guideline: '45 µg/m³',
+    interimTarget1: '150 µg/m³',
+    healthRelevance: 'Deposits in upper thoracic airways; contributes to airway inflammation, asthma exacerbation, and chronic obstructive pulmonary diseases.'
+  },
+  {
+    pollutant: 'no2',
+    name: 'Nitrogen Dioxide (NO₂)',
+    averagingPeriod: '24-Hour mean (1-Hour: 200 µg/m³; Annual: 10 µg/m³)',
+    who2021Guideline: '25 µg/m³',
+    interimTarget1: '120 µg/m³',
+    healthRelevance: 'Combustion tracer; induces bronchial hyperresponsiveness, increases susceptibility to respiratory infections, and serves as a photochemical ozone precursor.'
+  },
+  {
+    pollutant: 'so2',
+    name: 'Sulfur Dioxide (SO₂)',
+    averagingPeriod: '24-Hour mean (10-Minute: 500 µg/m³)',
+    who2021Guideline: '40 µg/m³',
+    interimTarget1: '125 µg/m³',
+    healthRelevance: 'Industrial and coal emissions; potent bronchoconstrictor causing acute irritation, cough, and bronchospasm within minutes in asthmatic individuals.'
+  },
+  {
+    pollutant: 'o3',
+    name: 'Ground-Level Ozone (O₃)',
+    averagingPeriod: '8-Hour daily maximum (Peak season: 60 µg/m³)',
+    who2021Guideline: '100 µg/m³',
+    interimTarget1: '160 µg/m³',
+    healthRelevance: 'Secondary photochemical oxidant formed from NOx and VOC precursors under sunlight; induces lung inflammation, decreases vital capacity, and increases hospital admissions.'
+  },
+  {
+    pollutant: 'co',
+    name: 'Carbon Monoxide (CO)',
+    averagingPeriod: '24-Hour mean (8-Hour: 10 mg/m³; 1-Hour: 35 mg/m³)',
+    who2021Guideline: '4 mg/m³ (4,000 µg/m³)',
+    interimTarget1: '7 mg/m³',
+    healthRelevance: 'Forms carboxyhemoglobin (COHb), reducing oxygen-carrying capacity of blood; hazardous for individuals with ischemic heart disease and developing fetuses.'
+  }
+];
+
 export const HealthView: React.FC<HealthViewProps> = ({
   advisories,
   selectedPollutant,
   onSelectPollutant
 }) => {
   const currentAdvisory = advisories.find(a => a.pollutant === selectedPollutant) || advisories[0];
+  const activeStandard = WHO_2021_STANDARDS.find(s => s.pollutant === selectedPollutant);
 
   return (
     <div className="space-y-6">
       {/* Top Advisory Banner */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#E5DFD3] shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">
-              Ambient Air Pollution Health Education
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FBF4E8] text-[#8C5D14] border border-[#E8D4B0] mb-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#C88A2E]" />
+              <span>WHO 2021 Global Air Quality Guidelines Reference</span>
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold text-[#1C1E24]">
+              Criteria Pollutants Health & Environmental Education
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
-              Educational facts sourced from World Health Organization (WHO) guidance documents.
+            <p className="text-xs sm:text-sm text-[#555C68] mt-1 max-w-2xl leading-relaxed">
+              Educational facts sourced from World Health Organization (WHO 2021) documents and peer-reviewed environmental health literature.
             </p>
           </div>
 
-          {/* Pollutant Tabs */}
-          <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg">
+          {/* Pollutant Switcher Tabs */}
+          <div className="flex items-center gap-1.5 bg-[#F5F1EA] p-1.5 rounded-xl border border-[#E5DFD3] overflow-x-auto">
             {(['pm25', 'pm10', 'no2', 'so2', 'o3', 'co'] as Pollutant[]).map(p => (
               <button
                 key={p}
                 onClick={() => onSelectPollutant(p)}
-                className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${
+                className={`min-h-[44px] px-3.5 py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer shrink-0 ${
                   selectedPollutant === p
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-[#1C1E24] shadow-xs border border-[#D8CFBC]'
+                    : 'text-[#555C68] hover:text-[#1C1E24] hover:bg-white/50'
                 }`}
               >
-                {p === 'pm25' ? 'PM2.5' : p.toUpperCase()}
+                {p === 'pm25' ? 'PM2.5' : p === 'pm10' ? 'PM10' : p.toUpperCase()}
               </button>
             ))}
           </div>
         </div>
 
         {/* Clinical Disclaimer Box */}
-        <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
-          <svg className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="mt-5 p-4 bg-[#FBF4E8] rounded-xl border border-[#E8D4B0] text-xs text-[#78350F] flex items-start gap-3 leading-relaxed">
+          <svg className="w-5 h-5 text-[#C88A2E] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
           <div>
-            <span className="font-bold">Medical & Non-Clinical Notice: </span>
-            Educational population-level information; no diagnosis or personal risk estimate. This content does not assign an official CPCB AQI category or prescribe a safe activity window. Consult licensed medical professionals for diagnosis and treatment plans.
+            <strong className="font-bold text-[#8C5D14]">Medical & Non-Clinical Disclaimer: </strong>
+            This content is provided strictly for population-level environmental education. It does not provide medical diagnoses, individual health-risk scores, clinical triage, or a prescription of a guaranteed "safe activity window." WHO benchmarks are statistical public-health recommendations. Consult licensed medical professionals for diagnosis and treatment plans.
           </div>
         </div>
       </div>
 
-      {/* Advisory Content Card */}
+      {/* Criteria Pollutant Standards Card */}
+      {activeStandard && (
+        <Card className="border-[#E5DFD3]">
+          <CardHeader className="bg-[#FAF8F5] border-b border-[#E5DFD3]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span className="text-xs font-bold text-[#0D9488] uppercase bg-[#F0FDFA] px-2.5 py-1 rounded border border-[#99F6E4]">
+                Criteria Benchmark: {activeStandard.name}
+              </span>
+              <span className="text-xs text-[#7D8592] font-mono">
+                Averaging Window: {activeStandard.averagingPeriod}
+              </span>
+            </div>
+            <CardTitle className="text-base font-bold text-[#1C1E24] mt-2">
+              WHO 2021 Air Quality Guideline Level: <span className="text-[#0D9488]">{activeStandard.who2021Guideline}</span>
+            </CardTitle>
+            <CardDescription className="text-xs text-[#555C68]">
+              Interim Target-1 (IT-1): {activeStandard.interimTarget1} · Interim targets guide staged pollution mitigation towards the final guideline.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-5 text-xs text-[#2D3139] space-y-3 leading-relaxed">
+            <div>
+              <strong className="text-[#1C1E24]">Biological & Physiological Relevance: </strong>
+              <span>{activeStandard.healthRelevance}</span>
+            </div>
+            <div className="p-3 bg-[#FAF8F5] rounded-lg border border-[#E5DFD3] text-[#555C68]">
+              <strong className="text-[#1C1E24]">Why Averaging Periods Matter: </strong>
+              Air pollution toxicology demonstrates that damage depends on the integration of exposure duration and concentration. A short-term 1-hour peak concentration cannot be directly compared to a 24-hour daily or annual average benchmark.
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Advisory Content Card (from Live API) */}
       {currentAdvisory ? (
-        <Card className="border-slate-200">
-          <CardHeader className="pb-3">
+        <Card className="border-[#E5DFD3]">
+          <CardHeader className="pb-3 bg-[#FAF8F5] border-b border-[#E5DFD3]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-teal-800 uppercase bg-teal-50 px-2.5 py-0.5 rounded border border-teal-200">
+              <span className="text-xs font-bold text-[#0D9488] uppercase bg-[#F0FDFA] px-2.5 py-0.5 rounded border border-[#99F6E4]">
                 Pollutant: {currentAdvisory.pollutant.toUpperCase()}
               </span>
-              <span className="text-xs text-slate-400 font-mono">
+              <span className="text-xs text-[#7D8592] font-mono">
                 Version: {currentAdvisory.content_version}
               </span>
             </div>
-            <CardTitle className="text-base font-bold mt-2">
+            <CardTitle className="text-base font-bold text-[#1C1E24] mt-2">
               {currentAdvisory.title}
             </CardTitle>
-            <CardDescription className="text-xs text-slate-500">
-              Source: <a href={currentAdvisory.source_url} target="_blank" rel="noopener noreferrer" className="text-teal-700 underline">{currentAdvisory.source_title}</a> • Scope: {currentAdvisory.scope}
+            <CardDescription className="text-xs text-[#555C68]">
+              Source:{' '}
+              <a
+                href={currentAdvisory.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0D9488] underline hover:text-[#0F766E]"
+              >
+                {currentAdvisory.source_title}
+              </a>{' '}
+              • Scope: {currentAdvisory.scope}
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-4 pt-2 text-xs">
-            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 leading-relaxed">
-              <div className="font-bold text-slate-900 mb-1">Educational Summary</div>
+          <CardContent className="space-y-4 pt-4 text-xs text-[#2D3139]">
+            <div className="p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E5DFD3] text-[#2D3139] leading-relaxed">
+              <div className="font-bold text-[#1C1E24] mb-1">Educational Summary</div>
               <p>{currentAdvisory.summary}</p>
             </div>
 
-            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 leading-relaxed">
-              <div className="font-bold text-slate-900 mb-1">Content Review & Scientific Scope</div>
-              <p className="font-mono text-slate-600">{currentAdvisory.review_scope}</p>
-              <div className="text-[11px] text-slate-400 mt-1">Reviewed At: {currentAdvisory.reviewed_at}</div>
+            <div className="p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E5DFD3] text-[#2D3139] leading-relaxed">
+              <div className="font-bold text-[#1C1E24] mb-1">Content Review & Scientific Scope</div>
+              <p className="font-mono text-[#555C68]">{currentAdvisory.review_scope}</p>
+              <div className="text-[11px] text-[#7D8592] mt-1">Reviewed At: {currentAdvisory.reviewed_at}</div>
             </div>
 
             {currentAdvisory.limitations && currentAdvisory.limitations.length > 0 && (
-              <div className="p-3.5 bg-amber-50/60 rounded-lg border border-amber-200/80 text-amber-950">
-                <div className="font-bold mb-1.5 uppercase text-[11px] tracking-wider">
+              <div className="p-3.5 bg-[#FBF4E8] rounded-lg border border-[#E8D4B0] text-[#78350F]">
+                <div className="font-bold mb-1.5 uppercase text-[11px] tracking-wider text-[#8C5D14]">
                   Documented Content Limitations:
                 </div>
-                <ul className="list-disc list-inside space-y-1 text-slate-700">
+                <ul className="list-disc list-inside space-y-1 text-[#555C68]">
                   {currentAdvisory.limitations.map((lim, idx) => (
                     <li key={idx}>{lim}</li>
                   ))}
@@ -106,10 +212,55 @@ export const HealthView: React.FC<HealthViewProps> = ({
           </CardContent>
         </Card>
       ) : (
-        <div className="p-8 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200">
+        <div className="p-8 text-center text-[#7D8592] text-xs bg-white rounded-xl border border-[#E5DFD3]">
           Loading health advisory content...
         </div>
       )}
+
+      {/* Full 6-Pollutants Reference Table */}
+      <Card className="border-[#E5DFD3]">
+        <CardHeader className="bg-[#FAF8F5] border-b border-[#E5DFD3]">
+          <CardTitle className="text-sm font-bold text-[#1C1E24]">
+            WHO 2021 Global Air Quality Guidelines Reference Summary (All 6 Criteria Pollutants)
+          </CardTitle>
+          <CardDescription className="text-xs text-[#555C68]">
+            Comparison matrix of health-based guidelines across criteria air contaminants
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0 overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-[#F5F1EA] text-[#1C1E24] border-b border-[#E5DFD3]">
+                <th className="p-3 font-bold">Criteria Pollutant</th>
+                <th className="p-3 font-bold">Averaging Period</th>
+                <th className="p-3 font-bold">WHO 2021 Guideline</th>
+                <th className="p-3 font-bold">Interim Target-1</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#F0EBE1] text-[#2D3139]">
+              {WHO_2021_STANDARDS.map(std => (
+                <tr
+                  key={std.pollutant}
+                  onClick={() => onSelectPollutant(std.pollutant)}
+                  className={`hover:bg-[#FAF8F5] cursor-pointer transition-colors ${
+                    selectedPollutant === std.pollutant ? 'bg-[#F0FDFA]' : ''
+                  }`}
+                >
+                  <td className="p-3 font-semibold text-[#1C1E24]">
+                    {std.name}
+                    {selectedPollutant === std.pollutant && (
+                      <span className="ml-2 text-[10px] text-[#0D9488] font-bold">● Active</span>
+                    )}
+                  </td>
+                  <td className="p-3 text-[#555C68]">{std.averagingPeriod}</td>
+                  <td className="p-3 font-bold text-[#0D9488]">{std.who2021Guideline}</td>
+                  <td className="p-3 text-[#C88A2E] font-medium">{std.interimTarget1}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
     </div>
   );
 };

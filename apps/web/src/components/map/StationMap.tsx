@@ -1,3 +1,4 @@
+import { BASEMAP_URL, BASEMAP_ATTRIBUTION } from '../../lib/basemap';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -255,11 +256,11 @@ export const StationMap: React.FC<StationMapProps> = ({
         className="w-full h-full"
         zoomControl={true}
       >
-        {/* CartoDB Positron Geographic Tiles with OpenStreetMap Attribution */}
+        {/* OpenStreetMap standard geographic tiles with required attribution */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          subdomains="abcd"
+          attribution={BASEMAP_ATTRIBUTION}
+          url={BASEMAP_URL}
+          
           maxZoom={19}
         />
 
@@ -349,7 +350,7 @@ export const StationMap: React.FC<StationMapProps> = ({
       <div className="absolute bottom-6 right-3 z-20 max-w-xs">
         <div className="bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-lg p-2.5 text-xs">
           <div className="flex items-center justify-between gap-3 mb-1.5">
-            <span className="font-bold text-slate-800 text-[11px] uppercase tracking-wider">
+            <span className="font-bold text-slate-800 text-[11px] tracking-wide">
               {legend.label} Concentration Scale
             </span>
             <button

@@ -46,7 +46,8 @@ import {
   ForecastRunPage,
   ForecastRunView,
   ForecastRunDetail,
-  ShadowPoint
+  ShadowPoint,
+  Schemas
 } from './types';
 
 import {
@@ -852,6 +853,17 @@ export class BreatheWiseApiClient {
   // ----------------------------------------------------------------------
   // Contract 1.2.0 Methods: Model Registry & Evaluation
   // ----------------------------------------------------------------------
+
+  async getReplayIssues(modelVersion: string, offset = 0): Promise<ApiResult<Schemas['ReplayIssuePage']>> {
+    if (this.isDemoMode) return { ok: false, status: 409, error: { code: 'REPLAY_DEMO_UNAVAILABLE', message: 'Exit demo mode to use actual saved forecast trajectories.', retryable: false } };
+    const query = new URLSearchParams({ split: 'test', limit: '25', offset: String(offset) });
+    return this.request<Schemas['ReplayIssuePage']>(`/models/${encodeURIComponent(modelVersion)}/replay-issues?${query}`);
+  }
+
+  async planReplay(body: Schemas['ReplayPlanRequest']): Promise<ApiResult<Schemas['ReplayPlan']>> {
+    if (this.isDemoMode) return { ok: false, status: 409, error: { code: 'REPLAY_DEMO_UNAVAILABLE', message: 'Replay planning requires actual saved forecasts.', retryable: false } };
+    return this.request<Schemas['ReplayPlan']>('/activity-plan/replay', { method: 'POST', body: JSON.stringify(body) });
+  }
 
   async getModels(): Promise<ApiResult<ModelCatalogue>> {
     if (this.isDemoMode) {

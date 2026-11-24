@@ -57,7 +57,7 @@ export const CoverageView: React.FC<CoverageViewProps> = ({ selectedCity, capabi
 
         <CardContent className="space-y-4 text-xs text-amber-950">
           <p className="leading-relaxed">
-            In accordance with project scientific guidelines, BreatheWise does not present synthetic population headcounts or unverified raster extraction percentages. The dataset report cites national census and GHSL references, but full-extent raster files and extraction scripts have not been established locally.
+            In accordance with project scientific guidelines, BreatheWise does not present synthetic population headcounts or unverified raster extraction percentages. The prior project contains population assets, but their release, epoch, cell geometry and complete-city extraction still require verification.
           </p>
 
           <div className="bg-white p-3 rounded-lg border border-amber-200">
@@ -74,7 +74,7 @@ export const CoverageView: React.FC<CoverageViewProps> = ({ selectedCity, capabi
           </div>
 
           <div className="p-3 bg-amber-100/60 rounded-lg text-[11px] leading-relaxed text-amber-950">
-            <strong>Geographic Reference vs Exposure Boundary:</strong> Radial circles displayed on the map (e.g. 5 km buffer around CAAQMS sites) represent geographic distance to a physical sensor enclosure. They are <em>not</em> validated pollution contours, uniform dispersion boundaries, or safe-air envelopes.
+            <strong>Geographic Reference vs Exposure Boundary:</strong> A geographic distance buffer, if added, would represent distance to a monitor only. They are <em>not</em> validated pollution contours, uniform dispersion boundaries, or safe-air envelopes.
           </div>
         </CardContent>
       </Card>

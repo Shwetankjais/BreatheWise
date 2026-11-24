@@ -1,3 +1,4 @@
+import { BASEMAP_URL, BASEMAP_ATTRIBUTION } from '../../lib/basemap';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
@@ -309,9 +310,9 @@ export const RouteCompareView: React.FC = () => {
               className="w-full h-full"
             >
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
-                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                subdomains="abcd"
+                attribution={BASEMAP_ATTRIBUTION}
+                url={BASEMAP_URL}
+                
                 maxZoom={19}
               />
 

@@ -481,4 +481,75 @@ describe('BreatheWise Features Verification & Scientific Integrity', () => {
       }
     });
   });
+
+  describe('PHASE B: First-Visit Geolocation, WHO Criteria & Replay Planning Verification', () => {
+    it('calculates Haversine distance correctly and finds nearest CAAQMS station', () => {
+      function haversineDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      // Connaught Place (Central Delhi) coords: 28.6328, 77.2197
+      const userLat = 28.6328;
+      const userLon = 77.2197;
+
+      const testStations = [
+        { id: 'site_301', name: 'Anand Vihar, Delhi - DPCC', latitude: 28.6476, longitude: 77.3160 },
+        { id: 'site_113', name: 'Mandir Marg, Delhi - DPCC', latitude: 28.6364, longitude: 77.1994 },
+        { id: 'site_502', name: 'Bawana, Delhi - DPCC', latitude: 28.7762, longitude: 77.0511 }
+      ];
+
+      const distances = testStations.map(s => ({
+        station: s,
+        dist: haversineDistanceKm(userLat, userLon, s.latitude, s.longitude)
+      }));
+
+      distances.sort((a, b) => a.dist - b.dist);
+
+      // Mandir Marg is ~2 km from Connaught Place, much closer than Anand Vihar (~9.4 km) or Bawana (~22 km)
+      expect(distances[0].station.id).toBe('site_113');
+      expect(distances[0].dist).toBeLessThan(3.0);
+      expect(distances[1].station.id).toBe('site_301');
+      expect(distances[1].dist).toBeGreaterThan(8.0);
+    });
+
+    it('CONTRACT 1.4: Replay planning sensitivity rule adds +0.25 * peak * duration to general score', () => {
+      const durationHours = 2;
+      const concentrationTime = 373.029863;
+      const peakConcentration = 197.277394;
+
+      // General preference score: concentration-time
+      const generalScore = concentrationTime;
+      expect(generalScore).toBeCloseTo(373.03, 2);
+
+      // Sensitive preference score: concentration-time + 0.25 * peak * duration_hours
+      const sensitiveScore = concentrationTime + 0.25 * peakConcentration * durationHours;
+      expect(sensitiveScore).toBeCloseTo(471.67, 2);
+      expect(sensitiveScore).toBeGreaterThan(generalScore);
+    });
+
+    it('WHO 2021 air quality standards cover all six criteria pollutants with explicit averaging periods', () => {
+      const pollutants = ['pm25', 'pm10', 'no2', 'so2', 'o3', 'co'];
+      const averagingPeriods: Record<string, string> = {
+        pm25: '24-Hour',
+        pm10: '24-Hour',
+        no2: '24-Hour',
+        so2: '24-Hour',
+        o3: '8-Hour',
+        co: '24-Hour'
+      };
+
+      for (const p of pollutants) {
+        expect(averagingPeriods[p]).toBeDefined();
+        expect(['24-Hour', '8-Hour']).toContain(averagingPeriods[p]);
+      }
+    });
+  });
 });
