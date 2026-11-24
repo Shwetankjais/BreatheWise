@@ -202,7 +202,7 @@ npm --workspace=@breathewise/web run typecheck
 # 3. Production Bundle Build
 npm --workspace=@breathewise/web run build
 
-# 4. Backend Unit & Contract Tests (131 passed, 1 skipped)
+# 4. Backend Unit & Contract Tests (132 passed, 1 skipped)
 uv run pytest -q
 
 # 5. Contract Specification Export & Validation
@@ -217,3 +217,5 @@ npm run contracts:check
 - **Historical Retrospective Comparisons:** Activity replay rankings compare past saved model forecasts from completed runs; they do not predict tomorrow's outdoor activity risk or guarantee personal safety.
 - **Educational Content:** Air quality advisories and pollutant guides are sourced from WHO 2021 Global Air Quality Guidelines and are educational. BreatheWise does not provide medical diagnosis, clinical evaluation, or personalized health prescriptions.
 - **Honest Model Gating:** Operational live inference is withheld (`503 MODEL_UNAVAILABLE`) when input data is partial or unverified. Zero forecasts are never fabricated.
+- **Supplied Diagnostic Models (`supplied-native-75-v1` & `supplied-horizon-ensemble-v5`):** Both supplied artifacts are diagnostic-only and isolated in offline tooling (`tools/model-diagnostics` and `tools/model-v5`). They declare horizons `[1, 3, 6, 12, 24]` and ordered inputs (75 and 69 features respectively), but golden parity, original wrapper source (`HyperlocalAQPipeline`), feature units, training missingness, and target physical units remain unverified. No public or live API route provides operational inference from these artifacts.
+- **Availability-Aware Model (`delhi-openaq-pm25-delay3h-v2`):** Trained under a declared 3-hour simulated publication-delay regime on a single OpenAQ sensor. Retrospective evaluation and shadow run inspection are operational; when live input hours are partial, it honestly surfaces `AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE` with 0 forecast rows.

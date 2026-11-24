@@ -1,33 +1,43 @@
 # Antigravity handoff
 
 Agent: shwetank's-antigravity (Senior UI/UX Designer & Frontend FDE).  
-Status: FINAL_SUBMISSION_READY (Git window released by Codex at eff1c9f / 408faa5; final submission slice verified).  
-Git authority: Window released by Codex. Antigravity staging and pushing final reviewed submission slice to `feat/foundation`. Codex-owned files and tests strictly preserved.  
+Status: FINAL_VERIFICATION_ACCEPTED_AND_PAUSED (Git window released at 408faa5; final submission pass committed and pushed; ready paths paused for Codex inspection).  
+Git authority: Window released by Codex. Antigravity completed, verified, committed, and pushed the final application slice to `feat/foundation`. Ready paths are paused for Codex inspection.  
 Orchestrator: Original project chat (docs/ORCHESTRATOR.md).  
 Branch Context: `feat/foundation`  
 
 ---
 
-## Final Submission Slice & Release ACK — 2026-11-24T20:12:00+05:30
+## Final Verification ACK & Submission Freeze — 2026-11-24T20:18:00+05:30
 
-**RELEASE_ACK:** Codex's model integration commit (`eff1c9fba4f112e8b18bd48f74635a18b7612798` / `408faa5`) is verified on `feat/foundation`. Antigravity resumes the serialized Git window to commit the final verified submission slice.
+**FINAL_VERIFICATION_ACK:**  
+Codex's model Git/shared-contract window release at `408faa5` is verified on `feat/foundation`. Antigravity's stale pause status from 20:03 IST is formally superseded. Antigravity has completed and saved all overview, health, and v5 diagnostic-display changes, verified all test suites, and published this final snapshot.
 
-### 1. Verification Summary
-1. **Frontend Unit Tests:** 60 of 60 tests PASSED (`npm --workspace=@breathewise/web run test` across 4 test suites: `features.test.ts`, `client.test.ts`, `replay.test.ts`, `aqi.test.ts`).
-2. **Frontend Typecheck & Production Build:** Clean build in 1.08s (`tsc --noEmit && vite build`).
-3. **Backend Unit & Contract Tests:** 131 passed, 1 skipped (`uv run pytest -q`, Starlette TestClient warning handled, PostgreSQL concurrency skip preserved).
-4. **Backend Lint & Formatting:** Clean (`uv run ruff check apps/api` all checks passed).
-5. **Headless Browser Journeys:** All 6 core journeys verified across desktop (1440x900) and mobile (390x844). Mobile document scroll width matches viewport width (`390px`, **0 horizontal scroll overflow**).
-6. **Local Prototype Daemon:** Active and responding on `http://127.0.0.1:8000/api/v1/health` and `http://127.0.0.1:5173/` via background task `task-4132`.
+The exact ready paths below are **PAUSED/FROZEN** while Codex checks the saved snapshot:
 
-### 2. Ready Files for Submission Commit
+### 1. Exact Ready Paths (Frozen)
 - `apps/web/src/features/health/HealthView.tsx` (clinician-provided action plan; removal of universal 6–9 AM avoidance; particulate respirator aerosol scope and gaseous/diagnosis limitations)
-- `apps/web/src/features/overview/OverviewView.tsx` (station catalogue scoped to Delhi CAAQMS monitors; ground observation vs modeled weather attribution)
-- `apps/web/src/features/model-performance/ModelAuditView.tsx` (diagnostic-only integration for `supplied-horizon-ensemble-v5`)
-- `README.md` (problem statement, architecture, tech stack, data realities, Docker/cloud deployment documentation)
-- `docs/PROTOTYPE_COMPLETION.md` (updated test metrics and running supervisor status)
+- `apps/web/src/features/overview/OverviewView.tsx` (station catalogue scoped to Delhi CAAQMS monitors; ground observation vs modeled weather attribution; multi-criteria pollutant selection with 1-hr averaging tag and NAQI disclaimer)
+- `apps/web/src/features/model-performance/ModelAuditView.tsx` (diagnostic-only integration for `supplied-horizon-ensemble-v5`, declared horizons 1/3/6/12/24, 69 ordered inputs, `unavailable_reasons` badge display, non-operational notice)
+- `apps/web/src/features/planner/ReplayPlanner.tsx` (complete issue selection, 1–6h duration, ranked candidate windows, 24h trajectory visualizer, `no_suitable_window` with suggested adjustments)
+- `apps/web/src/features/routes/RouteCompareView.tsx` (OSRM route geometry/duration alternatives, gated `409 EXPOSURE_UNAVAILABLE`)
+- `apps/web/src/features/places/SavedPlacesView.tsx` (bearer token session persistence, per-user isolation, zero-threshold rule persistence)
+- `README.md` (problem statement, architecture, tech stack, data realities, explicit model limitations, Docker/cloud deployment documentation)
+- `docs/PROTOTYPE_COMPLETION.md` (updated test metrics, v5 diagnostic row, and running supervisor status)
 - `docs/UI_IMPLEMENTATION.md` (updated test metrics and Section 5 additions)
 - `docs/handoffs/antigravity.md` (this handoff)
+
+### 2. Comprehensive Verification Evidence
+1. **Frontend Unit Tests:** **60 of 60 tests PASSED** in 308ms across 4 test suites:
+   - `features.test.ts` (28 passed)
+   - `client.test.ts` (22 passed)
+   - `replay.test.ts` (5 passed)
+   - `aqi.test.ts` (5 passed)
+2. **Frontend Typecheck & Production Build:** Clean production build in 1.08s (`tsc --noEmit && vite build`).
+3. **Backend Unit & Contract Tests:** **132 passed, 1 skipped** (PostgreSQL-only concurrency test preserved) in 6.66s (`uv run pytest -q`).
+4. **Backend Linting:** Clean (`uv run ruff check apps/api` all checks passed).
+5. **Headless Browser Journeys:** Verified across desktop (1440x900) and mobile (390x844). Mobile `document.body.scrollWidth === 390px` (**0 horizontal scroll overflow**).
+6. **Local Prototype Daemon:** Active and responding on `http://127.0.0.1:8000/api/v1/health` (HTTP 200) and `http://127.0.0.1:5173/` (HTTP 200).
 
 ---
 

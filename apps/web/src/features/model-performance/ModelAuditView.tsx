@@ -521,6 +521,20 @@ export const ModelAuditView: React.FC<ModelAuditViewProps> = ({ capabilities }) 
                     ))}
                   </ul>
                 )}
+                {recoveredModelSummary?.unavailable_reasons && recoveredModelSummary.unavailable_reasons.length > 0 && (
+                  <div className="pt-2 border-t border-amber-200/60 mt-2">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-amber-900 mb-1">
+                      Declared Scientific Gates & Unavailable Reasons:
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {recoveredModelSummary.unavailable_reasons.map((reason, idx) => (
+                        <span key={idx} className="font-mono text-[10px] bg-amber-100 text-amber-950 px-1.5 py-0.5 rounded border border-amber-300 font-semibold">
+                          {reason}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
