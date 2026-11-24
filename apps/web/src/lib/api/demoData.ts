@@ -704,6 +704,7 @@ export const DEMO_MODELS: ModelCatalogue = {
 export const DEMO_MODEL_EVALUATION: ModelEvaluation = {
   model_version: 'delhi-recorded-pm25-v1',
   dataset_mode: 'recorded_clock',
+  evaluation_cohort: 'target_timestamp_split_only',
   dataset_sha256: '43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df',
   live_forecast_ready: false,
   publication_time_known: false,
@@ -713,6 +714,7 @@ export const DEMO_MODEL_EVALUATION: ModelEvaluation = {
   target_unit: 'µg/m³',
   station_ids: ['site_301'],
   supported_horizons: [1, 3, 6, 12, 24],
+  target_only_horizons: [],
   input_availability_assumption: 'same_recorded_clock_causal_lags_only',
   limitations: [
     'Retrospective recorded-clock experiment only; source timezone and interval meaning unresolved.',
@@ -852,6 +854,7 @@ export const DEMO_MODEL_EVALUATION: ModelEvaluation = {
 export const DEMO_PREDICTION_PAGE: PredictionPage = {
   model_version: 'delhi-recorded-pm25-v1',
   dataset_mode: 'recorded_clock',
+  evaluation_cohort: 'target_timestamp_split_only',
   retrospective_only: true,
   publication_time_known: false,
   timezone: null,
