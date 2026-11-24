@@ -9,8 +9,8 @@ Status: incomplete product; real-observation backend and native diagnostic miles
 | Migration/worker | Through 0003; safe retry/overlap controls, persisted outcomes; demo repeated intake inserted 1 then 0 |
 | Real provider | OpenAQ authenticated locally; 70 actual Anand Vihar PM2.5 hours cached; latest 98 µg/m³ at 24 Nov 03:00 IST was stale/partial; source flags retained |
 | Real API/browser | Stations/latest/history 200; history 70 valid/3 missing of 73; forecast/evaluation 503. Desktop/mobile display checks passed; DATA_EVIDENCE.json |
-| Account/error/demo browser | 8 desktop/mobile/reduced-motion cases passed against isolated synthetic DB: HTTP errors, empty data, session/place reload and ownership, explicit demo |
-| Frontend unit/build | 18 owner unit tests and production build passed; targeted scientific/geographic owner corrections remain open; source not committed |
+| Account/error/demo browser | Latest targeted snapshot: 6 passed, 2 mobile interaction timeouts; desktop persistence/ownership, errors/empty/demo pass. Earlier snapshot had 8 passes. Mobile responsive defect remains open |
+| Frontend unit/build | 22 owner unit tests and production build passed; targeted scientific/geographic owner corrections remain open; source not committed |
 | PostgreSQL/CI | [CI45291003341](https://github.com/Shwetankjais/BreatheWise/actions/runs/45291003341) at 4e6ccf5 succeeded: 46 standard + 1 default skip, 18 PostgreSQL, 2 native mechanics, wheel; logs inspected |
 
 | Acceptance | Evidence and remaining gate |
@@ -64,3 +64,6 @@ Provider/feature/worker CI: [run 45288748827](https://github.com/Shwetankjais/Br
 
 ## Real observation milestone
 See DATA_EVIDENCE.json for exact measured/available timestamps, source IDs and archive hash. Stored actual data, keys, native model text and numerical probe tensors remain ignored. Real browser checks were read-only on the cache; eight broader journeys used synthetic inputs. Readiness was database/provider true but model false at verification; provider freshness expires without another run. Existing pipeline source, original units/time anchors/missingness, issue-time weather/CAMS/FIRMS inputs and golden/evaluation evidence remain missing. No native diagnostic score is presented as a city forecast.
+
+## Delhi archive comparison follow-up
+Read-only full pollutant archive audit and bounded real OpenAQ overlap check completed; DELHI_DATA_COMPARISON.md records the hybrid recommendation and DELHI_DATA_AUDIT.json records actual counts/hashes. All 75 candidate archive sources/blockers are mapped in DELHI_FEATURE_INPUTS.csv. Clock/interval/availability uncertainty prevents authoritative historical UTC import. No original model semantics or operational forecast readiness promoted. Current mobile frontend regressions and remaining AQI/mode-title review are in the Codex handoff; source ownership preserved.

@@ -1,0 +1,76 @@
+position,feature,local_asset,status,original_formula_status,original_model_unit_status
+0,lat,data/processed/station_coordinate_context.parquet,approximate coordinates only; prefer verified current provider registry,missing,missing
+1,lon,data/processed/station_coordinate_context.parquet,approximate coordinates only; prefer verified current provider registry,missing,missing
+2,ghs_pop_exact,data/cleaned/population_*.parquet,epoch values present; release/cell footprint/aggregation semantics not established,missing,missing
+3,ghs_pop_1km,data/cleaned/population_*.parquet,epoch values present; release/cell footprint/aggregation semantics not established,missing,missing
+4,ghs_pop_3km,data/cleaned/population_*.parquet,epoch values present; release/cell footprint/aggregation semantics not established,missing,missing
+5,pop_density_ratio,data/cleaned/population_*.parquet,epoch values present; release/cell footprint/aggregation semantics not established,missing,missing
+6,pm25,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+7,pm10,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+8,no2,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+9,so2,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+10,o3,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+11,co_ugm3,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+12,pm25_to_pm10_ratio,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+13,no2_to_co_ratio,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+14,pm25_lag_1h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+15,pm25_lag_3h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+16,pm25_lag_6h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+17,pm25_lag_12h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+18,pm25_lag_24h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+19,pm25_lag_48h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+20,pm25_diff_3h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+21,pm25_diff_24h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+22,pm25_roll_mean_24h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+23,pm25_roll_std_24h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+24,pm25_roll_max_24h,data/cleaned/pollutants/*.parquet and original hourly CSVs,observed values present; clock/time-anchor/site mapping require verification,missing,missing
+25,pm25_local_bias,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+26,pm25_cams_ratio,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+27,temperature_2m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+28,relative_humidity_2m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+29,dewpoint_spread,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+30,precipitation,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+31,wind_speed_10m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+32,wind_direction_10m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+33,boundary_layer_height,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+34,surface_pressure,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+35,shortwave_radiation,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+36,ventilation_coeff,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+37,stagnation_index,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+38,wind_u,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+39,wind_v,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+40,cams_pm25,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+41,cams_pm10,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+42,cams_no2,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+43,cams_co,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+44,cams_so2,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+45,cams_o3,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+46,cams_dust,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+47,cams_dust_fraction,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+48,fire_cnt_25km_24h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+49,fire_frp_25km_24h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+50,fire_cnt_50km_24h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+51,fire_frp_50km_24h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+52,fire_cnt_100km_48h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+53,fire_frp_100km_48h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+54,upwind_fire_frp_100km_24h,data/cleaned/firms_detections.parquet,October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof,missing,missing
+55,hour_sin,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+56,hour_cos,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+57,doy_sin,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+58,doy_cos,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+59,is_weekend,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+60,forecast_horizon_h,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,recovered,recovered
+61,target_temperature_2m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+62,target_relative_humidity_2m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+63,target_precipitation,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+64,target_wind_speed_10m,data/cleaned/weather/*.parquet plus co-reported station weather where present,historical values present; initialization/lead time/availability and original formulas unverified,missing,missing
+65,target_boundary_layer_height,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+66,target_ventilation_coeff,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+67,target_cams_pm25,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+68,target_cams_pm10,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+69,target_cams_no2,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+70,cams_pm25_delta_h,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+71,cams_pm25_ratio_h,data/cleaned/weather/*.parquet,"some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute",missing,missing
+72,ventilation_ratio_h,,required boundary-layer height not found; formulas and issue-time drivers still missing,missing,missing
+73,target_hour_sin,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing
+74,target_hour_cos,recorded source clock and declared artifact horizons,source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged,missing,missing

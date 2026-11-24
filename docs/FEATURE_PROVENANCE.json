@@ -45,7 +45,14 @@
         "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
       },
       "source_unit_status": "verified_from_source",
-      "source_unit": "WGS84 degrees"
+      "source_unit": "WGS84 degrees",
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/processed/station_coordinate_context.parquet",
+        "status": "approximate coordinates only; prefer verified current provider registry"
+      }
     },
     {
       "position": 1,
@@ -74,7 +81,14 @@
         "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
       },
       "source_unit_status": "verified_from_source",
-      "source_unit": "WGS84 degrees"
+      "source_unit": "WGS84 degrees",
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/processed/station_coordinate_context.parquet",
+        "status": "approximate coordinates only; prefer verified current provider registry"
+      }
     },
     {
       "position": 2,
@@ -94,7 +108,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/population_*.parquet",
+        "status": "epoch values present; release/cell footprint/aggregation semantics not established"
+      }
     },
     {
       "position": 3,
@@ -114,7 +135,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/population_*.parquet",
+        "status": "epoch values present; release/cell footprint/aggregation semantics not established"
+      }
     },
     {
       "position": 4,
@@ -134,7 +162,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/population_*.parquet",
+        "status": "epoch values present; release/cell footprint/aggregation semantics not established"
+      }
     },
     {
       "position": 5,
@@ -154,7 +189,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/population_*.parquet",
+        "status": "epoch values present; release/cell footprint/aggregation semantics not established"
+      }
     },
     {
       "position": 6,
@@ -183,7 +225,14 @@
         "scope": "actual source value/metadata only; original model assignment/formula/units still unverified"
       },
       "source_unit_status": "verified_from_source",
-      "source_unit": "\u00b5g/m\u00b3"
+      "source_unit": "\u00b5g/m\u00b3",
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 7,
@@ -203,7 +252,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 8,
@@ -223,7 +279,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 9,
@@ -243,7 +306,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 10,
@@ -263,7 +333,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 11,
@@ -283,7 +360,15 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification",
+        "co_source_unit": "mg/m3; cannot use unchanged as co_ugm3"
+      }
     },
     {
       "position": 12,
@@ -303,7 +388,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 13,
@@ -323,7 +415,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 14,
@@ -343,7 +442,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 15,
@@ -363,7 +469,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 16,
@@ -383,7 +496,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 17,
@@ -403,7 +523,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 18,
@@ -423,7 +550,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 19,
@@ -443,7 +577,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 20,
@@ -463,7 +604,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 21,
@@ -483,7 +631,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 22,
@@ -503,7 +658,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 23,
@@ -523,7 +685,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 24,
@@ -543,7 +712,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/pollutants/*.parquet and original hourly CSVs",
+        "status": "observed values present; clock/time-anchor/site mapping require verification"
+      }
     },
     {
       "position": 25,
@@ -563,7 +739,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 26,
@@ -583,7 +766,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 27,
@@ -603,7 +793,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 28,
@@ -623,7 +820,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 29,
@@ -643,7 +847,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 30,
@@ -663,7 +874,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 31,
@@ -683,7 +901,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 32,
@@ -703,7 +928,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 33,
@@ -723,7 +955,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 34,
@@ -743,7 +982,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 35,
@@ -763,7 +1009,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 36,
@@ -783,7 +1036,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 37,
@@ -803,7 +1063,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 38,
@@ -823,7 +1090,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 39,
@@ -843,7 +1117,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 40,
@@ -863,7 +1144,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 41,
@@ -883,7 +1171,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 42,
@@ -903,7 +1198,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 43,
@@ -923,7 +1225,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 44,
@@ -943,7 +1252,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 45,
@@ -963,7 +1279,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 46,
@@ -983,7 +1306,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 47,
@@ -1003,7 +1333,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 48,
@@ -1023,7 +1360,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 49,
@@ -1043,7 +1387,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 50,
@@ -1063,7 +1414,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 51,
@@ -1083,7 +1441,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 52,
@@ -1103,7 +1468,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 53,
@@ -1123,7 +1495,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 54,
@@ -1143,7 +1522,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/firms_detections.parquet",
+        "status": "October/November 2024 and 2025 only; no 2026 issue-time fire coverage or complete feed proof"
+      }
     },
     {
       "position": 55,
@@ -1163,7 +1549,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 56,
@@ -1183,7 +1576,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 57,
@@ -1203,7 +1603,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 58,
@@ -1223,7 +1630,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 59,
@@ -1243,7 +1657,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 60,
@@ -1261,7 +1682,14 @@
       "issue_time_availability": "known at issue; declared horizons are not validation evidence",
       "blockers": [
         "supported-horizon held-out evidence and golden output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 61,
@@ -1281,7 +1709,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 62,
@@ -1301,7 +1736,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 63,
@@ -1321,7 +1763,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 64,
@@ -1341,7 +1790,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet plus co-reported station weather where present",
+        "status": "historical values present; initialization/lead time/availability and original formulas unverified"
+      }
     },
     {
       "position": 65,
@@ -1361,7 +1817,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 66,
@@ -1381,7 +1844,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 67,
@@ -1401,7 +1871,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 68,
@@ -1421,7 +1898,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 69,
@@ -1441,7 +1925,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 70,
@@ -1461,7 +1952,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 71,
@@ -1481,7 +1979,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "data/cleaned/weather/*.parquet",
+        "status": "some model composition fields present; smog_pm25 units/source not verified as CAMS PM2.5, O3 absent; do not substitute"
+      }
     },
     {
       "position": 72,
@@ -1501,7 +2006,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": null,
+        "status": "required boundary-layer height not found; formulas and issue-time drivers still missing"
+      }
     },
     {
       "position": 73,
@@ -1521,7 +2033,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     },
     {
       "position": 74,
@@ -1541,7 +2060,14 @@
         "original formula/preprocessing and missingness policy",
         "source/provenance and exact model units",
         "golden feature/output parity"
-      ]
+      ],
+      "new_archive_evidence": {
+        "report": "docs/DELHI_DATA_AUDIT.json",
+        "model_formula_parity": false,
+        "historical_publication_times": "missing",
+        "asset": "recorded source clock and declared artifact horizons",
+        "status": "source timezone/issue-vs-target policy unresolved; declared horizon metadata unchanged"
+      }
     }
   ],
   "project_data_inventory": {
@@ -1556,6 +2082,7 @@
     "unrelated_personal_folders_scanned": false,
     "initial_actual_observation_tables_found": false,
     "actual_observation_cache_now_available": true,
-    "actual_source_evidence": "docs/DATA_EVIDENCE.json"
+    "actual_source_evidence": "docs/DATA_EVIDENCE.json",
+    "new_user_authorized_archive": "NIErnaya_data/AirScope_India_final; scoped read-only audit in DELHI_DATA_AUDIT.json"
   }
 }

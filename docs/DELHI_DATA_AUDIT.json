@@ -1,0 +1,1354 @@
+{
+  "verified_at_utc": "2026-11-24T00:10:46.291050+00:00",
+  "archive_name": "AirScope_India_final",
+  "read_only_source": true,
+  "pollutant_totals": {
+    "grid_rows": 4047408,
+    "folders": 54,
+    "source_site_ids": 55,
+    "retained_folders": 52,
+    "retained_site_ids": 54,
+    "quarantined_rows": 172368,
+    "first_record": "2009-01-01 00:00:00",
+    "last_record": "2026-10-31 23:00:00"
+  },
+  "pollutant_parameters": [
+    {
+      "parameter": "pm25",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2885092,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "pm10",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2718468,
+      "invalid_rows": 0,
+      "first_value": "2013-04-19 21:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "no",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2982513,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "no2",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 3028995,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "nox",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 3008840,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "nh3",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2259437,
+      "invalid_rows": 0,
+      "first_value": "2011-05-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "so2",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2486449,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "co",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2801988,
+      "invalid_rows": 0,
+      "first_value": "2009-01-03 02:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    },
+    {
+      "parameter": "o3",
+      "eligible_grid_rows": 3875040,
+      "present_rows": 2989435,
+      "invalid_rows": 0,
+      "first_value": "2009-01-01 00:00:00",
+      "last_value": "2026-10-31 23:00:00"
+    }
+  ],
+  "station_profiles": [
+    {
+      "source_folder": "Aanad Vihar",
+      "site_id": "site_301",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 124176,
+      "first_record": "2012-09-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 124176,
+      "pm25_present": 91287,
+      "pm10_present": 84243,
+      "no2_present": 89222,
+      "co_present": 86467,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Alipur",
+      "site_id": "site_5024",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 66514,
+      "pm10_present": 66496,
+      "no2_present": 66945,
+      "co_present": 65231,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Ashok Vihar",
+      "site_id": "site_1420",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73228,
+      "pm10_present": 73814,
+      "no2_present": 74706,
+      "co_present": 72890,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Aya Nagar",
+      "site_id": "site_108",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73682,
+      "pm10_present": 75100,
+      "no2_present": 75753,
+      "co_present": 77174,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Badarpur",
+      "site_id": "site_100409",
+      "analysis_eligible": false,
+      "exclusion_reason": "Copied series identical to Aya Nagar; original station assignment unverified",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73682,
+      "pm10_present": 75100,
+      "no2_present": 75753,
+      "co_present": 77174,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Bawana",
+      "site_id": "site_1560",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 70571,
+      "pm10_present": 69874,
+      "no2_present": 70685,
+      "co_present": 69186,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Burari",
+      "site_id": "site_100408",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 598,
+      "pm10_present": 598,
+      "no2_present": 598,
+      "co_present": 588,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Burari Crossing",
+      "site_id": "site_104",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 53825,
+      "pm10_present": 53989,
+      "no2_present": 49587,
+      "co_present": 57598,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "CRRI Mathura",
+      "site_id": "site_103",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 75207,
+      "pm10_present": 73763,
+      "no2_present": 74775,
+      "co_present": 76273,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Chandni Chowk",
+      "site_id": "site_5393",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 32988,
+      "pm10_present": 36129,
+      "no2_present": 34890,
+      "co_present": 35808,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Chhawla",
+      "site_id": "site_100410",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 484,
+      "pm10_present": 481,
+      "no2_present": 500,
+      "co_present": 500,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Commonn Wealth Sports Complex",
+      "site_id": "site_6079",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 16056,
+      "first_record": "2025-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 16056,
+      "pm25_present": 5674,
+      "pm10_present": 5598,
+      "no2_present": 5588,
+      "co_present": 5509,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "DTU",
+      "site_id": "site_118",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 156312,
+      "first_record": "2009-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 156312,
+      "pm25_present": 79395,
+      "pm10_present": 70498,
+      "no2_present": 111993,
+      "co_present": 74197,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Dr. Karni Singh Shooting Range",
+      "site_id": "site_1421",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 71609,
+      "pm10_present": 74737,
+      "no2_present": 73044,
+      "co_present": 72762,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Dwarka",
+      "site_id": "site_1422",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 75227,
+      "pm10_present": 74445,
+      "no2_present": 74997,
+      "co_present": 74302,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Ghoga",
+      "site_id": "site_100418",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 453,
+      "pm10_present": 453,
+      "no2_present": 455,
+      "co_present": 455,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Ghummanhera",
+      "site_id": "site_100413",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 507,
+      "pm10_present": 507,
+      "no2_present": 462,
+      "co_present": 507,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "IGI Airport T3",
+      "site_id": "site_106",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 72997,
+      "pm10_present": 73553,
+      "no2_present": 71041,
+      "co_present": 70725,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "IGNOU_Maidan Garhi",
+      "site_id": "site_6080",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 16056,
+      "first_record": "2025-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 16056,
+      "pm25_present": 5678,
+      "pm10_present": 5743,
+      "no2_present": 5790,
+      "co_present": 5763,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "IIT Delhi",
+      "site_id": "site_6060",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 8760,
+      "first_record": "2025-11-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 8760,
+      "pm25_present": 7721,
+      "pm10_present": 7746,
+      "no2_present": 7703,
+      "co_present": 7802,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "IMD Lodhi",
+      "site_id": "site_109",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74609,
+      "pm10_present": 74815,
+      "no2_present": 74238,
+      "co_present": 76073,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "ITO",
+      "site_id": "site_117",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 146136,
+      "first_record": "2009-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 146136,
+      "pm25_present": 103174,
+      "pm10_present": 65790,
+      "no2_present": 113850,
+      "co_present": 67308,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Jahangiripuri",
+      "site_id": "site_1423",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73470,
+      "pm10_present": 73507,
+      "no2_present": 74322,
+      "co_present": 73698,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Jawaharlal Nehru Stadium",
+      "site_id": "site_1424",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73551,
+      "pm10_present": 72583,
+      "no2_present": 73567,
+      "co_present": 72498,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Jharoda Kalan",
+      "site_id": "site_100412",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 507,
+      "pm10_present": 507,
+      "no2_present": 508,
+      "co_present": 508,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Lodhi Road",
+      "site_id": "site_5395",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 26476,
+      "pm10_present": 25877,
+      "no2_present": 27569,
+      "co_present": 12800,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Maidan Gharhi",
+      "site_id": "site_5395",
+      "analysis_eligible": false,
+      "exclusion_reason": "Copied site 5395 Lodhi Road under conflicting folder label",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 26476,
+      "pm10_present": 25877,
+      "no2_present": 27569,
+      "co_present": 12800,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Major Dhyan Chand National Stadium",
+      "site_id": "site_100407",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 516,
+      "pm10_present": 516,
+      "no2_present": 502,
+      "co_present": 504,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Major Dhyan Chand National Stadium",
+      "site_id": "site_1425",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74572,
+      "pm10_present": 74305,
+      "no2_present": 74932,
+      "co_present": 72885,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Mandir Marg",
+      "site_id": "site_122",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 135912,
+      "first_record": "2011-05-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 135912,
+      "pm25_present": 101195,
+      "pm10_present": 92322,
+      "no2_present": 101662,
+      "co_present": 100425,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Mundka",
+      "site_id": "site_1561",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 70531,
+      "pm10_present": 69777,
+      "no2_present": 70647,
+      "co_present": 69242,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "NIH Narela",
+      "site_id": "site_100423",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 508,
+      "pm10_present": 508,
+      "no2_present": 504,
+      "co_present": 508,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "NSIT Dwarka",
+      "site_id": "site_115",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 156312,
+      "first_record": "2009-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 156312,
+      "pm25_present": 87759,
+      "pm10_present": 51854,
+      "no2_present": 132693,
+      "co_present": 86288,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "NSUT Jaffarpur",
+      "site_id": "site_6077",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 16056,
+      "first_record": "2025-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 16056,
+      "pm25_present": 5733,
+      "pm10_present": 5705,
+      "no2_present": 5671,
+      "co_present": 5742,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Naafagarh",
+      "site_id": "site_1427",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 71980,
+      "pm10_present": 72170,
+      "no2_present": 72550,
+      "co_present": 72300,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Nangloi",
+      "site_id": "site_100422",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 507,
+      "pm10_present": 508,
+      "no2_present": 508,
+      "co_present": 508,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Narela",
+      "site_id": "site_1426",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74551,
+      "pm10_present": 74274,
+      "no2_present": 74634,
+      "co_present": 72825,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Nehru Nagar",
+      "site_id": "site_1429",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74780,
+      "pm10_present": 74914,
+      "no2_present": 71734,
+      "co_present": 73414,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "North Campus",
+      "site_id": "site_105",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73595,
+      "pm10_present": 73385,
+      "no2_present": 72797,
+      "co_present": 75424,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Okhla Phase-2",
+      "site_id": "site_1428",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74896,
+      "pm10_present": 74331,
+      "no2_present": 74648,
+      "co_present": 73858,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Patrpar Ganj",
+      "site_id": "site_1431",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74248,
+      "pm10_present": 73912,
+      "no2_present": 74167,
+      "co_present": 74168,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Punjabi Bagh",
+      "site_id": "site_125",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 135912,
+      "first_record": "2011-05-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 135912,
+      "pm25_present": 100767,
+      "pm10_present": 89546,
+      "no2_present": 99428,
+      "co_present": 99667,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Pusa",
+      "site_id": "site_1563",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 69822,
+      "pm10_present": 69532,
+      "no2_present": 69378,
+      "co_present": 67442,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Pusa - IITM",
+      "site_id": "site_107",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 71651,
+      "pm10_present": 72311,
+      "no2_present": 72931,
+      "co_present": 74113,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "R K Puram",
+      "site_id": "site_124",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 127152,
+      "first_record": "2011-05-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 127152,
+      "pm25_present": 102251,
+      "pm10_present": 93837,
+      "no2_present": 105887,
+      "co_present": 100038,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Rohini",
+      "site_id": "site_1430",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 74775,
+      "pm10_present": 74912,
+      "no2_present": 74781,
+      "co_present": 73745,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Shadipur",
+      "site_id": "site_113",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 156312,
+      "first_record": "2009-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 156312,
+      "pm25_present": 93408,
+      "pm10_present": 52489,
+      "no2_present": 138412,
+      "co_present": 86793,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Sir Aurobindo Marg",
+      "site_id": "site_1562",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 71258,
+      "pm10_present": 71146,
+      "no2_present": 71718,
+      "co_present": 70056,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Sirifort",
+      "site_id": "site_119",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 156312,
+      "first_record": "2009-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 156312,
+      "pm25_present": 78596,
+      "pm10_present": 71085,
+      "no2_present": 87352,
+      "co_present": 72388,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Sonia Vihar",
+      "site_id": "site_1432",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73749,
+      "pm10_present": 73319,
+      "no2_present": 73455,
+      "co_present": 71812,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Talkatora Garden",
+      "site_id": "site_6081",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 16056,
+      "first_record": "2025-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 16056,
+      "pm25_present": 5394,
+      "pm10_present": 5408,
+      "no2_present": 5631,
+      "co_present": 5638,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Tikri Kalan",
+      "site_id": "site_100417",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 452,
+      "pm10_present": 452,
+      "no2_present": 462,
+      "co_present": 462,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Uttam Nagar",
+      "site_id": "site_100416",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 409,
+      "pm10_present": 415,
+      "no2_present": 471,
+      "co_present": 477,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Vivek Vihar",
+      "site_id": "site_100411",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 744,
+      "first_record": "2026-10-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 744,
+      "pm25_present": 535,
+      "pm10_present": 496,
+      "no2_present": 519,
+      "co_present": 537,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Vivek Vihar",
+      "site_id": "site_1435",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73302,
+      "pm10_present": 72305,
+      "no2_present": 73920,
+      "co_present": 72340,
+      "pm25_invalid": 0
+    },
+    {
+      "source_folder": "Wazirpur",
+      "site_id": "site_1434",
+      "analysis_eligible": true,
+      "exclusion_reason": "",
+      "rows": 86184,
+      "first_record": "2017-01-01 00:00:00",
+      "last_record": "2026-10-31 23:00:00",
+      "distinct_hours": 86184,
+      "pm25_present": 73920,
+      "pm10_present": 71888,
+      "no2_present": 74213,
+      "co_present": 71767,
+      "pm25_invalid": 0
+    }
+  ],
+  "input_manifest": [
+    {
+      "path": "data/cleaned/pollutants/Aanad Vihar.parquet",
+      "bytes": 4114696,
+      "sha256": "43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df"
+    },
+    {
+      "path": "data/cleaned/pollutants/Alipur.parquet",
+      "bytes": 2785492,
+      "sha256": "26c81ae6e44d1520b046c73bec6ea05c286f54720a478dc7cbc329a1eab104ac"
+    },
+    {
+      "path": "data/cleaned/pollutants/Ashok Vihar.parquet",
+      "bytes": 3091233,
+      "sha256": "2f3418bda6c8916abc7698eb57f84ee57ded925cca06ea3ac845d5077ca59d64"
+    },
+    {
+      "path": "data/cleaned/pollutants/Aya Nagar.parquet",
+      "bytes": 2128090,
+      "sha256": "346c9e9f1c56dcd2e9e8a257a69a384af7dd5643fc647fe31dedbf18b8172060"
+    },
+    {
+      "path": "data/cleaned/pollutants/Badarpur.parquet",
+      "bytes": 2129085,
+      "sha256": "e15eb0e5fa62c3ebf99605e7f882c19ec4f41f0cb8601932f8529250b1560686"
+    },
+    {
+      "path": "data/cleaned/pollutants/Bawana.parquet",
+      "bytes": 2778506,
+      "sha256": "273afa2e89106d3f4096c1da5f7329664c7b5bf2a75ff999a89a21ab39439f99"
+    },
+    {
+      "path": "data/cleaned/pollutants/Burari Crossing.parquet",
+      "bytes": 1802532,
+      "sha256": "0032246a606169e9bfd71733fbb898ca3c704d55c3a3a5f0648001ed6d114be9"
+    },
+    {
+      "path": "data/cleaned/pollutants/Burari.parquet",
+      "bytes": 57125,
+      "sha256": "c0c3fd7fe905d608482c8dc75a3a64a4bfbcc5d2a85fe11e1707c3b8b2dbd32b"
+    },
+    {
+      "path": "data/cleaned/pollutants/CRRI Mathura.parquet",
+      "bytes": 2225767,
+      "sha256": "09d1f45a77cd08db0601ebca10afe87d30d7cf270ae59b5ec734281a64b79769"
+    },
+    {
+      "path": "data/cleaned/pollutants/Chandni Chowk.parquet",
+      "bytes": 2265709,
+      "sha256": "acb4c68894380fcb1bf511f296b1e5cf8d13c8d13a903451d4e9da8b1ab6b503"
+    },
+    {
+      "path": "data/cleaned/pollutants/Chhawla.parquet",
+      "bytes": 44628,
+      "sha256": "ede002e9d8133851c1a41f47726e38ebe9d6214782ee51970a155773b9f3d458"
+    },
+    {
+      "path": "data/cleaned/pollutants/Commonn Wealth Sports Complex.parquet",
+      "bytes": 409150,
+      "sha256": "34ea04c1692c633e88e712a05aad20b35c399b0e3d0cb54440e0b5941548deea"
+    },
+    {
+      "path": "data/cleaned/pollutants/DTU.parquet",
+      "bytes": 4029189,
+      "sha256": "e806936b9776ccaaf8359c217ff87ee3d6f6ec9e40321cb8b2ce9ef129baaaa3"
+    },
+    {
+      "path": "data/cleaned/pollutants/Dr. Karni Singh Shooting Range.parquet",
+      "bytes": 3065297,
+      "sha256": "d4d61031416d731cbc3793f3bee43a9260325b59a563f9315ab5d4134e1d893e"
+    },
+    {
+      "path": "data/cleaned/pollutants/Dwarka.parquet",
+      "bytes": 3144396,
+      "sha256": "15865d4e6b830cfc96cf53f19d16abe555c837716cc486637bee8fad6ec2e2a3"
+    },
+    {
+      "path": "data/cleaned/pollutants/Ghoga.parquet",
+      "bytes": 45014,
+      "sha256": "502b1c881d7e767005c13d7d20476895e92776b347b0c75f494c1cd5bcd3fb0d"
+    },
+    {
+      "path": "data/cleaned/pollutants/Ghummanhera.parquet",
+      "bytes": 47657,
+      "sha256": "311d1c38337ac6fbd2b62f353c81608456f31a6feb1ab94f1aeefda3c1eed8ca"
+    },
+    {
+      "path": "data/cleaned/pollutants/IGI Airport T3.parquet",
+      "bytes": 2144170,
+      "sha256": "e8c28e19b2cc3d7cde8cc2965cf6238e6d63e9e4f8e89265a97c9cdb997559d5"
+    },
+    {
+      "path": "data/cleaned/pollutants/IGNOU_Maidan Garhi.parquet",
+      "bytes": 397787,
+      "sha256": "f2c2367c2b75a5e2280e808b11847e95eeb634d1d6b80bca577fb81d95f2163a"
+    },
+    {
+      "path": "data/cleaned/pollutants/IIT Delhi.parquet",
+      "bytes": 237793,
+      "sha256": "95c0d86271987b77a87c735235f1261c35780e7f073678d550621fe51914c5aa"
+    },
+    {
+      "path": "data/cleaned/pollutants/IMD Lodhi.parquet",
+      "bytes": 2196787,
+      "sha256": "6ca42a2ac89701f06fb871ba878714b62f1a22b9dc52c01f55e9cc869019752c"
+    },
+    {
+      "path": "data/cleaned/pollutants/ITO.parquet",
+      "bytes": 3056684,
+      "sha256": "88d20060793acc170082ef1f4d80f4629006fe56fb89e6363da608b4a44ad930"
+    },
+    {
+      "path": "data/cleaned/pollutants/Jahangiripuri.parquet",
+      "bytes": 3094117,
+      "sha256": "55648b0287e2081e3f2d0c936070d3ef0dfb045e38860e3da94f8e467edbbc95"
+    },
+    {
+      "path": "data/cleaned/pollutants/Jawaharlal Nehru Stadium.parquet",
+      "bytes": 3122095,
+      "sha256": "aa772b38e8bf0a6562fc28035b92fe916e1c6df5ab534c7801bf938951e6aebf"
+    },
+    {
+      "path": "data/cleaned/pollutants/Jharoda Kalan.parquet",
+      "bytes": 47870,
+      "sha256": "6a4d8c88a09f3fcf185098cd3fb8dac9e738449401c0957d877e46b44810841f"
+    },
+    {
+      "path": "data/cleaned/pollutants/Lodhi Road.parquet",
+      "bytes": 1425661,
+      "sha256": "08b124de94b934eb0448e1562236cf383aa9e16956fc65c06e97b491e4ea9cea"
+    },
+    {
+      "path": "data/cleaned/pollutants/Maidan Gharhi.parquet",
+      "bytes": 1426499,
+      "sha256": "805426ebc1f38a3d5a8019c50933fe32ca14514a16dbc48315a9738a3ca776c0"
+    },
+    {
+      "path": "data/cleaned/pollutants/Major Dhyan Chand National Stadium.parquet",
+      "bytes": 3187245,
+      "sha256": "f6297c564159c16e288e751aec4d172acf79228e37dfad22c8236042d78f160b"
+    },
+    {
+      "path": "data/cleaned/pollutants/Mandir Marg.parquet",
+      "bytes": 4371636,
+      "sha256": "78c11eb42f7681db99247a7b15c6235263f53f7e399fd1edabc841e2de75a273"
+    },
+    {
+      "path": "data/cleaned/pollutants/Mundka.parquet",
+      "bytes": 2976046,
+      "sha256": "f6ccb4896413bf93a33c888bd0450e6eebe7d6e1560ac8e1f8e23c0ef1559beb"
+    },
+    {
+      "path": "data/cleaned/pollutants/NIH Narela.parquet",
+      "bytes": 46629,
+      "sha256": "2f614c1b673e245648b9b234359698f0e0963f3dd2860e1741e38d24adf56563"
+    },
+    {
+      "path": "data/cleaned/pollutants/NSIT Dwarka.parquet",
+      "bytes": 5789050,
+      "sha256": "dd9f2f8654962076facf6cbcbf944e81dc5b7ff4872cde3def763ec23b108e8e"
+    },
+    {
+      "path": "data/cleaned/pollutants/NSUT Jaffarpur.parquet",
+      "bytes": 403138,
+      "sha256": "91d40b26cff47aff4d13f6227c2dbdf9be02ca951ed9144db842bbaa307560a2"
+    },
+    {
+      "path": "data/cleaned/pollutants/Naafagarh.parquet",
+      "bytes": 2959238,
+      "sha256": "0fdc6f955fdc43a3cba92780b0098d46366ca41be92971d94bf857abf602b6e5"
+    },
+    {
+      "path": "data/cleaned/pollutants/Nangloi.parquet",
+      "bytes": 47034,
+      "sha256": "f4ffc89489ac4647b6c9f3d7f2dab29be8df57b1178843f5b41f5a9bfdb0ff9b"
+    },
+    {
+      "path": "data/cleaned/pollutants/Narela.parquet",
+      "bytes": 3179674,
+      "sha256": "d8cde9bcddf01851b25819324ce868fb07c5e03eae912611cd74f746d5fe86ff"
+    },
+    {
+      "path": "data/cleaned/pollutants/Nehru Nagar.parquet",
+      "bytes": 3119421,
+      "sha256": "ba466a7cf32704183eb276ddb7f9939c08e732bc75f510d31ae46c5b680a9fb1"
+    },
+    {
+      "path": "data/cleaned/pollutants/North Campus.parquet",
+      "bytes": 2244190,
+      "sha256": "f65ae977307dc51d2d5a9f3553db0b3bb9aaa4d418db2c6af5652305df7c525a"
+    },
+    {
+      "path": "data/cleaned/pollutants/Okhla Phase-2.parquet",
+      "bytes": 3121544,
+      "sha256": "626bd13aa9f88595b9bbd150460b9ef453cf1a89b51ceb6745aafe14017bd3e9"
+    },
+    {
+      "path": "data/cleaned/pollutants/Patrpar Ganj.parquet",
+      "bytes": 3094154,
+      "sha256": "f030310f073efff8e00b9dc5424ef17f94e1c01c55ed2ffc825277c0805792c4"
+    },
+    {
+      "path": "data/cleaned/pollutants/Punjabi Bagh.parquet",
+      "bytes": 4264307,
+      "sha256": "8c8d6083e4785e2f86cd50cda31d4f5fbe92752c327713de8c5a911fcda5f5eb"
+    },
+    {
+      "path": "data/cleaned/pollutants/Pusa - IITM.parquet",
+      "bytes": 2190306,
+      "sha256": "8f4b0c9a81f191ed9d3affba7f33958752407f94f63adff17793ada92aea4439"
+    },
+    {
+      "path": "data/cleaned/pollutants/Pusa.parquet",
+      "bytes": 2946305,
+      "sha256": "6510dcd5b4c8b94db3f339cfbcae7ecbed007f458d7e43b811fd0b9ec5f5a8d3"
+    },
+    {
+      "path": "data/cleaned/pollutants/R K Puram.parquet",
+      "bytes": 4354560,
+      "sha256": "9d2a8d155da9be094f1ed08aebda8dc322f956389483b49ef1664e30083231b9"
+    },
+    {
+      "path": "data/cleaned/pollutants/Rohini.parquet",
+      "bytes": 3029113,
+      "sha256": "120432af984583056344d40ae029480722ec4047e359813a980f26781e13a16b"
+    },
+    {
+      "path": "data/cleaned/pollutants/Shadipur.parquet",
+      "bytes": 6144638,
+      "sha256": "fea7bc165e3c698f88df6820950f4fc5319d6b967179debd0c7e463cb76b2ed5"
+    },
+    {
+      "path": "data/cleaned/pollutants/Sir Aurobindo Marg.parquet",
+      "bytes": 2896524,
+      "sha256": "ed73c18041770de0157c39501ab2c0ae37a9b9364f677c0881309f8c0bfa3743"
+    },
+    {
+      "path": "data/cleaned/pollutants/Sirifort.parquet",
+      "bytes": 4283458,
+      "sha256": "619cd19d9f301040daf60e66fe7932348eb35407d4bd41403cf14d9c2c088b1f"
+    },
+    {
+      "path": "data/cleaned/pollutants/Sonia Vihar.parquet",
+      "bytes": 3045969,
+      "sha256": "2227c7e38eb4adbf8cdb7744f9c9172375c1edc369d34d8d8a23f9c11c7d3a6f"
+    },
+    {
+      "path": "data/cleaned/pollutants/Talkatora Garden.parquet",
+      "bytes": 390618,
+      "sha256": "ca1bf76fb2bd4c1ccea93f12d490f6f6a641dd733181ca9902f391cabf48aa40"
+    },
+    {
+      "path": "data/cleaned/pollutants/Tikri Kalan.parquet",
+      "bytes": 42391,
+      "sha256": "32225be20049cf1425338e595b53bbb09cb246523bd19119d5467d671d4cfb1a"
+    },
+    {
+      "path": "data/cleaned/pollutants/Uttam Nagar.parquet",
+      "bytes": 43005,
+      "sha256": "31f4d4a63ee074a78db9f5de13c7ef64ee9ffddb1eb3315c602ced93a6733d25"
+    },
+    {
+      "path": "data/cleaned/pollutants/Vivek Vihar.parquet",
+      "bytes": 3134475,
+      "sha256": "34b656a9e5aa3a5caba0eabca327826d03c475e26423acc573d6c6fbbb4955d8"
+    },
+    {
+      "path": "data/cleaned/pollutants/Wazirpur.parquet",
+      "bytes": 3101243,
+      "sha256": "4e7874cf89d165798db88a2961d5a5b1927d4978875f74b96c83fd1c58a40dcf"
+    }
+  ],
+  "clock_status": "naive recorded clock; timezone and period start/end unverified",
+  "historical_publication_times": "missing; never replaced by measured timestamps",
+  "model_pipeline_parity": false,
+  "weather": {
+    "grid_rows": 4998672,
+    "locations": 58,
+    "first_record": "2017-01-01 00:00:00",
+    "last_record": "2026-10-31 23:00:00",
+    "temperature_present": 4998672,
+    "smog_pm25_present": 2157310,
+    "first_smog_pm25": "2022-08-04 05:00:00",
+    "model_field_interpretation": "supplementary model data, not measured station weather; smog units/algorithm, forecast initialization/lead time and original model parity unverified"
+  },
+  "fire_months_utc": [
+    {
+      "month": "2024-10",
+      "detections": 8556
+    },
+    {
+      "month": "2024-11",
+      "detections": 11368
+    },
+    {
+      "month": "2025-10",
+      "detections": 6656
+    },
+    {
+      "month": "2025-11",
+      "detections": 7407
+    }
+  ],
+  "population_epochs": [
+    {
+      "epoch": 2010,
+      "cells": 91459,
+      "minimum_value": 0.0045790914446115,
+      "maximum_value": 2326.886474609375
+    },
+    {
+      "epoch": 2015,
+      "cells": 95873,
+      "minimum_value": 0.0031882994808256,
+      "maximum_value": 2291.422607421875
+    },
+    {
+      "epoch": 2020,
+      "cells": 98823,
+      "minimum_value": 0.0033559545408934,
+      "maximum_value": 2473.87255859375
+    },
+    {
+      "epoch": 2025,
+      "cells": 102595,
+      "minimum_value": 0.0035843399818986,
+      "maximum_value": 2441.612548828125
+    },
+    {
+      "epoch": 2030,
+      "cells": 105511,
+      "minimum_value": 0.0037783386651426,
+      "maximum_value": 2568.0986328125
+    }
+  ],
+  "focal_csv_export": {
+    "file": "anand_vihar_observed.csv",
+    "rows": 124176,
+    "sha256": "aa448cba22f917e05e05c8835a89ba58d3a555c874d745f62318784c9ee5b4c4",
+    "raw_clock_and_nulls_preserved": true,
+    "source_parquet_bytes": 4114696,
+    "csv_bytes": 29077977
+  },
+  "raw_focal_verification": {
+    "rows": 7296,
+    "pm25_present": 6941,
+    "mismatches": 0,
+    "unmatched_rows": 0,
+    "file": "Raw_Data_2026_site_301_anand_vihar_delhi_dpcc_1Hr (1).csv",
+    "sha256": "33dd7d372bf5e2980388e58d233c5b1ca5d54a500a7711a9d62133a7443b4d57",
+    "match_scope": "2026 PM2.5 values and nulls only"
+  },
+  "notebook_static_search": {
+    "executed": false,
+    "occurrences": {
+      "HyperlocalAQPipeline": 0,
+      "lightgbm": 0,
+      "forecast_horizon": 0,
+      "cams_": 0
+    },
+    "standalone_src_path_present": false,
+    "original_copy_path_present": false
+  },
+  "local_audit_elapsed_seconds": 1.057,
+  "openaq": {
+    "scope": "one Anand Vihar PM2.5 sensor; not a Delhi-wide quality ranking",
+    "details": {
+      "skipped": {},
+      "fetched_rows": 70,
+      "location_id": 235,
+      "sensor_id": 12235610,
+      "actual_provider_fetch": true,
+      "city_assignment_method": "explicit_provider_station_name_and_DPCC_owner_not_boundary_GIS",
+      "license_metadata_present": false
+    },
+    "fetched_rows": 70,
+    "elapsed_seconds": 2.418,
+    "requests": 3,
+    "sensor_datetime_last": {
+      "utc": "2026-11-23T22:15:00Z",
+      "local": "2026-11-24T03:45:00+05:30"
+    },
+    "checked_at": "2026-11-24T00:10:48.962396+00:00",
+    "alignment_hypotheses": [
+      {
+        "clock": "recorded_clock_assumed_IST",
+        "period": "recorded_as_end",
+        "matched_nonnull_pairs": 63,
+        "mean_absolute_difference_ugm3": 7.059523809523809,
+        "exact_value_matches": 0,
+        "scientific_clock_verification": false,
+        "interpretation": "agreement between two candidate records, not forecast error or independent calibration"
+      },
+      {
+        "clock": "recorded_clock_assumed_IST",
+        "period": "recorded_as_start_plus_1h",
+        "matched_nonnull_pairs": 65,
+        "mean_absolute_difference_ugm3": 2.5615384615384613,
+        "exact_value_matches": 13,
+        "scientific_clock_verification": false,
+        "interpretation": "agreement between two candidate records, not forecast error or independent calibration"
+      },
+      {
+        "clock": "recorded_clock_assumed_UTC",
+        "period": "recorded_as_end",
+        "matched_nonnull_pairs": 0,
+        "mean_absolute_difference_ugm3": null,
+        "exact_value_matches": 0,
+        "scientific_clock_verification": false,
+        "interpretation": "agreement between two candidate records, not forecast error or independent calibration"
+      },
+      {
+        "clock": "recorded_clock_assumed_UTC",
+        "period": "recorded_as_start_plus_1h",
+        "matched_nonnull_pairs": 0,
+        "mean_absolute_difference_ugm3": null,
+        "exact_value_matches": 0,
+        "scientific_clock_verification": false,
+        "interpretation": "agreement between two candidate records, not forecast error or independent calibration"
+      }
+    ],
+    "raw_response_sha256": "c1ea88e57484378776326cda4e7be0fbf9f1b52d8ebee1ef8e9a8c0c2ad80b24"
+  }
+}

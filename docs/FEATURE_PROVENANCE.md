@@ -85,3 +85,5 @@ Machine-readable details (all 75 features, candidate formulas, source/unit statu
 Initial project-local inventory found only explicitly synthetic demo observations and diagnostic model probes; subsequent actual OpenAQ intake is recorded below and in DATA_EVIDENCE.json. Full state stores registry/spatial tree and booster metadata, with no original feature method bodies, observed input tables or cached 75-feature rows. No unrelated personal directories were scanned.
 
 Actual source update: DATA_EVIDENCE.json records the real Anand Vihar OpenAQ/CPCB intake. Source metadata for lat/lon and observed PM2.5 are now verified from source, while original model formula, time-selection, missingness, target units and golden parity remain unverified. This does not supply a complete 75-feature row or enable model forecasts.
+
+User-authorized local Delhi archive audit: DELHI_DATA_COMPARISON.md and DELHI_FEATURE_INPUTS.csv map all 75 features to actual available archive families and remaining semantics/availability gaps. This adds historical inputs; no original formula or model-unit status is promoted.
