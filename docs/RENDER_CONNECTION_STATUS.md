@@ -18,3 +18,9 @@ API: https://breathewise-api-56wc.onrender.com . Frontend: https://shwetankjais.
 Set exact frontend CORS origin, redeploy and verify browser requests. Provision OpenAQ secret and verified live ingestion before switching to live mode. Do not simply relabel the demo database. Supply approved archive/model bundles via suitable storage for history/evaluation/replay. Provision a new hosted session for account tests. Configure routing provider for geometry; pollution exposure remains unavailable. Original v5 feature builder, target units and golden parity remain required; hosting does not resolve these.
 
 Checks: frontend typecheck and connected Pages production build passed. HTTP findings are actual server responses; public browser result is recorded separately after deployment.
+
+## Public deployment/browser result
+
+Commit52ce63c was deployed successfully by GitHub Pages workflow45441458791. Actual Chromium desktop1440/mobile390 tests reached all10tabs with no pageerrors or horizontal overflow. Both profiles displayed the explicit hosted-connection failure and NETWORK_ERROR: API CORS still rejected the GitHub Pages origin. This is not successful API-to-screen acceptance. An actual OPTIONS preflight returned400 without access-control-allow-origin. The owner reported the WEB_ORIGIN update was made; the deployed response still needs re-verification after Render finishes applying it.
+
+Actual route geometry POST returned503 ROUTING_UNAVAILABLE (missing trusted OSRM endpoint). Actual replay POST returned503 EVALUATION_UNAVAILABLE (missing registered artifacts). Weather context returned200 with weather.available=false and upstream429; the weather provider call was rate-limited, not successful modeled data. No hosted credentials/session were used or created.
