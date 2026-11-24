@@ -83,3 +83,5 @@ Verified intake: 70 actual hourly observations; latest cached reading 98 µg/m³
 Current implementation CI: [45291003341](https://github.com/Shwetankjais/BreatheWise/actions/runs/45291003341) at 4e6ccf5 succeeded with 46 standard tests, 1 default PostgreSQL-only skip, 18 actual PostgreSQL tests, 2 isolated native mechanics tests and backend packaging. No actual provider credentials/model binaries are supplied to CI.
 
 Current targeted frontend snapshot: 22 unit tests/build pass, but latest browser rerun is 6 passed and 2 mobile failures (header overflow/pointer interception; saved-place dialog timeout). Earlier eight-pass evidence applies to the earlier snapshot only. Frontend acceptance remains open. For local Delhi history versus ongoing OpenAQ intake, use scripts/audit_delhi_sources.py as documented in DELHI_DATA_COMPARISON.md; this read-only audit does not guess UTC clocks or enable forecasts.
+
+Mobile-corrected stable snapshot now passes all 8 desktop/mobile browser journeys, 22 frontend unit cases, build and make check; this supersedes the immediately preceding two mobile failures. Scientific/model limitations remain.

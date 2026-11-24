@@ -24,3 +24,7 @@ test-results/
 .DS_Store
 # Runtime handoff scratch lock, not source
 .agent-git.lock/
+
+# This is frontend feature source, not a generated coverage report.
+!apps/web/src/features/coverage/
+!apps/web/src/features/coverage/**

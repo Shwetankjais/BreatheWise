@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" fill="none" preserveAspectRatio="xMidYEnd meet">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FEF3C7" stop-opacity="0.8"/>
+      <stop offset="45%" stop-color="#FDE68A" stop-opacity="0.5"/>
+      <stop offset="80%" stop-color="#FAF9F5" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#FAF9F5" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="hazeGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#EA580C" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#D97706" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="hazeGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FAF9F5" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#FAF9F5" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FAF9F5" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="monumentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78350F" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#92400E" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Backing -->
+  <rect width="1200" height="500" fill="url(#skyGrad)" />
+
+  <!-- Distant Atmospheric Haze Layer -->
+  <path d="M0 320 Q 300 280, 600 310 T 1200 300 L 1200 500 L 0 500 Z" fill="url(#hazeGrad1)" />
+
+  <!-- India Gate Architectural Silhouette (Centred, Majestic, Sandstone-tinted) -->
+  <g transform="translate(480, 160)" fill="url(#monumentGrad)">
+    <!-- Base plinth -->
+    <rect x="10" y="240" width="220" height="15" rx="2" />
+    <rect x="25" y="225" width="190" height="15" rx="1" />
+    <rect x="35" y="210" width="170" height="15" rx="1" />
+
+    <!-- Left Pylon -->
+    <rect x="45" y="60" width="55" height="150" />
+    <!-- Right Pylon -->
+    <rect x="140" y="60" width="55" height="150" />
+
+    <!-- Main Central Archway Opening (cutout) -->
+    <path d="M100 210 L100 110 Q120 85, 140 110 L140 210 Z" fill="#FDE68A" fill-opacity="0.3" />
+
+    <!-- Arch Keystone and Trim -->
+    <path d="M98 112 Q120 83, 142 112 L142 118 Q120 89, 98 118 Z" fill="#78350F" fill-opacity="0.6"/>
+
+    <!-- Arch Entablature & Cornice Band -->
+    <rect x="40" y="45" width="160" height="15" rx="1" />
+    <rect x="35" y="32" width="170" height="13" rx="1" />
+
+    <!-- Attic Pediment Top -->
+    <rect x="50" y="15" width="140" height="17" rx="2" />
+
+    <!-- Decorative Top Urn/Chhatri Dome element -->
+    <rect x="105" y="5" width="30" height="10" rx="3" />
+    <circle cx="120" cy="5" r="7" />
+
+    <!-- Left side arch window -->
+    <path d="M58 140 L58 100 Q68 90, 78 100 L78 140 Z" fill="#FAF9F5" fill-opacity="0.4" />
+    <!-- Right side arch window -->
+    <path d="M158 140 L158 100 Q168 90, 178 100 L178 140 Z" fill="#FAF9F5" fill-opacity="0.4" />
+  </g>
+
+  <!-- Foreground Haze & Dust Scatter Gradient -->
+  <rect y="360" width="1200" height="140" fill="url(#hazeGrad2)" />
+
+  <!-- Subtle Horizon Ground Horizon -->
+  <line x1="0" y1="460" x2="1200" y2="460" stroke="#CBD5E1" stroke-width="1" stroke-opacity="0.4" />
+</svg>
