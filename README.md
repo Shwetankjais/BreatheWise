@@ -1,5 +1,8 @@
 # BreatheWise India
 
+**Public deployment: PENDING — no public URL has been deployed or verified.** Hosting account access/project identifiers are not yet configured. The accepted real-data prototype is localhost-only at http://127.0.0.1:5173. See [account connection and environment setup](docs/PUBLIC_DEPLOYMENT_HANDOFF.md). Initial cloud scope will be explicitly labeled demo until local archive/model redistribution is approved.
+
+
 Hyperlocal Atmospheric Intelligence & Machine Learning Forecasting for India's Cities.
 
 BreatheWise integrates ground-level continuous air quality monitoring observations (CAAQMS), numerical weather prediction models (Open-Meteo NWP), and specialized machine learning models (LightGBM/XGBoost) to deliver honest retrospective evaluations, step-by-step held-out model playback, historical outdoor activity replay planning, and criteria pollutant health guidance.
@@ -99,7 +102,7 @@ Open **`http://localhost:5173`**. The application runs in explicit Demo mode, cl
 
 ## Deployment Paths
 
-> **Deployment Status:** Docker multi-stage container building and runtime health checks were locally verified (`docker build -t breathewise-api:test -f Dockerfile.api .`). Render and Vercel blueprints are verified, reproducible deployment specifications ready for instant cloud hosting; no external cloud instances are claimed without active production credentials.
+> **Deployment Status:** Docker multi-stage container building and runtime health checks were locally verified (`docker build -t breathewise-api:test -f Dockerfile.api .`). Render/Vercel configuration files exist; hosting authentication, database-driver/startup preflight and actual public verification remain pending. Configuration files do not establish deployment. See docs/PUBLIC_DEPLOYMENT_HANDOFF.md.
 
 ### Option A: Full-Stack Docker (`compose.yaml`)
 

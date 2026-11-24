@@ -1,5 +1,12 @@
 # Codex handoff — current feature-building milestone, 24 November 2026
 
+## Public deployment preparation — 24 November 2026
+
+**Status: PENDING; public URL: none.** User confirmed hosting credentials/project identifiers are unavailable. No Vercel/Render credentials or linked project found; authenticated GitHub deployment list is empty. README now clearly distinguishes the accepted private localhost prototype from any future public demo. Exact account-connection steps, environment-variable names and targeted deployment preflight are in PUBLIC_DEPLOYMENT_HANDOFF.md. Asset sizes/hashes/source fingerprints are in DEPLOYMENT_ASSET_INVENTORY.json; no local model/archive redistribution is approved and none was uploaded. Initial authorized public scope is explicitly labeled synthetic demo, with real retrospective/history/replay assets unavailable. Public URL, CORS, hosted migrations/health, SPA routing and public desktop/mobile/account tests cannot be verified before hosting is provisioned. No deployment or new CI pass is inferred from config files. Localhost remains running; no main merge or purchase.
+
+Antigravity's final20:22IST saved-path ACK is preserved below its reconciled current status: the freeze ended with Codex's accepted13+13checks and reopening at54c3209. Submission/Git window is serialized through Codex for this documentation slice. Previously accepted implementation7a74907 passed CI45418832725; this follow-up changes documentation only, outside the backend workflow's push path filters. Preserve local artifacts and unrelated untracked files.
+
+
 **FINAL VERIFICATION ENDED — editing/Git window OPEN for Antigravity.** Final desktop/mobile13+13passed with unchanged snapshot, backend26passed, implementation7a74907 pushed and CI45418832725 passed. Localhost remains running8000/5173. No active frontend correction request from this completed check; the precise multi-pollutant ingestion dependency is recorded below. Final frozen hashes: FINAL_SNAPSHOT_HASHES.json. Any subsequent source changes need their own relevant verification.
 
 

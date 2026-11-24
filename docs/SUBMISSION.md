@@ -1,5 +1,12 @@
 # Verification and checkpoint evidence — 24 November 2026
 
+## Public deployment preparation — 24 November 2026
+
+**Status: PENDING; public URL: none.** User confirmed hosting credentials/project identifiers are unavailable. No Vercel/Render credentials or linked project found; authenticated GitHub deployment list is empty. README now clearly distinguishes the accepted private localhost prototype from any future public demo. Exact account-connection steps, environment-variable names and targeted deployment preflight are in PUBLIC_DEPLOYMENT_HANDOFF.md. Asset sizes/hashes/source fingerprints are in DEPLOYMENT_ASSET_INVENTORY.json; no local model/archive redistribution is approved and none was uploaded. Initial authorized public scope is explicitly labeled synthetic demo, with real retrospective/history/replay assets unavailable. Public URL, CORS, hosted migrations/health, SPA routing and public desktop/mobile/account tests cannot be verified before hosting is provisioned. No deployment or new CI pass is inferred from config files. Localhost remains running; no main merge or purchase.
+
+Antigravity's final20:22IST saved-path ACK is preserved below its reconciled current status: the freeze ended with Codex's accepted13+13checks and reopening at54c3209. Submission/Git window is serialized through Codex for this documentation slice. Previously accepted implementation7a74907 passed CI45418832725; this follow-up changes documentation only, outside the backend workflow's push path filters. Preserve local artifacts and unrelated untracked files.
+
+
 ## Final localhost integration — 24 November 2026
 
 Verified Antigravity application snapshot dc8baec after dated20:18IST freeze. Actual desktop1440/mobile390 walkthrough: **13 checks each passed**, no failures/pending, final source/document fingerprints unchanged. Evidence: FINAL_INTEGRATION_EVIDENCE.json. Covers observed station markers/click/pollutants, actual weather context, recorded archive/explicit same-clock comparison, both model clocks/evaluation/purged playback, retained learned rejection, one-issue replay duration/bounds/zero-ceiling no-window, actual route geometry, authenticated saved-place refresh/owner isolation/preferences, zero-threshold alerts and unsupported capability gates. Earlier attempt had two harness selector errors and three concurrent documentation saves; retained as diagnostic only under work/final-integration, then corrected and rerun. No frontend defect identified by the completed pass.

@@ -1,43 +1,43 @@
 # Antigravity handoff
 
-Agent: shwetank's-antigravity (Senior UI/UX Designer & Frontend FDE).  
-Status: FINAL_VERIFICATION_ACCEPTED_AND_PAUSED (Git window released at 408faa5; final submission pass committed and pushed; ready paths paused for Codex inspection).  
-Git authority: Window released by Codex. Antigravity completed, verified, committed, and pushed the final application slice to `feat/foundation`. Ready paths are paused for Codex inspection.  
-Orchestrator: Original project chat (docs/ORCHESTRATOR.md).  
-Branch Context: `feat/foundation`  
+Agent: shwetank's-antigravity (Senior UI/UX Designer & Frontend FDE).
+Status: LOCAL_VERIFICATION_COMPLETE_EDITING_REOPENED (Codex verification/evidence completed at54c3209; the20:22IST freeze below is historical).
+Git authority: Codex holds the serialized submission/deployment documentation window for the current user request. The prior verification freeze has ended; frontend editing was reopened at54c3209. Coordinate any new Git/shared-contract window before writes.
+Orchestrator: Original project chat (docs/ORCHESTRATOR.md).
+Branch Context: `feat/foundation`
 
 ---
 
-## Final Verification ACK & Submission Freeze — 2026-11-24T20:18:00+05:30
+## Final Freeze ACK & Release to Codex — 2026-11-24T20:22:00+05:30
 
-**FINAL_VERIFICATION_ACK:**  
-Codex's model Git/shared-contract window release at `408faa5` is verified on `feat/foundation`. Antigravity's stale pause status from 20:03 IST is formally superseded. Antigravity has completed and saved all overview, health, and v5 diagnostic-display changes, verified all test suites, and published this final snapshot.
+**FREEZE_ACK:**
+Antigravity confirms all pending application, overview, health, and v5 diagnostic-display saves are finished. Staging and pushing to `origin/feat/foundation` is complete (commits `2a9cc97` and `dc8baec`). All source, test, and document saves are now **PAUSED/FROZEN** until Codex publishes its focused desktop/mobile verification results.
 
-The exact ready paths below are **PAUSED/FROZEN** while Codex checks the saved snapshot:
+Git writes and shared-contract writes are explicitly **RELEASED TO CODEX**. This handoff update is left uncommitted in the working tree for inclusion in Codex’s submission-evidence commit.
 
-### 1. Exact Ready Paths (Frozen)
-- `apps/web/src/features/health/HealthView.tsx` (clinician-provided action plan; removal of universal 6–9 AM avoidance; particulate respirator aerosol scope and gaseous/diagnosis limitations)
-- `apps/web/src/features/overview/OverviewView.tsx` (station catalogue scoped to Delhi CAAQMS monitors; ground observation vs modeled weather attribution; multi-criteria pollutant selection with 1-hr averaging tag and NAQI disclaimer)
-- `apps/web/src/features/model-performance/ModelAuditView.tsx` (diagnostic-only integration for `supplied-horizon-ensemble-v5`, declared horizons 1/3/6/12/24, 69 ordered inputs, `unavailable_reasons` badge display, non-operational notice)
-- `apps/web/src/features/planner/ReplayPlanner.tsx` (complete issue selection, 1–6h duration, ranked candidate windows, 24h trajectory visualizer, `no_suitable_window` with suggested adjustments)
-- `apps/web/src/features/routes/RouteCompareView.tsx` (OSRM route geometry/duration alternatives, gated `409 EXPOSURE_UNAVAILABLE`)
-- `apps/web/src/features/places/SavedPlacesView.tsx` (bearer token session persistence, per-user isolation, zero-threshold rule persistence)
-- `README.md` (problem statement, architecture, tech stack, data realities, explicit model limitations, Docker/cloud deployment documentation)
-- `docs/PROTOTYPE_COMPLETION.md` (updated test metrics, v5 diagnostic row, and running supervisor status)
-- `docs/UI_IMPLEMENTATION.md` (updated test metrics and Section 5 additions)
-- `docs/handoffs/antigravity.md` (this handoff)
+### 1. Exact Seven Saved Paths
+1. `apps/web/src/features/health/HealthView.tsx`
+2. `apps/web/src/features/overview/OverviewView.tsx`
+3. `apps/web/src/features/model-performance/ModelAuditView.tsx`
+4. `README.md`
+5. `docs/PROTOTYPE_COMPLETION.md`
+6. `docs/UI_IMPLEMENTATION.md`
+7. `docs/handoffs/antigravity.md`
 
-### 2. Comprehensive Verification Evidence
-1. **Frontend Unit Tests:** **60 of 60 tests PASSED** in 308ms across 4 test suites:
-   - `features.test.ts` (28 passed)
-   - `client.test.ts` (22 passed)
-   - `replay.test.ts` (5 passed)
-   - `aqi.test.ts` (5 passed)
-2. **Frontend Typecheck & Production Build:** Clean production build in 1.08s (`tsc --noEmit && vite build`).
-3. **Backend Unit & Contract Tests:** **132 passed, 1 skipped** (PostgreSQL-only concurrency test preserved) in 6.66s (`uv run pytest -q`).
-4. **Backend Linting:** Clean (`uv run ruff check apps/api` all checks passed).
-5. **Headless Browser Journeys:** Verified across desktop (1440x900) and mobile (390x844). Mobile `document.body.scrollWidth === 390px` (**0 horizontal scroll overflow**).
-6. **Local Prototype Daemon:** Active and responding on `http://127.0.0.1:8000/api/v1/health` (HTTP 200) and `http://127.0.0.1:5173/` (HTTP 200).
+### 2. Verified Snapshot Summary
+- **Frontend Unit Tests:** 60 of 60 tests passed across 4 test suites.
+- **Frontend Build:** Clean production bundle via Vite (`dist/index.html`, `dist/assets/*`).
+- **Backend Tests:** 132 passed, 1 skipped via pytest.
+- **Backend Linting:** Clean via Ruff.
+- **Browser Journeys:** All 6 desktop and mobile (390px, 0 horizontal scroll overflow) journeys verified against the live prototype.
+- **Supervisor Daemon:** Live and responding on `http://127.0.0.1:8000/api/v1/health` and `http://127.0.0.1:5173/`.
+
+---
+
+## Previous Coordination Records (Superseded)
+
+### Final Verification ACK — 2026-11-24T20:18:00+05:30 (Superseded)
+Earlier submission pass verification record. Superseded by the Final Freeze ACK above.
 
 ---
 
@@ -50,7 +50,7 @@ Antigravity paused Git and shared-contract writes while Codex audited and integr
 
 ## Application Completion Milestone Record
 
-**COMPLETION_ACK — 2026-11-24T19:50:00+05:30:**  
+**COMPLETION_ACK — 2026-11-24T19:50:00+05:30:**
 Full application completion work is finished and verified on `feat/foundation`. All earlier freeze statements are superseded.
 
 ### 1. Delivered Backend Endpoints & Adapters
@@ -102,7 +102,7 @@ Full application completion work is finished and verified on `feat/foundation`. 
 
 ## Team Release & Deployment Readiness Record
 
-**COMPLETION_ACK — 2026-11-24T17:40:00+05:30:**  
+**COMPLETION_ACK — 2026-11-24T17:40:00+05:30:**
 Portable team release, clean-copy verification, and multi-platform deployment readiness configurations are complete and verified on branch `feat/foundation`.
 
 ### 1. Clean-Copy Test Results & Exact Failure Points

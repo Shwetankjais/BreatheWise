@@ -1,0 +1,531 @@
+{
+  "public_deployment_status": "blocked_hosting_authentication",
+  "public_url": null,
+  "real_asset_distribution_status": "permission_not_established_no_upload",
+  "retrospective_bundles": [
+    {
+      "model_version": "delhi-recorded-pm25-v1",
+      "dataset_mode": "recorded_clock",
+      "training_dataset_sha256": "43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df",
+      "source_file_name": "Aanad Vihar.parquet",
+      "source_station_ids": [
+        "site_301"
+      ],
+      "redistribution_approved": false,
+      "files": [
+        {
+          "file": "heldout_predictions.csv",
+          "bytes": 23233437,
+          "sha256": "9745e7168967b1897c4c4b54fbf69d8a4fbf46c3a35dc31651db726b91ce187c"
+        },
+        {
+          "file": "horizon_12h.txt",
+          "bytes": 224994,
+          "sha256": "9058f611618f0791fea75752e23fa911fc09406c9d24033face1c059022db594"
+        },
+        {
+          "file": "horizon_1h.txt",
+          "bytes": 435270,
+          "sha256": "b9dcfb8965c83a7e450534c59f1f0ae3d83ad00e001ad900e02b8104d5c03b76"
+        },
+        {
+          "file": "horizon_24h.txt",
+          "bytes": 155408,
+          "sha256": "8ac9b7ef961e79dfb493c9acf488183bf0ccb92c68f219583499d31d2bfde606"
+        },
+        {
+          "file": "horizon_3h.txt",
+          "bytes": 437615,
+          "sha256": "db305347dd2f3c33059048d6272f230b184070ac097b2ad8e86d16d27b1c23c9"
+        },
+        {
+          "file": "horizon_6h.txt",
+          "bytes": 444703,
+          "sha256": "5af26ad6b86bf671470fe26d3f2b097d610b77c29e1c6bd2c5c72997fb94cde0"
+        },
+        {
+          "file": "manifest.json",
+          "bytes": 88421,
+          "sha256": "1255bd8cc95ffefd84b6b439ff4663ad1152e25af3b7746a07faa820ab76b4f3"
+        },
+        {
+          "file": "protocol.json",
+          "bytes": 1290,
+          "sha256": "33d74493386751bb42637962873f7e28b03878015e763566b121a8bec4ebbf03"
+        }
+      ]
+    },
+    {
+      "model_version": "delhi-recorded-pm25-hourly-v2",
+      "dataset_mode": "recorded_clock",
+      "training_dataset_sha256": "43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df",
+      "source_file_name": "Aanad Vihar.parquet",
+      "source_station_ids": [
+        "site_301"
+      ],
+      "redistribution_approved": false,
+      "files": [
+        {
+          "file": "heldout_predictions.csv",
+          "bytes": 117216714,
+          "sha256": "6705c073a34b33f819f373157bb9b4cfe43eb58906ab02fd8519fc6163516f03"
+        },
+        {
+          "file": "horizon_10h.txt",
+          "bytes": 246910,
+          "sha256": "a7cc729ff52fd0da3a6955879e31e42ee2de3090e5941e73002652bee3f62f08"
+        },
+        {
+          "file": "horizon_11h.txt",
+          "bytes": 277605,
+          "sha256": "9acb4b6e5c54e76d1524dbb8b5526f06130cf78023cfa4222e1a05f07066e260"
+        },
+        {
+          "file": "horizon_12h.txt",
+          "bytes": 224994,
+          "sha256": "9058f611618f0791fea75752e23fa911fc09406c9d24033face1c059022db594"
+        },
+        {
+          "file": "horizon_13h.txt",
+          "bytes": 242196,
+          "sha256": "bdd64f95e26a8684fd8f59930b7da4db16226f5c486d5929f6179ad118b92aac"
+        },
+        {
+          "file": "horizon_14h.txt",
+          "bytes": 220746,
+          "sha256": "10f745213e92db89ca3a30d8dc8a793a45d6963a7fb552611d75df08a5a99229"
+        },
+        {
+          "file": "horizon_15h.txt",
+          "bytes": 264593,
+          "sha256": "912934bf7a7717ad5fbce6b3aa3a0f06aa5c05244806ef808418398f204cb7ec"
+        },
+        {
+          "file": "horizon_16h.txt",
+          "bytes": 216098,
+          "sha256": "237de2b95ec4fc77720cffffc98cec4e8a3549c74296c328969819aa46305270"
+        },
+        {
+          "file": "horizon_17h.txt",
+          "bytes": 180373,
+          "sha256": "0cd27db5e2a0d36280c93b3f126eef73dc5c2b0d4696b53ea508ccf09600efca"
+        },
+        {
+          "file": "horizon_18h.txt",
+          "bytes": 169085,
+          "sha256": "2d1213834635c244076098859e299b50ce059ce1e8595ff229adcdca9fe0d32e"
+        },
+        {
+          "file": "horizon_19h.txt",
+          "bytes": 171539,
+          "sha256": "e2c9e950d1810526dc004dd3630d73802435cc0f887710adce20a003496f9b2e"
+        },
+        {
+          "file": "horizon_1h.txt",
+          "bytes": 435270,
+          "sha256": "b9dcfb8965c83a7e450534c59f1f0ae3d83ad00e001ad900e02b8104d5c03b76"
+        },
+        {
+          "file": "horizon_20h.txt",
+          "bytes": 193411,
+          "sha256": "0b651c9720bc7af76fbe78412d4d0b1def27af8b338fea165378bfab834aec76"
+        },
+        {
+          "file": "horizon_21h.txt",
+          "bytes": 146690,
+          "sha256": "2625443d4014aca007fc53913a37477596b3126cadec028f69737efdd7a8bb7c"
+        },
+        {
+          "file": "horizon_22h.txt",
+          "bytes": 140172,
+          "sha256": "c67f7dd73e2ec07edd2c12f342b869fa42c0e795fba1d71ae471346e547464af"
+        },
+        {
+          "file": "horizon_23h.txt",
+          "bytes": 206325,
+          "sha256": "bce0b5e66da77557e9b5e5085fa99778f9019d42ce87bcb9b9e5357b501e8c1e"
+        },
+        {
+          "file": "horizon_24h.txt",
+          "bytes": 155408,
+          "sha256": "8ac9b7ef961e79dfb493c9acf488183bf0ccb92c68f219583499d31d2bfde606"
+        },
+        {
+          "file": "horizon_2h.txt",
+          "bytes": 445584,
+          "sha256": "b7682c1d0a27aad9ce9cb7a050e51c0e370c6d79290769fd3dbe17ea8027161d"
+        },
+        {
+          "file": "horizon_3h.txt",
+          "bytes": 437615,
+          "sha256": "db305347dd2f3c33059048d6272f230b184070ac097b2ad8e86d16d27b1c23c9"
+        },
+        {
+          "file": "horizon_4h.txt",
+          "bytes": 442354,
+          "sha256": "d492423ec5786c4218b99d099cbb8231d849541ac9f82fba830751cd42460708"
+        },
+        {
+          "file": "horizon_5h.txt",
+          "bytes": 447092,
+          "sha256": "cf8551511aaa029dec1cea391eb38432c9bb7f564ad15646e7b08cfeab35dd97"
+        },
+        {
+          "file": "horizon_6h.txt",
+          "bytes": 444703,
+          "sha256": "5af26ad6b86bf671470fe26d3f2b097d610b77c29e1c6bd2c5c72997fb94cde0"
+        },
+        {
+          "file": "horizon_7h.txt",
+          "bytes": 446541,
+          "sha256": "05305850cd74c11dfd26da570ed004e1f36de94365526e9804eed6365ec31977"
+        },
+        {
+          "file": "horizon_8h.txt",
+          "bytes": 360219,
+          "sha256": "ec9e38eadf026f598d8d8934341333ec74e3f102fc340dcdc337b7a824ac7143"
+        },
+        {
+          "file": "horizon_9h.txt",
+          "bytes": 432301,
+          "sha256": "6d65aba943de2a83972616e072d2936ce0175304c8ed444a4ff6a3018d7ed753"
+        },
+        {
+          "file": "issue_purged_evaluation.json",
+          "bytes": 219195,
+          "sha256": "30c4a4a05c40305cf0963e728a803e9e338891d9d004f5cba7a047d811275930"
+        },
+        {
+          "file": "manifest.json",
+          "bytes": 417285,
+          "sha256": "a60dee6f536ed43b932b6e48da57317089ecf9ec11a6cd4e7be007f6cb3a95c8"
+        },
+        {
+          "file": "protocol.json",
+          "bytes": 1708,
+          "sha256": "5b0e356517f2a5e0f701950fdbd5e075a194069d3f2c61e36540c51cdaa9f9b2"
+        }
+      ]
+    },
+    {
+      "model_version": "delhi-openaq-pm25-hourly-v1",
+      "dataset_mode": "utc_provider_history",
+      "training_dataset_sha256": "90779cc9e54d54523af906ddc3d2c63c75a8e84d51d7ac7b1222d6192c09ef04",
+      "source_file_name": "observations.csv",
+      "source_station_ids": [
+        "openaq-235"
+      ],
+      "redistribution_approved": false,
+      "files": [
+        {
+          "file": "heldout_predictions.csv",
+          "bytes": 16637991,
+          "sha256": "ab59b47d14a8f3675ae69c28a124c0b476b1845bfd02598bf4789dfd6b623d65"
+        },
+        {
+          "file": "horizon_10h.txt",
+          "bytes": 47089,
+          "sha256": "fe5642d9e0e5c7ac2f114f110dc12c9e148137da828a08363796fd7de6733c87"
+        },
+        {
+          "file": "horizon_11h.txt",
+          "bytes": 59852,
+          "sha256": "5d5a23c69bd8d503d346b6cd2a334f1b7b02dfca2e4e6c85f209ef56cc3d85a0"
+        },
+        {
+          "file": "horizon_12h.txt",
+          "bytes": 57848,
+          "sha256": "49f504aee7ea02a3f3afb0dd5e2f2940973da41ef5c79d8002d10102a3b2f6b8"
+        },
+        {
+          "file": "horizon_13h.txt",
+          "bytes": 55717,
+          "sha256": "02f54970a28feffb60a49c6453af7fe262959ff0d4450626fae07e1dfa023c6b"
+        },
+        {
+          "file": "horizon_14h.txt",
+          "bytes": 42801,
+          "sha256": "051844e8b0fc66824a1ff13060447cbfcc308f830d1bd422206eb3d7d0fce436"
+        },
+        {
+          "file": "horizon_15h.txt",
+          "bytes": 34368,
+          "sha256": "8a363bc0f3b1afe505e081a30d9aaba217943ee0d6b90bf66d67c29d89a3b64f"
+        },
+        {
+          "file": "horizon_16h.txt",
+          "bytes": 44949,
+          "sha256": "f47737dc256ac2a8b6014da70a0af189bdcacb31ba53b35d02160b253eb5ed37"
+        },
+        {
+          "file": "horizon_17h.txt",
+          "bytes": 47023,
+          "sha256": "99c0653af65bf69c9a922c3760977c645c69f1a2c34e3827d53d3b39f0abddcd"
+        },
+        {
+          "file": "horizon_18h.txt",
+          "bytes": 62099,
+          "sha256": "d6b7437c7f9c99d39c63fdc5d353374d23f6e4fcb6e65632969ecc3c16fda2c1"
+        },
+        {
+          "file": "horizon_19h.txt",
+          "bytes": 53523,
+          "sha256": "b3cad5f9a3a3f9af7a711ead823c7b627f53bffc719750354512d9ee201ded60"
+        },
+        {
+          "file": "horizon_1h.txt",
+          "bytes": 247647,
+          "sha256": "98e94b2a8bf9bd436334e0f1b674008fae4d830f47fe83baf00eb4ada947a660"
+        },
+        {
+          "file": "horizon_20h.txt",
+          "bytes": 51288,
+          "sha256": "c3f3da95f05a8b9012be45560db9d0485863657ef21b7bb60c730c0ea61daf28"
+        },
+        {
+          "file": "horizon_21h.txt",
+          "bytes": 53461,
+          "sha256": "3f82ee7a1117fa573d16f71a15d2caefd9a6e39d8346de31993ff78eeac43a17"
+        },
+        {
+          "file": "horizon_22h.txt",
+          "bytes": 76867,
+          "sha256": "4da19f8af98fe328833c9c301a24e81e07b51f29b7efd24ee59304ca4a6a4234"
+        },
+        {
+          "file": "horizon_23h.txt",
+          "bytes": 51256,
+          "sha256": "a619fe808a7789a7335adda30c9041be263891146501f753838351561c722ee0"
+        },
+        {
+          "file": "horizon_24h.txt",
+          "bytes": 57689,
+          "sha256": "5b39a1f5af94252b36dcd978e33caf2df94525aec7a748b30f7571a612252245"
+        },
+        {
+          "file": "horizon_2h.txt",
+          "bytes": 132190,
+          "sha256": "60322251acc57325a691740aa69100c90ad8bbb8bcfa0825c49d9cf62e4faa88"
+        },
+        {
+          "file": "horizon_3h.txt",
+          "bytes": 145180,
+          "sha256": "76bc253d05bf2ed2480d7df65133240f073e83015ad4eef0f6b92aa659376697"
+        },
+        {
+          "file": "horizon_4h.txt",
+          "bytes": 81105,
+          "sha256": "a71206a0e442fe0e8491cd1654fe0df7c34d9194b9143feeb1a0ff09349a3642"
+        },
+        {
+          "file": "horizon_5h.txt",
+          "bytes": 79071,
+          "sha256": "31ae3610849e5c6260f4f9d71cf598874f888eb5bf1773d2a47bc024023cdd9a"
+        },
+        {
+          "file": "horizon_6h.txt",
+          "bytes": 83387,
+          "sha256": "566d980e89d6e7e7df558d805586f50e425653eedbb4ec6bf567cf12fb61e680"
+        },
+        {
+          "file": "horizon_7h.txt",
+          "bytes": 64186,
+          "sha256": "72cb0c71be5b985f558b106cd5d49888a367a613da1b561defdcad9e48881350"
+        },
+        {
+          "file": "horizon_8h.txt",
+          "bytes": 64236,
+          "sha256": "f1fa9f756f9c19219833664fc399815c38cbe274d44b2199403c36232b16c30f"
+        },
+        {
+          "file": "horizon_9h.txt",
+          "bytes": 59965,
+          "sha256": "76ad2bcfa6f43f95b9005dd0d58a4a7df324ea331b5d235b289d7bbda559c7f8"
+        },
+        {
+          "file": "issue_purged_evaluation.json",
+          "bytes": 217915,
+          "sha256": "e129c23a6a01f26e1757c43a4649fdc778fe9d666196541cb213808085d7cbc5"
+        },
+        {
+          "file": "manifest.json",
+          "bytes": 420328,
+          "sha256": "21d62fdb7673a6f075073d18d25029f2afb950a9ee823f21994734ae11debc4b"
+        },
+        {
+          "file": "protocol.json",
+          "bytes": 1810,
+          "sha256": "782c90ee18283c9c1ddb42320695f7bb9a7386585354d172f3c869e39247e246"
+        }
+      ]
+    },
+    {
+      "model_version": "delhi-openaq-pm25-delay3h-v2",
+      "dataset_mode": "utc_availability_scenario",
+      "training_dataset_sha256": "90779cc9e54d54523af906ddc3d2c63c75a8e84d51d7ac7b1222d6192c09ef04",
+      "source_file_name": "observations.csv",
+      "source_station_ids": [
+        "openaq-235"
+      ],
+      "redistribution_approved": false,
+      "files": [
+        {
+          "file": "heldout_predictions.csv",
+          "bytes": 20136629,
+          "sha256": "cfed4b508bb5a2836cae2029dfe0845c1dcfebfd76a44725434812ead8eef57f"
+        },
+        {
+          "file": "horizon_10h.txt",
+          "bytes": 62407,
+          "sha256": "94d4560b5348570d4b38c882e3b6cd0d1019273cfebbca68fdbfd8704b20e0a2"
+        },
+        {
+          "file": "horizon_11h.txt",
+          "bytes": 32519,
+          "sha256": "f6456b21a176eed2b8cb21d63613c2945638e89346beb26a279ade15350e1952"
+        },
+        {
+          "file": "horizon_12h.txt",
+          "bytes": 45334,
+          "sha256": "356a7f1031603e7d958ad87b0499d556cccf46ae8a8de02995f6687faada2155"
+        },
+        {
+          "file": "horizon_13h.txt",
+          "bytes": 43239,
+          "sha256": "cf399d81da35f679b5fb569c26b0822db7317e5acf0d91801974de6bb50c503c"
+        },
+        {
+          "file": "horizon_14h.txt",
+          "bytes": 45248,
+          "sha256": "a40196a8ca75b88d0f190ad95df92a7714b42e3d634ec65d71bc65debfe182bd"
+        },
+        {
+          "file": "horizon_15h.txt",
+          "bytes": 47510,
+          "sha256": "d9f8c735182f325191779fd83804ffaf88290df966730274216e44f213d68fad"
+        },
+        {
+          "file": "horizon_16h.txt",
+          "bytes": 62404,
+          "sha256": "5e2dbd36544586da80bfb0f425250e57b6623553e40c12994ebeef053644ce36"
+        },
+        {
+          "file": "horizon_17h.txt",
+          "bytes": 43159,
+          "sha256": "feb92431ee7aa7d49b16702142fd6298b3549f7a2087e66cab4420c267a2d9ac"
+        },
+        {
+          "file": "horizon_18h.txt",
+          "bytes": 53954,
+          "sha256": "ee03e0650e10b5d197e8c20359840f844c9d20e700964a7ba81673782c8e07ae"
+        },
+        {
+          "file": "horizon_19h.txt",
+          "bytes": 49548,
+          "sha256": "d66e6f4fd030232e344bd164525da22921f95cd92ce2ec2133856cc472cc2265"
+        },
+        {
+          "file": "horizon_1h.txt",
+          "bytes": 70935,
+          "sha256": "cb0e7ef583b6807bc305880ab1e91b6d20e7ec2c1b5621c8be23bc3173be8cc4"
+        },
+        {
+          "file": "horizon_20h.txt",
+          "bytes": 54021,
+          "sha256": "96395526a2d3b17b9bf23aedbf2e074f211dbed35ada625572115675fc3f2a0c"
+        },
+        {
+          "file": "horizon_21h.txt",
+          "bytes": 53966,
+          "sha256": "466f2b3682a8efcf4c2d6600bdab266e747f14d0a57522d568bde6745495591e"
+        },
+        {
+          "file": "horizon_22h.txt",
+          "bytes": 45435,
+          "sha256": "7f2d33dd17bf3447ceba67e0ca2f0b4e94a7909c101b711201e84c09751835b6"
+        },
+        {
+          "file": "horizon_23h.txt",
+          "bytes": 41146,
+          "sha256": "61ef7727aa01645b613d00554bf0db46c2e33bab1683f0b4d28693998c977dab"
+        },
+        {
+          "file": "horizon_24h.txt",
+          "bytes": 38996,
+          "sha256": "b88b1b3afc9e288027e1ce693a1ca764c75f789f706f9914affb68d4109fe4ab"
+        },
+        {
+          "file": "horizon_2h.txt",
+          "bytes": 73264,
+          "sha256": "944e604ef538e62d8c2b29f767a5374c5ae92dca47893d1c788f0efa3545c4fd"
+        },
+        {
+          "file": "horizon_3h.txt",
+          "bytes": 83990,
+          "sha256": "369a39d51196511b0944ffa727204e9444d8d409e1f752d7563aafefe0514111"
+        },
+        {
+          "file": "horizon_4h.txt",
+          "bytes": 83864,
+          "sha256": "7ed8ec3a299cf867002dba67fb42aa5a04ef71f5e6ebd36dfcb227fe800ce9bc"
+        },
+        {
+          "file": "horizon_5h.txt",
+          "bytes": 64665,
+          "sha256": "35531ddbc910ac6c5378a9b9514ba7506e58e98691fab57bcc974a68b2da3530"
+        },
+        {
+          "file": "horizon_6h.txt",
+          "bytes": 45380,
+          "sha256": "92f951d556ca6ed7eed8cf7acee85200524ca770f2bc0a8efdc430f5806a8822"
+        },
+        {
+          "file": "horizon_7h.txt",
+          "bytes": 49565,
+          "sha256": "6b2db1227c05d74585a69240f8678666c164c9c7d3754eed68a2b5a44640ef41"
+        },
+        {
+          "file": "horizon_8h.txt",
+          "bytes": 60336,
+          "sha256": "4765f4b984040875f7cb1100c111d8ef37bc34e03d34a70ec7d7174764dd1a40"
+        },
+        {
+          "file": "horizon_9h.txt",
+          "bytes": 53856,
+          "sha256": "0a5a2ef611507490afe8e6565e04a8ff3f5d9700e0bfcc723ffe504d122174bb"
+        },
+        {
+          "file": "manifest.json",
+          "bytes": 448660,
+          "sha256": "93b5bf887a2bc39d8deeca16451a80ae5b0caae32e628a85456e207de87eb8f4"
+        },
+        {
+          "file": "protocol.json",
+          "bytes": 2509,
+          "sha256": "9d76bab9be2fe59607b8fa0317147b0b4c5b970ea5cee891e686b3f32b7dcc7f"
+        }
+      ]
+    }
+  ],
+  "archive_requirement": {
+    "configured_local_root": "/Users/shwetankjaiswal/Desktop/NIErnaya_data/AirScope_India_final",
+    "scope": "audited Delhi pollutant Parquet sources excluding quarantined duplicates; recorded clock only",
+    "redistribution_approved": false,
+    "provenance_docs": [
+      "docs/DELHI_DATA_COMPARISON.md",
+      "docs/CLOCK_READINESS.md"
+    ]
+  },
+  "redistributable_demo_fixture": {
+    "path": "packages/contracts/fixtures/demo-import.json",
+    "sha256": "e3f14fb2d15aa8bfec6d5d4be45185d2556a81fe5ed8c0ce88f7a08724635ff2",
+    "scope": "repository synthetic_demo observations; not real station/evaluation evidence"
+  },
+  "excluded_from_upload": [
+    ".env",
+    "work/prototype/*.token",
+    "local databases and session tables",
+    "artifacts/models/*.joblib",
+    "raw or processed private provider/archive data"
+  ]
+}
