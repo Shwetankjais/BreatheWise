@@ -1,0 +1,191 @@
+{
+  "checks": [
+    {
+      "path": "/models",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/station-catalogue",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/stations/openaq-235/pollutants",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/stations/openaq-50/pollutants",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/stations/openaq-8365/pollutants",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/stations/openaq-8472/pollutants",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/station-catalogue",
+      "params": {
+        "city_id": "mumbai"
+      },
+      "status": 200
+    },
+    {
+      "path": "/environment/context",
+      "params": {
+        "latitude": 28.646835,
+        "longitude": 77.316032
+      },
+      "status": 200
+    },
+    {
+      "path": "/archive/catalogue",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/archive/explore",
+      "params": {
+        "station_id": "site_301",
+        "pollutant": "pm25",
+        "start": "2026-10-01T00:00:00",
+        "end": "2026-11-01T00:00:00"
+      },
+      "status": 200
+    },
+    {
+      "path": "/archive/compare",
+      "params": {
+        "station_ids": [
+          "site_100407",
+          "site_100408"
+        ],
+        "pollutant": "pm25",
+        "start": "2026-10-01T00:00:00",
+        "end": "2026-11-01T00:00:00",
+        "clock_assumption": "same_recorded_clock"
+      },
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/evaluation",
+      "params": {
+        "horizon_h": 1
+      },
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/predictions",
+      "params": {
+        "horizon_h": 3,
+        "issue_time_purged": "true",
+        "limit": 2
+      },
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-recorded-pm25-hourly-v2/replay-issues",
+      "params": {
+        "limit": 1
+      },
+      "status": 200
+    },
+    {
+      "path": "/activity-plan/replay",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/activity-plan/replay",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-evaluation",
+      "params": {
+        "horizon_h": 1
+      },
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/utc-predictions",
+      "params": {
+        "horizon_h": 3,
+        "issue_time_purged": "true",
+        "limit": 2
+      },
+      "status": 200
+    },
+    {
+      "path": "/models/delhi-openaq-pm25-hourly-v1/replay-issues",
+      "params": {
+        "limit": 1
+      },
+      "status": 200
+    },
+    {
+      "path": "/activity-plan/replay",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/activity-plan/replay",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/routes/geometry",
+      "params": null,
+      "status": 200
+    },
+    {
+      "path": "/stations/openaq-235/forecast",
+      "params": {
+        "model_version": "supplied-horizon-ensemble-v5"
+      },
+      "status": 503
+    },
+    {
+      "path": "/forecast-runs/51cded18-d577-4319-a602-d2683431b0be",
+      "params": null,
+      "status": 200
+    }
+  ],
+  "sensor_availability": [
+    {
+      "sensor_id": 12235609,
+      "status": 200,
+      "parameter": {
+        "id": 1,
+        "name": "pm10",
+        "units": "\u00b5g/m\u00b3",
+        "displayName": "PM10"
+      },
+      "datetimeLast": {
+        "utc": "2026-11-24T12:00:00Z",
+        "local": "2026-11-24T17:30:00+05:30"
+      }
+    },
+    {
+      "sensor_id": 12235607,
+      "status": 200,
+      "parameter": {
+        "id": 15,
+        "name": "no2",
+        "units": "ppb",
+        "displayName": "NO\u2082"
+      },
+      "datetimeLast": {
+        "utc": "2026-11-24T12:00:00Z",
+        "local": "2026-11-24T17:30:00+05:30"
+      }
+    }
+  ]
+}

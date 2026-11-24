@@ -22,3 +22,13 @@ def test_v5_registry_does_not_enable_operational_inference():
     assert "V5_GOLDEN_PARITY_MISSING" in row["unavailable_reasons"]
     assert "V5_ISSUE_TIME_INPUTS_UNVERIFIED" in row["unavailable_reasons"]
     assert any(m["model_version"] == "delhi-recorded-pm25-hourly-v2" for m in models)
+
+
+def test_v5_public_selection_returns_precise_unavailable_reason():
+    client = TestClient(create_app())
+    response = client.get(
+        "/api/v1/stations/openaq-235/forecast",
+        params={"model_version": "supplied-horizon-ensemble-v5"},
+    )
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "V5_INFERENCE_UNAVAILABLE"

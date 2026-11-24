@@ -1,0 +1,462 @@
+{
+  "verified_at_utc": "2026-11-24T14:50:22.387Z",
+  "scope": "Actual localhost API/web and configured real assets; explicitly identified authenticated owned writes",
+  "profiles": [
+    {
+      "viewport": "desktop",
+      "checks": [
+        {
+          "name": "observation marker values match actual API",
+          "status": "passed",
+          "stations": 4,
+          "observations": [
+            {
+              "station_id": "openaq-235",
+              "value": 147,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-50",
+              "value": 113,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-8472",
+              "value": 107,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-8365",
+              "value": 90.5,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            }
+          ]
+        },
+        {
+          "name": "station pollutants and weather context match API",
+          "status": "passed",
+          "station": "/api/v1/stations/openaq-235/pollutants",
+          "weather_available": true,
+          "weather_timestamp": "2026-11-24T09:15:00Z"
+        },
+        {
+          "name": "archive and comparison values match actual responses",
+          "status": "passed",
+          "valid": 740,
+          "expected": 744,
+          "mean": 56.434000000000005,
+          "matched_hours": 732,
+          "unit": "µg/m³",
+          "alignment_status": "conditional_same_recorded_clock_only"
+        },
+        {
+          "name": "registry clock-specific evaluation and purged playback",
+          "status": "passed",
+          "model_version": "delhi-recorded-pm25-hourly-v2",
+          "dataset_mode": "recorded_clock",
+          "timezone": null,
+          "horizon_h": 3,
+          "matched_cohort_count_h1": 13977,
+          "mae_h1": 18.913312140631415,
+          "playback_rows": 14554,
+          "first_forecast": 248.5952106659973
+        },
+        {
+          "name": "registry clock-specific evaluation and purged playback",
+          "status": "passed",
+          "model_version": "delhi-openaq-pm25-hourly-v1",
+          "dataset_mode": "utc_provider_history",
+          "timezone": "UTC",
+          "horizon_h": 3,
+          "matched_cohort_count_h1": 1324,
+          "mae_h1": 11.173321724078484,
+          "playback_rows": 1506,
+          "first_forecast": 28.81037968329495
+        },
+        {
+          "name": "learned input unavailability is precisely persisted and displayed",
+          "status": "passed",
+          "capability": "genuine_learned_shadow_forecast",
+          "model_version": "delhi-openaq-pm25-delay3h-v2",
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+          "prediction_count": 0,
+          "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+        },
+        {
+          "name": "actual rejected run remains failed and empty",
+          "status": "passed",
+          "run_id": "09865bb9-377c-42e8-9014-7e163903b26f",
+          "code": "SHADOW_INPUT_STALE",
+          "predictions": 0
+        },
+        {
+          "name": "one-issue replay duration/bounds and genuine no-window response",
+          "status": "passed",
+          "model": "delhi-openaq-pm25-hourly-v1",
+          "issue": "2026-08-19T16:30:00+00:00",
+          "clock": "UTC_hour_ending",
+          "first_window": {
+            "rank": 1,
+            "start_horizon_h": 14,
+            "end_horizon_h": 16,
+            "start_at": "2026-08-20T06:30:00+00:00",
+            "end_at": "2026-08-20T08:30:00+00:00",
+            "duration_minutes": 120,
+            "concentration_time": 138.65677165668708,
+            "mean_concentration": 69.32838582834354,
+            "peak_concentration": 74.94550820023966,
+            "ranking_score": 138.65677165668708,
+            "concentration_time_unit": "µg·h/m³"
+          },
+          "empty_status": "no_suitable_window"
+        },
+        {
+          "name": "route values and unavailable exposure match provider result",
+          "status": "passed",
+          "alternatives": 2,
+          "distances_m": [
+            17140.5,
+            19017.9
+          ],
+          "estimated_durations_s": [
+            1160.5,
+            1240.6
+          ]
+        },
+        {
+          "name": "saved place survives refresh and isolates owners",
+          "status": "passed",
+          "place_id": "06ad6f30-639b-4fa2-9014-131dbc4aa332",
+          "label": "Prototype verified bookmark desktop",
+          "latitude": 28.646835,
+          "longitude": 77.316032,
+          "cross_owner_status": 404,
+          "preference_saved": "sensitive",
+          "preference_restored": "general"
+        },
+        {
+          "name": "zero threshold is server-persisted and notifications remain real",
+          "status": "passed",
+          "rule_id": "7e662974-517c-49b1-a756-07227b795a6b",
+          "threshold": 0,
+          "averaging_minutes": 60,
+          "worker": {
+            "status": "success",
+            "alerts_created": 0
+          },
+          "notifications": 0
+        },
+        {
+          "name": "public live/planning/exposure/uncertainty remain gated",
+          "status": "passed"
+        },
+        {
+          "name": "viewport has no body horizontal overflow",
+          "status": "passed"
+        }
+      ],
+      "deferred_capabilities": [
+        {
+          "capability": "genuine_learned_shadow_forecast",
+          "model_version": "delhi-openaq-pm25-delay3h-v2",
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+          "prediction_count": 0,
+          "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+        }
+      ],
+      "api_paths": [
+        "GET /api/v1/cities ->200",
+        "GET /api/v1/advisories?pollutant=pm25 ->200",
+        "GET /api/v1/capabilities ->200",
+        "GET /api/v1/stations?city_id=delhi ->200",
+        "GET /api/v1/station-catalogue?city_id=delhi ->200",
+        "GET /api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "GET /api/v1/environment/context?latitude=28.646835&longitude=77.316032&city_id=delhi ->200",
+        "GET /api/v1/stations/openaq-235/pollutants ->200",
+        "GET /api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "GET /api/v1/history?station_id=openaq-235&start=2026-11-22T14%3A00%3A00.000Z&end=2026-11-24T14%3A00%3A00.000Z&pollutant=pm25 ->200",
+        "GET /api/v1/archive/catalogue ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->422",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2023-11-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/compare?station_ids=site_301&station_ids=site_113&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily&clock_assumption=same_recorded_clock ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/evaluation ->200",
+        "GET /api/v1/models ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/utc-evaluation ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/forecast-runs?limit=20&offset=0 ->200",
+        "GET /api/v1/forecast-runs/51cded18-d577-4319-a602-d2683431b0be ->200",
+        "GET /api/v1/forecast-runs/09865bb9-377c-42e8-9014-7e163903b26f ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/replay-issues?split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/activity-plan/replay ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/replay-issues?split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/routes/geometry ->200",
+        "GET /api/v1/me ->200",
+        "GET /api/v1/alerts?limit=50&offset=0 ->200",
+        "GET /api/v1/saved-places ->200",
+        "GET /api/v1/alert-rules ->200",
+        "PATCH /api/v1/preferences ->200",
+        "POST /api/v1/alert-rules ->201"
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "checks": [
+        {
+          "name": "observation marker values match actual API",
+          "status": "passed",
+          "stations": 4,
+          "observations": [
+            {
+              "station_id": "openaq-235",
+              "value": 147,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-50",
+              "value": 113,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-8472",
+              "value": 107,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            },
+            {
+              "station_id": "openaq-8365",
+              "value": 90.5,
+              "measured_at": "2026-11-24T05:30:00Z",
+              "unit": "µg/m³",
+              "stale": true
+            }
+          ]
+        },
+        {
+          "name": "station pollutants and weather context match API",
+          "status": "passed",
+          "station": "/api/v1/stations/openaq-235/pollutants",
+          "weather_available": true,
+          "weather_timestamp": "2026-11-24T09:15:00Z"
+        },
+        {
+          "name": "archive and comparison values match actual responses",
+          "status": "passed",
+          "valid": 740,
+          "expected": 744,
+          "mean": 56.434000000000005,
+          "matched_hours": 732,
+          "unit": "µg/m³",
+          "alignment_status": "conditional_same_recorded_clock_only"
+        },
+        {
+          "name": "registry clock-specific evaluation and purged playback",
+          "status": "passed",
+          "model_version": "delhi-recorded-pm25-hourly-v2",
+          "dataset_mode": "recorded_clock",
+          "timezone": null,
+          "horizon_h": 3,
+          "matched_cohort_count_h1": 13977,
+          "mae_h1": 18.913312140631415,
+          "playback_rows": 14554,
+          "first_forecast": 248.5952106659973
+        },
+        {
+          "name": "registry clock-specific evaluation and purged playback",
+          "status": "passed",
+          "model_version": "delhi-openaq-pm25-hourly-v1",
+          "dataset_mode": "utc_provider_history",
+          "timezone": "UTC",
+          "horizon_h": 3,
+          "matched_cohort_count_h1": 1324,
+          "mae_h1": 11.173321724078484,
+          "playback_rows": 1506,
+          "first_forecast": 28.81037968329495
+        },
+        {
+          "name": "learned input unavailability is precisely persisted and displayed",
+          "status": "passed",
+          "capability": "genuine_learned_shadow_forecast",
+          "model_version": "delhi-openaq-pm25-delay3h-v2",
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+          "prediction_count": 0,
+          "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+        },
+        {
+          "name": "actual rejected run remains failed and empty",
+          "status": "passed",
+          "run_id": "09865bb9-377c-42e8-9014-7e163903b26f",
+          "code": "SHADOW_INPUT_STALE",
+          "predictions": 0
+        },
+        {
+          "name": "one-issue replay duration/bounds and genuine no-window response",
+          "status": "passed",
+          "model": "delhi-openaq-pm25-hourly-v1",
+          "issue": "2026-08-19T16:30:00+00:00",
+          "clock": "UTC_hour_ending",
+          "first_window": {
+            "rank": 1,
+            "start_horizon_h": 14,
+            "end_horizon_h": 16,
+            "start_at": "2026-08-20T06:30:00+00:00",
+            "end_at": "2026-08-20T08:30:00+00:00",
+            "duration_minutes": 120,
+            "concentration_time": 138.65677165668708,
+            "mean_concentration": 69.32838582834354,
+            "peak_concentration": 74.94550820023966,
+            "ranking_score": 138.65677165668708,
+            "concentration_time_unit": "µg·h/m³"
+          },
+          "empty_status": "no_suitable_window"
+        },
+        {
+          "name": "route values and unavailable exposure match provider result",
+          "status": "passed",
+          "alternatives": 2,
+          "distances_m": [
+            17140.5,
+            19017.9
+          ],
+          "estimated_durations_s": [
+            1160.5,
+            1240.6
+          ]
+        },
+        {
+          "name": "saved place survives refresh and isolates owners",
+          "status": "passed",
+          "place_id": "778171db-9e35-4243-9116-6d17a30b518c",
+          "label": "Prototype verified bookmark mobile",
+          "latitude": 28.646835,
+          "longitude": 77.316032,
+          "cross_owner_status": 404,
+          "preference_saved": "sensitive",
+          "preference_restored": "general"
+        },
+        {
+          "name": "zero threshold is server-persisted and notifications remain real",
+          "status": "passed",
+          "rule_id": "d35bf891-6fe0-4663-9206-8de7a4193bbf",
+          "threshold": 0,
+          "averaging_minutes": 60,
+          "worker": {
+            "status": "success",
+            "alerts_created": 0
+          },
+          "notifications": 0
+        },
+        {
+          "name": "public live/planning/exposure/uncertainty remain gated",
+          "status": "passed"
+        },
+        {
+          "name": "viewport has no body horizontal overflow",
+          "status": "passed"
+        }
+      ],
+      "deferred_capabilities": [
+        {
+          "capability": "genuine_learned_shadow_forecast",
+          "model_version": "delhi-openaq-pm25-delay3h-v2",
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+          "prediction_count": 0,
+          "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+        }
+      ],
+      "api_paths": [
+        "GET /api/v1/advisories?pollutant=pm25 ->200",
+        "GET /api/v1/cities ->200",
+        "GET /api/v1/capabilities ->200",
+        "GET /api/v1/stations?city_id=delhi ->200",
+        "GET /api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "GET /api/v1/station-catalogue?city_id=delhi ->200",
+        "GET /api/v1/stations/openaq-235/pollutants ->200",
+        "GET /api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "GET /api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "GET /api/v1/environment/context?latitude=28.646835&longitude=77.316032&city_id=delhi ->200",
+        "GET /api/v1/history?station_id=openaq-235&start=2026-11-22T14%3A00%3A00.000Z&end=2026-11-24T14%3A00%3A00.000Z&pollutant=pm25 ->200",
+        "GET /api/v1/archive/catalogue ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->422",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2023-11-01T00%3A00%3A00&end=2023-11-08T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/explore?station_id=site_301&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily ->200",
+        "GET /api/v1/archive/compare?station_ids=site_301&station_ids=site_113&pollutant=pm25&start=2026-10-01T00%3A00%3A00&end=2026-11-01T00%3A00%3A00&aggregation=daily&clock_assumption=same_recorded_clock ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/evaluation ->200",
+        "GET /api/v1/models ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/utc-evaluation ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "GET /api/v1/forecast-runs?limit=20&offset=0 ->200",
+        "GET /api/v1/forecast-runs/51cded18-d577-4319-a602-d2683431b0be ->200",
+        "GET /api/v1/forecast-runs/09865bb9-377c-42e8-9014-7e163903b26f ->200",
+        "GET /api/v1/models/delhi-openaq-pm25-hourly-v1/replay-issues?split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/activity-plan/replay ->200",
+        "GET /api/v1/models/delhi-recorded-pm25-hourly-v2/replay-issues?split=test&limit=25&offset=0 ->200",
+        "POST /api/v1/routes/geometry ->200",
+        "GET /api/v1/me ->200",
+        "GET /api/v1/alert-rules ->200",
+        "GET /api/v1/saved-places ->200",
+        "GET /api/v1/alerts?limit=50&offset=0 ->200",
+        "PATCH /api/v1/preferences ->200",
+        "POST /api/v1/alert-rules ->201"
+      ]
+    }
+  ],
+  "fingerprint_paths": 38,
+  "all_capabilities_available": false,
+  "changed_runtime_paths": [],
+  "snapshot_unchanged": true,
+  "prototype_acceptance_passed": true,
+  "passed": true,
+  "deferred_capabilities": [
+    {
+      "viewport": "desktop",
+      "capability": "genuine_learned_shadow_forecast",
+      "model_version": "delhi-openaq-pm25-delay3h-v2",
+      "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+      "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+      "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+      "prediction_count": 0,
+      "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+    },
+    {
+      "viewport": "mobile",
+      "capability": "genuine_learned_shadow_forecast",
+      "model_version": "delhi-openaq-pm25-delay3h-v2",
+      "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+      "error_code": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+      "input_sha256": "cd3d3b199e63ee5f5a142ecf44f248dc0a5ace6c7e231a32e7b368d2ef57bed2",
+      "prediction_count": 0,
+      "condition": "Actual eligible inputs must satisfy the independently trained publication-delay/required-lag regime; no freshness widening or synthetic substitution"
+    }
+  ]
+}

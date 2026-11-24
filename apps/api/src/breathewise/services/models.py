@@ -24,6 +24,18 @@ REGISTERED_VERSIONS = (*EXPERIMENT_VERSIONS, UTC_MODEL_VERSION)
 
 
 def experiment_manifest(version):
+    if version == "supplied-horizon-ensemble-v5":
+        raise ServiceError(
+            503,
+            "V5_INFERENCE_UNAVAILABLE",
+            "V5 is diagnostic-only: original feature builder, units, golden parity and issue-time inputs remain unverified",
+            missing=[
+                "original_feature_builder",
+                "target_units",
+                "golden_parity",
+                "issue_time_inputs",
+            ],
+        )
     if version not in REGISTERED_VERSIONS or not re.fullmatch(r"[a-z0-9-]{1,100}", version):
         raise ServiceError(404, "MODEL_VERSION_NOT_FOUND", "Unknown retrospective model version")
     folder = get_settings().forecast_registry_root / version
