@@ -9,6 +9,7 @@ from breathewise.schemas.environment import (
     RouteRequest,
     WeatherRequest,
 )
+from breathewise.schemas.models import ModelEvaluation
 from breathewise.services.advisories import Advisory, advisory
 from breathewise.services.capabilities import MODEL_MISSING
 from breathewise.services.cities import cities, validate_city
@@ -41,6 +42,7 @@ def forecast(
     station_id: str,
     pollutant: Pollutant = Pollutant.pm25,
     horizons: Annotated[list[int] | None, Query()] = None,
+    model_version: str | None = None,
 ):
     if horizons is not None and (not horizons or any(h not in [1, 3, 6, 12, 24] for h in horizons)):
         raise ServiceError(
@@ -52,6 +54,16 @@ def forecast(
         raise ServiceError(
             409, "UNSUPPORTED_POLLUTANT", "Artifact has no verified support for this pollutant"
         )
+    if model_version is not None:
+        from breathewise.services.models import NATIVE_VERSION, experiment_manifest
+
+        if model_version != NATIVE_VERSION:
+            experiment_manifest(model_version)
+            raise ServiceError(
+                409,
+                "MODEL_RETROSPECTIVE_ONLY",
+                "Selected model is recorded-clock retrospective only; live input/time compatibility is unverified",
+            )
     raise ServiceError(
         503,
         "MODEL_UNAVAILABLE",
@@ -118,12 +130,25 @@ def weather(body: WeatherRequest):
     )
 
 
-@router.get("/model-performance")
+@router.get("/model-performance", response_model=Envelope[ModelEvaluation])
 def performance(
+    request: Request,
     model_version: str | None = None,
     city_id: str | None = None,
     horizon_h: Literal[1, 3, 6, 12, 24] | None = None,
 ):
+    if model_version:
+        from breathewise.api.models import recorded_meta
+        from breathewise.services.models import evaluation
+
+        report = evaluation(model_version, horizon_h)
+        if city_id not in {None, "delhi"}:
+            raise ServiceError(
+                409,
+                "EVALUATION_SCOPE_UNSUPPORTED",
+                "This experiment covers the single Delhi archive source only",
+            )
+        return Envelope(meta=recorded_meta(request), data=report)
     raise ServiceError(
         503,
         "EVALUATION_UNAVAILABLE",

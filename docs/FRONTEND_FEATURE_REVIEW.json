@@ -1,0 +1,58 @@
+{
+  "status": "changes_requested",
+  "scope": "Published FRONTEND_MAP_EXPLORER_MILESTONE_READY; desktop/mobile, actual API via transparent owned-port harness proxy",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "actual_station_markers": 4,
+      "checks": {
+        "archive_endpoint_called": false,
+        "same_recorded_clock_parameter_sent": false,
+        "model_registry_or_evaluation_called": false,
+        "incorrect_record_agreement_metric_displayed": true,
+        "actual_model_version_displayed": false,
+        "actual_route_geometry_endpoint_called": false
+      },
+      "api_paths": [
+        "/api/v1/cities",
+        "/api/v1/capabilities",
+        "/api/v1/advisories?pollutant=pm25",
+        "/api/v1/stations?city_id=delhi",
+        "/api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25",
+        "/api/v1/stations/openaq-235/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-50/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-8365/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-8472/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-235/forecast?pollutant=pm25",
+        "/api/v1/history?station_id=openaq-235&start=2026-11-22T01%3A00%3A00.000Z&end=2026-11-24T01%3A00%3A00.000Z&pollutant=pm25"
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "actual_station_markers": 4,
+      "checks": {
+        "archive_endpoint_called": false,
+        "same_recorded_clock_parameter_sent": false,
+        "model_registry_or_evaluation_called": false,
+        "incorrect_record_agreement_metric_displayed": true,
+        "actual_model_version_displayed": false,
+        "actual_route_geometry_endpoint_called": false
+      },
+      "api_paths": [
+        "/api/v1/cities",
+        "/api/v1/capabilities",
+        "/api/v1/advisories?pollutant=pm25",
+        "/api/v1/stations?city_id=delhi",
+        "/api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25",
+        "/api/v1/stations/openaq-235/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-50/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-8365/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-8472/latest?pollutant=pm25",
+        "/api/v1/stations/openaq-235/forecast?pollutant=pm25",
+        "/api/v1/history?station_id=openaq-235&start=2026-11-22T01%3A00%3A00.000Z&end=2026-11-24T01%3A00%3A00.000Z&pollutant=pm25"
+      ]
+    }
+  ],
+  "accepted_milestone_unchanged": "be63911",
+  "new_frontend_accepted": false
+}

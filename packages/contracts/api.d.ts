@@ -108,6 +108,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/archive/catalogue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catalogue */
+        get: operations["catalogue_api_v1_archive_catalogue_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/archive/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Compare */
+        get: operations["compare_api_v1_archive_compare_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/archive/explore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Explore */
+        get: operations["explore_api_v1_archive_explore_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/capabilities": {
         parameters: {
             query?: never;
@@ -244,6 +295,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catalogue */
+        get: operations["catalogue_api_v1_models_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/models/{model_version}/evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Evaluation */
+        get: operations["evaluation_api_v1_models__model_version__evaluation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/models/{model_version}/predictions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Predictions */
+        get: operations["predictions_api_v1_models__model_version__predictions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/observed-rankings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Rankings */
+        get: operations["rankings_api_v1_observed_rankings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/preferences": {
         parameters: {
             query?: never;
@@ -290,6 +409,23 @@ export interface paths {
         put?: never;
         /** Routes */
         post: operations["routes_api_v1_routes_compare_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/routes/geometry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Route Geometry */
+        post: operations["route_geometry_api_v1_routes_geometry_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -343,6 +479,23 @@ export interface paths {
         put?: never;
         /** Weather */
         post: operations["weather_api_v1_scenarios_weather_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/station-catalogue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catalogue */
+        get: operations["catalogue_api_v1_station_catalogue_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -493,9 +646,348 @@ export interface components {
             /** Title */
             title: string;
         };
+        /** ArchiveBucket */
+        ArchiveBucket: {
+            /** Coverage Fraction */
+            coverage_fraction: number;
+            /** Expected Count */
+            expected_count: number;
+            /** Meets Requested Sufficiency */
+            meets_requested_sufficiency: boolean;
+            /** Missing Count */
+            missing_count: number;
+            /**
+             * Period End
+             * Format: date-time
+             */
+            period_end: string;
+            /**
+             * Period Start
+             * Format: date-time
+             */
+            period_start: string;
+            /** Valid Count */
+            valid_count: number;
+            /** Value */
+            value: number | null;
+        };
+        /** ArchiveCatalogue */
+        ArchiveCatalogue: {
+            /**
+             * Clock Basis
+             * @default source_naive_clock_unverified
+             * @constant
+             */
+            clock_basis: "source_naive_clock_unverified";
+            /** Dataset Fingerprint */
+            dataset_fingerprint: string;
+            /**
+             * Dataset Id
+             * @default delhi_observed_archive_v1
+             */
+            dataset_id: string;
+            /**
+             * Dataset Mode
+             * @default recorded_clock
+             * @constant
+             */
+            dataset_mode: "recorded_clock";
+            /** Excluded Row Count */
+            excluded_row_count: number;
+            /**
+             * Interval Semantics
+             * @default unverified
+             * @constant
+             */
+            interval_semantics: "unverified";
+            /** Limitations */
+            limitations?: string[];
+            /**
+             * Publication Time Known
+             * @default false
+             */
+            publication_time_known: boolean;
+            /** Source File Count */
+            source_file_count: number;
+            /** Station Count */
+            station_count: number;
+            /** Stations */
+            stations: components["schemas"]["ArchiveStation"][];
+            /** Timezone */
+            timezone?: null;
+        };
+        /** ArchiveCompare */
+        ArchiveCompare: {
+            /**
+             * Aggregation
+             * @enum {string}
+             */
+            aggregation: "daily" | "monthly";
+            /**
+             * Alignment Status
+             * @default conditional_same_recorded_clock_only
+             * @constant
+             */
+            alignment_status: "conditional_same_recorded_clock_only";
+            /**
+             * Clock Assumption
+             * @constant
+             */
+            clock_assumption: "same_recorded_clock";
+            /**
+             * Clock Basis
+             * @default source_naive_clock_unverified
+             * @constant
+             */
+            clock_basis: "source_naive_clock_unverified";
+            /** Dataset Fingerprint */
+            dataset_fingerprint: string;
+            /**
+             * Dataset Id
+             * @default delhi_observed_archive_v1
+             */
+            dataset_id: string;
+            /**
+             * Dataset Mode
+             * @default recorded_clock
+             * @constant
+             */
+            dataset_mode: "recorded_clock";
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /** Expected Count */
+            expected_count: number;
+            /**
+             * Forecast Evaluation
+             * @default false
+             */
+            forecast_evaluation: boolean;
+            /**
+             * Interval Semantics
+             * @default unverified
+             * @constant
+             */
+            interval_semantics: "unverified";
+            /** Limitations */
+            limitations?: string[];
+            /** Matched Hour Count */
+            matched_hour_count: number;
+            /** Pair Agreement */
+            pair_agreement: components["schemas"]["ArchivePairAgreement"][];
+            /** Points */
+            points: components["schemas"]["ArchiveComparisonBucket"][];
+            pollutant: components["schemas"]["Pollutant"];
+            /**
+             * Publication Time Known
+             * @default false
+             */
+            publication_time_known: boolean;
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /** Station Ids */
+            station_ids: string[];
+            /** Timezone */
+            timezone?: null;
+            /** Unit */
+            unit: string;
+            /** Unmatched Or Missing Hour Count */
+            unmatched_or_missing_hour_count: number;
+        };
+        /** ArchiveComparisonBucket */
+        ArchiveComparisonBucket: {
+            /** Expected Count */
+            expected_count: number;
+            /** Means */
+            means: {
+                [key: string]: number | null;
+            };
+            /** Paired Coverage Fraction */
+            paired_coverage_fraction: number;
+            /** Paired Hour Count */
+            paired_hour_count: number;
+            /**
+             * Period End
+             * Format: date-time
+             */
+            period_end: string;
+            /**
+             * Period Start
+             * Format: date-time
+             */
+            period_start: string;
+        };
+        /** ArchiveDistribution */
+        ArchiveDistribution: {
+            /** Count */
+            count: number;
+            /** Maximum */
+            maximum?: number | null;
+            /** Mean */
+            mean?: number | null;
+            /** Median */
+            median?: number | null;
+            /** Minimum */
+            minimum?: number | null;
+            /** P05 */
+            p05?: number | null;
+            /** P25 */
+            p25?: number | null;
+            /** P75 */
+            p75?: number | null;
+            /** P95 */
+            p95?: number | null;
+            /** Stddev */
+            stddev?: number | null;
+        };
+        /** ArchiveExplore */
+        ArchiveExplore: {
+            /** Absent Hour Count */
+            absent_hour_count: number;
+            /**
+             * Aggregation
+             * @enum {string}
+             */
+            aggregation: "daily" | "monthly";
+            /**
+             * Clock Basis
+             * @default source_naive_clock_unverified
+             * @constant
+             */
+            clock_basis: "source_naive_clock_unverified";
+            /** Coverage Fraction */
+            coverage_fraction: number;
+            /** Dataset Fingerprint */
+            dataset_fingerprint: string;
+            /**
+             * Dataset Id
+             * @default delhi_observed_archive_v1
+             */
+            dataset_id: string;
+            /**
+             * Dataset Mode
+             * @default recorded_clock
+             * @constant
+             */
+            dataset_mode: "recorded_clock";
+            distribution: components["schemas"]["ArchiveDistribution"];
+            /**
+             * End
+             * Format: date-time
+             */
+            end: string;
+            /** Expected Count */
+            expected_count: number;
+            /**
+             * Interval Semantics
+             * @default unverified
+             * @constant
+             */
+            interval_semantics: "unverified";
+            /** Invalid Count */
+            invalid_count: number;
+            /** Limitations */
+            limitations?: string[];
+            /** Lineage Source Files */
+            lineage_source_files: string[];
+            /** Min Count */
+            min_count: number;
+            /** Min Coverage */
+            min_coverage: number;
+            /** Missing Count */
+            missing_count: number;
+            /** Points */
+            points: components["schemas"]["ArchiveBucket"][];
+            pollutant: components["schemas"]["Pollutant"];
+            /**
+             * Publication Time Known
+             * @default false
+             */
+            publication_time_known: boolean;
+            /** Source Null Count */
+            source_null_count: number;
+            /**
+             * Start
+             * Format: date-time
+             */
+            start: string;
+            /** Station Id */
+            station_id: string;
+            /** Timezone */
+            timezone?: null;
+            /** Unit */
+            unit: string;
+            /** Valid Count */
+            valid_count: number;
+        };
+        /** ArchivePairAgreement */
+        ArchivePairAgreement: {
+            /** Count */
+            count: number;
+            /**
+             * Interpretation
+             * @default Differences between observed station records, not forecast evaluation
+             */
+            interpretation: string;
+            /** Mean Absolute Difference */
+            mean_absolute_difference: number | null;
+            /** Mean Difference */
+            mean_difference: number | null;
+            /** Station A */
+            station_a: string;
+            /** Station B */
+            station_b: string;
+        };
+        /** ArchivePollutantCoverage */
+        ArchivePollutantCoverage: {
+            /** Coverage Fraction */
+            coverage_fraction: number;
+            /** Invalid Count */
+            invalid_count: number;
+            /** Missing Count */
+            missing_count: number;
+            pollutant: components["schemas"]["Pollutant"];
+            /** Unit */
+            unit: string;
+            /** Valid Count */
+            valid_count: number;
+        };
+        /** ArchiveStation */
+        ArchiveStation: {
+            /** Absent Hour Count */
+            absent_hour_count: number;
+            /** Expected Count */
+            expected_count: number;
+            /**
+             * First Record
+             * Format: date-time
+             */
+            first_record: string;
+            /** Grid Rows */
+            grid_rows: number;
+            /** Labels */
+            labels: string[];
+            /**
+             * Last Record
+             * Format: date-time
+             */
+            last_record: string;
+            /** Pollutants */
+            pollutants: components["schemas"]["ArchivePollutantCoverage"][];
+            /** Source Folders */
+            source_folders: string[];
+            /** Station Id */
+            station_id: string;
+        };
         /** Capabilities */
         Capabilities: {
             alerts: components["schemas"]["Capability"];
+            archive_explorer?: components["schemas"]["Capability"];
             calibrated_exceedance_probability: components["schemas"]["Capability"];
             calibrated_intervals: components["schemas"]["Capability"];
             continuous_hourly_trajectory: components["schemas"]["Capability"];
@@ -513,11 +1005,17 @@ export interface components {
             evaluation: components["schemas"]["Capability"];
             history: components["schemas"]["Capability"];
             model_forecast: components["schemas"]["Capability"];
+            native_diagnostics?: components["schemas"]["Capability"];
             observations: components["schemas"]["Capability"];
+            observed_rankings?: components["schemas"]["Capability"];
             population_coverage: components["schemas"]["Capability"];
+            retrospective_evaluation?: components["schemas"]["Capability"];
+            route_geometry?: components["schemas"]["Capability"];
             routes: components["schemas"]["Capability"];
             saved_places: components["schemas"]["Capability"];
             spatial_exposure: components["schemas"]["Capability"];
+            station_catalogue?: components["schemas"]["Capability"];
+            station_comparison?: components["schemas"]["Capability"];
             traffic_live: components["schemas"]["Capability"];
             /**
              * Verified Forecast Horizons
@@ -544,6 +1042,44 @@ export interface components {
             supported: boolean;
             /** Supported Scope */
             supported_scope?: string[];
+        };
+        /** CatalogueStation */
+        CatalogueStation: {
+            /** Catalogue Verified At */
+            catalogue_verified_at?: string | null;
+            /** City Id */
+            city_id: string;
+            /**
+             * Data Mode
+             * @enum {string}
+             */
+            data_mode: "live" | "historical_replay" | "demo";
+            /**
+             * Forecast Eligible
+             * @default false
+             */
+            forecast_eligible: boolean;
+            /** Id */
+            id: string;
+            /** Last Refresh Status */
+            last_refresh_status?: string | null;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            /** Name */
+            name: string;
+            /** Pollutants */
+            pollutants: components["schemas"]["PollutantAvailability"][];
+            /** Provider Location Id */
+            provider_location_id?: number | null;
+            /**
+             * Provider Revision Pending
+             * @default false
+             */
+            provider_revision_pending: boolean;
+            /** Source */
+            source: string;
         };
         /** City */
         City: {
@@ -576,6 +1112,21 @@ export interface components {
             /** Longitude */
             longitude: number;
         };
+        /** Envelope[ArchiveCatalogue] */
+        Envelope_ArchiveCatalogue_: {
+            data: components["schemas"]["ArchiveCatalogue"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ArchiveCompare] */
+        Envelope_ArchiveCompare_: {
+            data: components["schemas"]["ArchiveCompare"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ArchiveExplore] */
+        Envelope_ArchiveExplore_: {
+            data: components["schemas"]["ArchiveExplore"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** Envelope[Capabilities] */
         Envelope_Capabilities_: {
             data: components["schemas"]["Capabilities"];
@@ -584,6 +1135,11 @@ export interface components {
         /** Envelope[Forecast] */
         Envelope_Forecast_: {
             data: components["schemas"]["Forecast"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[GeometryResponse] */
+        Envelope_GeometryResponse_: {
+            data: components["schemas"]["GeometryResponse"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[Health] */
@@ -606,14 +1162,34 @@ export interface components {
             data: components["schemas"]["Measurement"];
             meta: components["schemas"]["Metadata"];
         };
+        /** Envelope[ModelCatalogue] */
+        Envelope_ModelCatalogue_: {
+            data: components["schemas"]["ModelCatalogue"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[ModelEvaluation] */
+        Envelope_ModelEvaluation_: {
+            data: components["schemas"]["ModelEvaluation"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** Envelope[NotificationView] */
         Envelope_NotificationView_: {
             data: components["schemas"]["NotificationView"];
             meta: components["schemas"]["Metadata"];
         };
+        /** Envelope[ObservedRankings] */
+        Envelope_ObservedRankings_: {
+            data: components["schemas"]["ObservedRankings"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** Envelope[PlaceView] */
         Envelope_PlaceView_: {
             data: components["schemas"]["PlaceView"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[PredictionPage] */
+        Envelope_PredictionPage_: {
+            data: components["schemas"]["PredictionPage"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[Preferences] */
@@ -629,6 +1205,11 @@ export interface components {
         /** Envelope[RuleView] */
         Envelope_RuleView_: {
             data: components["schemas"]["RuleView"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[StationCatalogue] */
+        Envelope_StationCatalogue_: {
+            data: components["schemas"]["StationCatalogue"];
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[StationView] */
@@ -688,10 +1269,40 @@ export interface components {
              */
             retryable: boolean;
         };
+        /** ErrorMetrics */
+        ErrorMetrics: {
+            /** Bias */
+            bias?: number | null;
+            /** Count */
+            count: number;
+            /** Mae */
+            mae?: number | null;
+            /** Rmse */
+            rmse?: number | null;
+        };
         /** ErrorResponse */
         ErrorResponse: {
             error: components["schemas"]["ErrorDetail"];
             meta: components["schemas"]["Metadata"];
+        };
+        /** EvaluationGroup */
+        EvaluationGroup: {
+            /** All Available */
+            all_available: {
+                [key: string]: components["schemas"]["ErrorMetrics"];
+            };
+            /** Common Baseline Cohort */
+            common_baseline_cohort: {
+                [key: string]: components["schemas"]["ErrorMetrics"];
+            };
+            /** High Pollution Definition */
+            high_pollution_definition: string;
+            /** High Pollution Observed Target Ge 150 */
+            high_pollution_observed_target_ge_150: {
+                [key: string]: components["schemas"]["ErrorMetrics"];
+            };
+            /** High Pollution Threshold Ugm3 */
+            high_pollution_threshold_ugm3: number;
         };
         /** Forecast */
         Forecast: {
@@ -747,10 +1358,95 @@ export interface components {
              */
             valid_at: string;
         };
+        /** GeometryRequest */
+        GeometryRequest: {
+            /**
+             * Alternatives
+             * @default 3
+             */
+            alternatives: number;
+            destination: components["schemas"]["Coordinates"];
+            /**
+             * Mode
+             * @default driving
+             * @enum {string}
+             */
+            mode: "driving" | "walking" | "cycling";
+            origin: components["schemas"]["Coordinates"];
+        };
+        /** GeometryResponse */
+        GeometryResponse: {
+            /** Alternatives Returned */
+            alternatives_returned: number;
+            /**
+             * Attribution
+             * @default Routing: OSRM; road data © OpenStreetMap contributors
+             */
+            attribution: string;
+            /**
+             * Cached
+             * @default false
+             */
+            cached: boolean;
+            /**
+             * Duration Method
+             * @default Provider road-network travel estimate; no live traffic or departure-time adjustment
+             */
+            duration_method: string;
+            /**
+             * Exposure Ready
+             * @default false
+             * @constant
+             */
+            exposure_ready: false;
+            /**
+             * Limitations
+             * @default [
+             *       "Provider may return fewer alternatives than requested",
+             *       "No pollution exposure estimate or street-level concentration differences",
+             *       "Public demonstration endpoint has no uptime/data-update guarantee; configure a production provider before deployment"
+             *     ]
+             */
+            limitations: string[];
+            /**
+             * Profile
+             * @default driving
+             * @constant
+             */
+            profile: "driving";
+            /**
+             * Provider
+             * @default OSRM
+             */
+            provider: string;
+            /** Routes */
+            routes: components["schemas"]["RouteGeometry"][];
+        };
         /** Health */
         Health: {
             /** Status */
             status: string;
+        };
+        /** HeldoutPrediction */
+        HeldoutPrediction: {
+            /** Horizon H */
+            horizon_h: number;
+            /** Issue At Recorded */
+            issue_at_recorded: string;
+            /** Lightgbm */
+            lightgbm: number | null;
+            /** Observed */
+            observed: number;
+            /** Persistence */
+            persistence: number | null;
+            /** Previous Day Same Hour */
+            previous_day_same_hour: number | null;
+            /** Split */
+            split: string;
+            /** Station Id */
+            station_id: string;
+            /** Target At Recorded */
+            target_at_recorded: string;
         };
         /** History */
         History: {
@@ -808,11 +1504,34 @@ export interface components {
             /** Value */
             value: number;
         };
+        /** HorizonEvaluation */
+        HorizonEvaluation: {
+            /** Horizon H */
+            horizon_h: number;
+            /** Splits */
+            splits: {
+                [key: string]: components["schemas"]["EvaluationGroup"];
+            };
+        };
         /** Identity */
         Identity: {
             preferences: components["schemas"]["Preferences"];
             /** User Id */
             user_id: string;
+        };
+        /** LineString */
+        LineString: {
+            /** Coordinates */
+            coordinates: [
+                number,
+                number
+            ][];
+            /**
+             * Type
+             * @default LineString
+             * @constant
+             */
+            type: "LineString";
         };
         /** Measurement */
         Measurement: {
@@ -857,7 +1576,7 @@ export interface components {
         Metadata: {
             /**
              * Contract Version
-             * @default 1.1.0
+             * @default 1.2.0
              */
             contract_version: string;
             /**
@@ -878,6 +1597,132 @@ export interface components {
             request_id: string;
             /** Source */
             source: string;
+        };
+        /** ModelCatalogue */
+        ModelCatalogue: {
+            /** Models */
+            models: components["schemas"]["ModelSummary"][];
+        };
+        /** ModelEvaluation */
+        ModelEvaluation: {
+            /**
+             * Dataset Mode
+             * @default recorded_clock
+             * @constant
+             */
+            dataset_mode: "recorded_clock";
+            /** Dataset Sha256 */
+            dataset_sha256: string;
+            /** Horizons */
+            horizons: components["schemas"]["HorizonEvaluation"][];
+            /** Input Availability Assumption */
+            input_availability_assumption: string;
+            /** Limitations */
+            limitations: string[];
+            /**
+             * Live Forecast Ready
+             * @default false
+             * @constant
+             */
+            live_forecast_ready: false;
+            /** Model Version */
+            model_version: string;
+            /** Preprocessing */
+            preprocessing: string;
+            /**
+             * Publication Time Known
+             * @default false
+             * @constant
+             */
+            publication_time_known: false;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /** Rolling Backtests */
+            rolling_backtests: {
+                [key: string]: components["schemas"]["HorizonEvaluation"][];
+            };
+            /** Splits */
+            splits: components["schemas"]["RecordedSplit"][];
+            /** Station Ids */
+            station_ids: string[];
+            /** Supported Horizons */
+            supported_horizons: number[];
+            /** Target Transform */
+            target_transform: string;
+            /** Target Unit */
+            target_unit: string;
+            /** Timezone */
+            timezone?: null;
+        };
+        /** ModelSummary */
+        ModelSummary: {
+            /**
+             * Continuous Trajectory Ready
+             * @default false
+             * @constant
+             */
+            continuous_trajectory_ready: false;
+            /**
+             * Dataset Mode
+             * @enum {string}
+             */
+            dataset_mode: "diagnostic" | "recorded_clock";
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "native_diagnostic" | "retrospective_forecast";
+            /** Limitations */
+            limitations: string[];
+            /**
+             * Live Forecast Ready
+             * @default false
+             * @constant
+             */
+            live_forecast_ready: false;
+            /**
+             * Live Supported Horizons
+             * @default []
+             */
+            live_supported_horizons: number[];
+            /** Model Version */
+            model_version: string;
+            /**
+             * Native Diagnostics Ready
+             * @default false
+             */
+            native_diagnostics_ready: boolean;
+            /**
+             * Pollutant
+             * @default pm25
+             */
+            pollutant: string;
+            /**
+             * Retrospective Evaluation Ready
+             * @default false
+             */
+            retrospective_evaluation_ready: boolean;
+            /**
+             * Station Ids
+             * @default []
+             */
+            station_ids: string[];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "artifact_unavailable" | "artifact_invalid";
+            /**
+             * Supported Horizons
+             * @default []
+             */
+            supported_horizons: number[];
+            /** Target Unit */
+            target_unit?: string | null;
         };
         /** NotificationView */
         NotificationView: {
@@ -904,6 +1749,62 @@ export interface components {
             /** Value */
             value: number;
         };
+        /** ObservedRank */
+        ObservedRank: {
+            /**
+             * Coverage State
+             * @enum {string}
+             */
+            coverage_state: "reported_complete" | "reported_partial" | "unknown";
+            measurement: components["schemas"]["Measurement"];
+            /**
+             * Provider Revision Pending
+             * @default false
+             */
+            provider_revision_pending: boolean;
+            /** Rank */
+            rank: number;
+            station: components["schemas"]["StationView"];
+        };
+        /** ObservedRankings */
+        ObservedRankings: {
+            /** City Id */
+            city_id: string;
+            /** Excluded Missing Count */
+            excluded_missing_count: number;
+            /** Excluded Stale Count */
+            excluded_stale_count: number;
+            /** Includes Stale */
+            includes_stale: boolean;
+            /**
+             * Input Cutoff At
+             * Format: date-time
+             */
+            input_cutoff_at: string;
+            /**
+             * Limitations
+             * @default [
+             *       "Latest station observations may have different measurement times and partial coverage",
+             *       "Not predicted hotspots, forecasts, area-wide concentration or a common-time city average"
+             *     ]
+             */
+            limitations: string[];
+            pollutant: components["schemas"]["Pollutant"];
+            /**
+             * Ranking Kind
+             * @default observed_concentration
+             * @constant
+             */
+            ranking_kind: "observed_concentration";
+            /** Rows */
+            rows: components["schemas"]["ObservedRank"][];
+            /**
+             * Unit
+             * @default µg/m³
+             * @constant
+             */
+            unit: "µg/m³";
+        };
         /** PlaceInput */
         PlaceInput: {
             /** Label */
@@ -929,6 +1830,84 @@ export interface components {
          * @enum {string}
          */
         Pollutant: "pm25" | "pm10" | "no2" | "so2" | "o3" | "co";
+        /** PollutantAvailability */
+        PollutantAvailability: {
+            /**
+             * Coverage State
+             * @default unknown
+             * @enum {string}
+             */
+            coverage_state: "reported_complete" | "reported_partial" | "unknown";
+            /**
+             * Freshness
+             * @enum {string}
+             */
+            freshness: "fresh" | "stale" | "no_observations";
+            /** Limitations */
+            limitations?: string[];
+            measurement?: components["schemas"]["Measurement"] | null;
+            pollutant: components["schemas"]["Pollutant"];
+            /**
+             * Provider Revision Pending
+             * @default false
+             */
+            provider_revision_pending: boolean;
+            /** Reported Sensor Units */
+            reported_sensor_units?: string[];
+            /**
+             * Revision Pending Count
+             * @default 0
+             */
+            revision_pending_count: number;
+            /** Selected Sensor Unit */
+            selected_sensor_unit?: string | null;
+            /** Selected Unit Compatible */
+            selected_unit_compatible?: boolean | null;
+            /** Sensor Id */
+            sensor_id?: number | null;
+            /** Sensor Ids */
+            sensor_ids?: number[];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "stale" | "no_observations" | "sensor_unavailable" | "coverage_unknown";
+        };
+        /** PredictionPage */
+        PredictionPage: {
+            /**
+             * Dataset Mode
+             * @default recorded_clock
+             * @constant
+             */
+            dataset_mode: "recorded_clock";
+            /** Limit */
+            limit: number;
+            /** Model Version */
+            model_version: string;
+            /** Offset */
+            offset: number;
+            /** Points */
+            points: components["schemas"]["HeldoutPrediction"][];
+            /**
+             * Publication Time Known
+             * @default false
+             * @constant
+             */
+            publication_time_known: false;
+            /**
+             * Retrospective Only
+             * @default true
+             * @constant
+             */
+            retrospective_only: true;
+            /** Timezone */
+            timezone?: null;
+            /** Total Count */
+            total_count: number;
+            /** Unit */
+            unit: string;
+        };
         /** Preferences */
         Preferences: {
             /** Default City Id */
@@ -962,6 +1941,39 @@ export interface components {
             providers: boolean;
             /** Status */
             status: string;
+        };
+        /** RecordedSplit */
+        RecordedSplit: {
+            /** End Recorded At Exclusive */
+            end_recorded_at_exclusive: string;
+            /** Name */
+            name: string;
+            /** Start Recorded At */
+            start_recorded_at: string;
+        };
+        /** RouteGeometry */
+        RouteGeometry: {
+            /** Distance M */
+            distance_m: number;
+            /** Estimated Duration S */
+            estimated_duration_s: number;
+            /** Exposure */
+            exposure?: null;
+            /**
+             * Exposure Status
+             * @default unavailable
+             * @constant
+             */
+            exposure_status: "unavailable";
+            geometry: components["schemas"]["LineString"];
+            /** Id */
+            id: string;
+            /**
+             * Traffic Aware
+             * @default false
+             * @constant
+             */
+            traffic_aware: false;
         };
         /** RouteRequest */
         RouteRequest: {
@@ -1050,6 +2062,25 @@ export interface components {
              * @default µg/m³
              */
             unit: string;
+        };
+        /** StationCatalogue */
+        StationCatalogue: {
+            /** Catalogue Verified At */
+            catalogue_verified_at?: string | null;
+            /** City Id */
+            city_id: string;
+            /**
+             * Input Cutoff At
+             * Format: date-time
+             */
+            input_cutoff_at: string;
+            /**
+             * Scope
+             * @default bounded imported station cohort; not all-city coverage
+             */
+            scope: string;
+            /** Stations */
+            stations: components["schemas"]["CatalogueStation"][];
         };
         /** StationView */
         StationView: {
@@ -1638,6 +2669,216 @@ export interface operations {
             };
         };
     };
+    catalogue_api_v1_archive_catalogue_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ArchiveCatalogue_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    compare_api_v1_archive_compare_get: {
+        parameters: {
+            query: {
+                station_ids: string[];
+                pollutant: components["schemas"]["Pollutant"];
+                start: string;
+                end: string;
+                clock_assumption: "same_recorded_clock";
+                aggregation?: "daily" | "monthly";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ArchiveCompare_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    explore_api_v1_archive_explore_get: {
+        parameters: {
+            query: {
+                station_id: string;
+                pollutant: components["schemas"]["Pollutant"];
+                start: string;
+                end: string;
+                aggregation?: "daily" | "monthly";
+                min_count?: number;
+                min_coverage?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ArchiveExplore_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     get_capabilities_api_v1_capabilities_get: {
         parameters: {
             query?: never;
@@ -2128,7 +3369,284 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["Envelope_ModelEvaluation_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    catalogue_api_v1_models_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ModelCatalogue_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    evaluation_api_v1_models__model_version__evaluation_get: {
+        parameters: {
+            query?: {
+                horizon_h?: number | null;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ModelEvaluation_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    predictions_api_v1_models__model_version__predictions_get: {
+        parameters: {
+            query: {
+                horizon_h: number;
+                split?: "test" | "validation" | "rolling_2022" | "rolling_2023";
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                model_version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PredictionPage_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rankings_api_v1_observed_rankings_get: {
+        parameters: {
+            query?: {
+                city_id?: string;
+                pollutant?: components["schemas"]["Pollutant"];
+                limit?: number;
+                include_stale?: boolean;
+                issue_at?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ObservedRankings_"];
                 };
             };
             /** @description Unauthorized */
@@ -2397,6 +3915,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    route_geometry_api_v1_routes_geometry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeometryRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_GeometryResponse_"];
                 };
             };
             /** @description Unauthorized */
@@ -2785,6 +4372,74 @@ export interface operations {
             };
         };
     };
+    catalogue_api_v1_station_catalogue_get: {
+        parameters: {
+            query?: {
+                city_id?: string;
+                issue_at?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_StationCatalogue_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     stations_api_v1_stations_get: {
         parameters: {
             query: {
@@ -2928,6 +4583,7 @@ export interface operations {
             query?: {
                 pollutant?: components["schemas"]["Pollutant"];
                 horizons?: number[] | null;
+                model_version?: string | null;
             };
             header?: never;
             path: {

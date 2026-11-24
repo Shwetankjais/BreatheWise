@@ -84,7 +84,20 @@ class OpenAQ:
         except (KeyError, TypeError, ValueError, AttributeError):
             raise ProviderError("OPENAQ_SCHEMA_MISMATCH") from None
 
-    def _fetch_hourly(self, *, location_id, start, end, mode, received_at=None, sensor_id=None):
+    def _fetch_hourly(
+        self,
+        *,
+        location_id,
+        start,
+        end,
+        mode,
+        received_at=None,
+        sensor_id=None,
+        pollutant="pm25",
+        location_metadata=None,
+    ):
+        if pollutant not in {"pm25", "pm10", "no2", "so2", "o3", "co"}:
+            raise ProviderError("OPENAQ_POLLUTANT_UNSUPPORTED")
         if (
             mode not in {"live", "historical_replay"}
             or not 0 < (end - start).total_seconds() <= 7 * 86400
@@ -94,7 +107,11 @@ class OpenAQ:
             raise ProviderError("OPENAQ_TIMEZONE_REQUIRED")
         explicit_receipt_clock = received_at is not None
         received_at = received_at or datetime.now(UTC)
-        body = self.get(f"/v3/locations/{location_id}")
+        body = (
+            {"results": [location_metadata]}
+            if location_metadata is not None
+            else self.get(f"/v3/locations/{location_id}")
+        )
         if len(body["results"]) != 1:
             raise ProviderError("OPENAQ_LOCATION_NOT_FOUND")
         location = body["results"][0]
@@ -112,12 +129,12 @@ class OpenAQ:
         sensors = [
             sensor
             for sensor in location.get("sensors", [])
-            if sensor.get("parameter", {}).get("name") == "pm25"
+            if sensor.get("parameter", {}).get("name") == pollutant
         ]
         if sensor_id is not None:
             sensors = [sensor for sensor in sensors if sensor.get("id") == sensor_id]
         if len(sensors) != 1:
-            raise ProviderError("OPENAQ_PM25_SENSOR_MISSING_OR_AMBIGUOUS")
+            raise ProviderError(f"OPENAQ_{pollutant.upper()}_SENSOR_MISSING_OR_AMBIGUOUS")
         sensor = sensors[0]
         units = {
             "µg/m³": "µg/m³",
@@ -168,7 +185,7 @@ class OpenAQ:
                 if not utc(start) <= measured <= utc(end) or measured > received_at:
                     continue
                 parameter = row.get("parameter", {})
-                if parameter.get("name") != "pm25" or parameter.get("units") not in units:
+                if parameter.get("name") != pollutant or parameter.get("units") not in units:
                     raise ProviderError("OPENAQ_PARAMETER_OR_UNITS_UNSUPPORTED")
                 coverage = row.get("coverage")
                 flags = [
@@ -179,14 +196,21 @@ class OpenAQ:
                     flags.append("provider_license_metadata_unavailable")
                 if city_method != "provider_locality":
                     flags.append("city_from_source_station_name_and_owner")
-                if not coverage:
+                coverage_percent = (
+                    coverage.get("percentCoverage") if isinstance(coverage, dict) else None
+                )
+                if (
+                    type(coverage_percent) not in {int, float}
+                    or not math.isfinite(coverage_percent)
+                    or not 0 <= coverage_percent <= 100
+                ):
                     flags.append("provider_coverage_unknown")
-                elif coverage.get("percentCoverage", 0) < 100:
+                elif coverage_percent < 100:
                     flags.append("provider_partial_hour")
                 observations.append(
                     {
                         "station_id": station_id,
-                        "pollutant": "pm25",
+                        "pollutant": pollutant,
                         "measured_at": measured,
                         "available_at": received_at,
                         "value": value,
@@ -238,6 +262,7 @@ class OpenAQ:
             "fetched_rows": len(observations),
             "location_id": location_id,
             "sensor_id": sensor["id"],
+            "pollutant": pollutant,
             "actual_provider_fetch": True,
             "city_assignment_method": city_method,
             "license_metadata_present": bool(location.get("licenses")),

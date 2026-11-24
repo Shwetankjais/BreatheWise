@@ -30,6 +30,13 @@ class Capabilities(BaseModel):
     population_coverage: Capability
     evaluation: Capability
     traffic_live: Capability
+    station_catalogue: Capability = Field(default_factory=Capability)
+    observed_rankings: Capability = Field(default_factory=Capability)
+    archive_explorer: Capability = Field(default_factory=Capability)
+    station_comparison: Capability = Field(default_factory=Capability)
+    native_diagnostics: Capability = Field(default_factory=Capability)
+    retrospective_evaluation: Capability = Field(default_factory=Capability)
+    route_geometry: Capability = Field(default_factory=Capability)
     declared_artifact_horizons: list[int] = [1, 3, 6, 12, 24]
     verified_forecast_horizons: list[int] = []
     verified_forecast_pollutants: list[str] = []
@@ -81,4 +88,56 @@ def capabilities() -> Capabilities:
             method="fresh hourly observation threshold; transactional in-app notification",
             supported_scope=["in_app", "manual/scheduled worker command", "provisioned identities"],
         )
+    from breathewise.core.config import get_settings
+    from breathewise.services.models import catalogue as model_catalogue
+
+    settings = get_settings()
+    result.station_catalogue = Capability(
+        supported=db_ready,
+        method="verified provider catalogue plus cached observations",
+        supported_scope=["configured bounded Delhi cohort"],
+        requirements_missing=[] if db_ready else ["database migrations"],
+    )
+    result.observed_rankings = Capability(
+        supported=bool(observation_count),
+        method="rank actual cached concentration; include age/stale flags",
+        supported_scope=sorted(city_counts),
+    )
+    archive_ready = (settings.archive_root / "data/cleaned/pollutants").is_dir()
+    result.archive_explorer = Capability(
+        supported=archive_ready,
+        method="read-only observed Parquet DuckDB; recorded-clock only",
+        supported_scope=["eligible Delhi source IDs; bounded daily/monthly aggregates"]
+        if archive_ready
+        else [],
+        requirements_missing=[] if archive_ready else ["configured audited local archive"],
+    )
+    result.station_comparison = Capability(
+        supported=archive_ready,
+        method="exact matched recorded hours; explicit same-clock assumption",
+        supported_scope=["2–4 eligible archive source series"] if archive_ready else [],
+    )
+    models = model_catalogue().models
+    result.native_diagnostics = Capability(
+        supported=models[0].native_diagnostics_ready,
+        method="offline supplied native booster diagnostics; no wrapper parity",
+        supported_scope=["explicit complete 75-feature input rows"],
+    )
+    ready_models = [m.model_version for m in models if m.retrospective_evaluation_ready]
+    result.retrospective_evaluation = Capability(
+        supported=bool(ready_models),
+        method="independent recorded-clock experiment with frozen test and baselines",
+        supported_scope=ready_models,
+        requirements_missing=[]
+        if ready_models
+        else ["registered experiment model/prediction artifacts"],
+    )
+    if ready_models:
+        result.evaluation = result.retrospective_evaluation
+    result.route_geometry = Capability(
+        supported=bool(settings.routing_base_url),
+        method="configured OSRM driving geometry; cached/throttled; no exposure/traffic",
+        supported_scope=["initial Delhi bounding region"] if settings.routing_base_url else [],
+        requirements_missing=[] if settings.routing_base_url else ["trusted HTTPS OSRM endpoint"],
+    )
     return result

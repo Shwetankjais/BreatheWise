@@ -1,0 +1,1846 @@
+{
+  "model_version": "delhi-recorded-pm25-v1",
+  "dataset_mode": "recorded_clock",
+  "timezone": null,
+  "source_station_ids": [
+    "site_301"
+  ],
+  "station_name": "Anand Vihar (archive source folder Aanad Vihar)",
+  "pollutant": "pm25",
+  "target_unit": "\u00b5g/m\u00b3",
+  "target_transform": "identity",
+  "supported_horizons": [
+    1,
+    3,
+    6,
+    12,
+    24
+  ],
+  "continuous_trajectory": false,
+  "live_forecast_ready": false,
+  "retrospective_evaluation_ready": true,
+  "historical_publication_time_known": false,
+  "protocol": {
+    "model_version": "delhi-recorded-pm25-v1",
+    "source_sha256": "43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df",
+    "station_id": "site_301",
+    "splits": {
+      "train": [
+        "2017-01-01T00:00:00",
+        "2024-01-01T00:00:00"
+      ],
+      "validation": [
+        "2024-01-01T00:00:00",
+        "2025-01-01T00:00:00"
+      ],
+      "test": [
+        "2025-01-01T00:00:00",
+        "2026-11-01T00:00:00"
+      ]
+    },
+    "rolling_backtests": [
+      {
+        "name": "rolling_2022",
+        "train_end": "2022-01-01T00:00:00",
+        "score_end": "2023-01-01T00:00:00"
+      },
+      {
+        "name": "rolling_2023",
+        "train_end": "2023-01-01T00:00:00",
+        "score_end": "2024-01-01T00:00:00"
+      }
+    ],
+    "supported_horizons": [
+      1,
+      3,
+      6,
+      12,
+      24
+    ],
+    "parameters": {
+      "objective": "regression_l1",
+      "metric": "l1",
+      "learning_rate": 0.05,
+      "num_leaves": 23,
+      "min_data_in_leaf": 60,
+      "feature_fraction": 1.0,
+      "bagging_fraction": 1.0,
+      "seed": 20261124,
+      "num_threads": 2,
+      "deterministic": true,
+      "force_col_wise": true,
+      "verbosity": -1
+    },
+    "max_boost_round": 200,
+    "early_stopping_rounds": 20,
+    "target_transform": "identity",
+    "dataset_mode": "recorded_clock",
+    "frozen_before_fit_at": "2026-11-24T00:51:14.278035+00:00"
+  },
+  "dataset_sha256": "43cb7d50000f3614657bfadc7f83f2954c879e561e790ccf13b5b75d247558df",
+  "source_file_name": "Aanad Vihar.parquet",
+  "observed_count": 74705,
+  "grid_count": 86184,
+  "preprocessing": "no fit/scaling/imputation; native NaN plus explicit lag missing indicators",
+  "input_availability_assumption": "recorded current and past rows hypothetically available at issue; actual publication unknown",
+  "libraries": {
+    "lightgbm": "4.7.0",
+    "numpy": "2.5.5"
+  },
+  "limitations": [
+    "Retrospective recorded-clock experiment only; source timezone and interval meaning unresolved.",
+    "Assumes the recorded current row is known at its recorded clock; historical publication times are unknown.",
+    "No live/provider alignment, original 75-feature pipeline parity, clinical or spatial readiness.",
+    "No prediction intervals, exceedance probabilities or untrained intermediate horizons.",
+    "One candidate source station; official station registry crosswalk and generalization remain unverified."
+  ],
+  "heldout_predictions": {
+    "path": "heldout_predictions.csv",
+    "sha256": "9745e7168967b1897c4c4b54fbf69d8a4fbf46c3a35dc31651db726b91ce187c",
+    "rows": 186839,
+    "columns": [
+      "model_version",
+      "station_id",
+      "pollutant",
+      "split",
+      "horizon_h",
+      "issue_at_recorded",
+      "target_at_recorded",
+      "observed",
+      "lightgbm",
+      "persistence",
+      "previous_day_same_hour"
+    ]
+  },
+  "completed_at": "2026-11-24T00:51:35.212006+00:00",
+  "manifest_sha256": "1255bd8cc95ffefd84b6b439ff4663ad1152e25af3b7746a07faa820ab76b4f3",
+  "protocol_sha256": "33d74493386751bb42637962873f7e28b03878015e763566b121a8bec4ebbf03",
+  "evaluation": {
+    "1": {
+      "validation": {
+        "all_available": {
+          "lightgbm": {
+            "count": 6991,
+            "mae": 23.92176497460897,
+            "rmse": 37.20277360969859,
+            "bias": -1.5262108117416096
+          },
+          "persistence": {
+            "count": 6991,
+            "mae": 26.09543126877414,
+            "rmse": 40.2734652303384,
+            "bias": -0.5479673866399657
+          },
+          "previous_day_same_hour": {
+            "count": 6325,
+            "mae": 59.16246166007905,
+            "rmse": 91.64922513428805,
+            "bias": -0.9749802371541502
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 6325,
+            "mae": 23.844631589153128,
+            "rmse": 35.8668574622321,
+            "bias": -1.4033518889636076
+          },
+          "persistence": {
+            "count": 6325,
+            "mae": 26.05769328063241,
+            "rmse": 39.142422890505,
+            "bias": -0.38199051383399213
+          },
+          "previous_day_same_hour": {
+            "count": 6325,
+            "mae": 59.16246166007905,
+            "rmse": 91.64922513428805,
+            "bias": -0.9749802371541502
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2492,
+            "mae": 33.91896116489206,
+            "rmse": 50.77792277957526,
+            "bias": -9.202757293074805
+          },
+          "persistence": {
+            "count": 2492,
+            "mae": 36.87540529695024,
+            "rmse": 54.429371821600704,
+            "bias": -6.037186998394864
+          },
+          "previous_day_same_hour": {
+            "count": 2343,
+            "mae": 95.05011096884337,
+            "rmse": 128.15300018352775,
+            "bias": -24.343256508749466
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "test": {
+        "all_available": {
+          "lightgbm": {
+            "count": 14718,
+            "mae": 18.976970036598566,
+            "rmse": 30.192548786016687,
+            "bias": -0.4341496879868698
+          },
+          "persistence": {
+            "count": 14718,
+            "mae": 20.891817502378043,
+            "rmse": 33.126789254827294,
+            "bias": -0.04886873216469629
+          },
+          "previous_day_same_hour": {
+            "count": 13977,
+            "mae": 47.92171639121414,
+            "rmse": 73.50225081676459,
+            "bias": -0.6632975602775989
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 13977,
+            "mae": 18.91331214063145,
+            "rmse": 30.124761391597087,
+            "bias": -0.3058271178801104
+          },
+          "persistence": {
+            "count": 13977,
+            "mae": 20.87049152178579,
+            "rmse": 33.11853166799563,
+            "bias": 0.06959004078128353
+          },
+          "previous_day_same_hour": {
+            "count": 13977,
+            "mae": 47.92171639121414,
+            "rmse": 73.50225081676459,
+            "bias": -0.6632975602775989
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 3277,
+            "mae": 33.94619620820729,
+            "rmse": 49.26773787511595,
+            "bias": -8.857632518125381
+          },
+          "persistence": {
+            "count": 3277,
+            "mae": 37.39405859017394,
+            "rmse": 54.16832163386498,
+            "bias": -6.224848947207812
+          },
+          "previous_day_same_hour": {
+            "count": 3134,
+            "mae": 91.81102425015953,
+            "rmse": 121.45575268550289,
+            "bias": -31.883296107211233
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    },
+    "3": {
+      "validation": {
+        "all_available": {
+          "lightgbm": {
+            "count": 6856,
+            "mae": 39.03321909698396,
+            "rmse": 59.78294094536655,
+            "bias": -7.093870007025812
+          },
+          "persistence": {
+            "count": 6856,
+            "mae": 48.765072928821475,
+            "rmse": 72.40804133177532,
+            "bias": -0.6191423570595099
+          },
+          "previous_day_same_hour": {
+            "count": 6232,
+            "mae": 59.75042522464699,
+            "rmse": 92.55216059772005,
+            "bias": -0.9843276636713736
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 6232,
+            "mae": 39.36962844516885,
+            "rmse": 59.449743017732544,
+            "bias": -7.020450444880481
+          },
+          "persistence": {
+            "count": 6232,
+            "mae": 49.09404525032093,
+            "rmse": 72.17959315410089,
+            "bias": -0.3228642490372272
+          },
+          "previous_day_same_hour": {
+            "count": 6232,
+            "mae": 59.75042522464699,
+            "rmse": 92.55216059772005,
+            "bias": -0.9843276636713736
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2467,
+            "mae": 62.31738135363863,
+            "rmse": 87.8230496068049,
+            "bias": -29.622799895075318
+          },
+          "persistence": {
+            "count": 2467,
+            "mae": 73.26114714227808,
+            "rmse": 100.77253928675594,
+            "bias": -17.513883259019053
+          },
+          "previous_day_same_hour": {
+            "count": 2327,
+            "mae": 95.60309840996992,
+            "rmse": 129.25902649728982,
+            "bias": -24.93886978942845
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "test": {
+        "all_available": {
+          "lightgbm": {
+            "count": 14557,
+            "mae": 30.251724779802373,
+            "rmse": 46.30580699916093,
+            "bias": -3.608512569923203
+          },
+          "persistence": {
+            "count": 14557,
+            "mae": 38.7984749605001,
+            "rmse": 59.228511481165114,
+            "bias": -0.19544961187057774
+          },
+          "previous_day_same_hour": {
+            "count": 13863,
+            "mae": 48.01171535742625,
+            "rmse": 73.60135330022548,
+            "bias": -0.2510517204068383
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 13863,
+            "mae": 30.223220420739125,
+            "rmse": 46.39303312033514,
+            "bias": -3.2991646765886466
+          },
+          "persistence": {
+            "count": 13863,
+            "mae": 38.89990478251461,
+            "rmse": 59.53357350186324,
+            "bias": 0.09599942292433096
+          },
+          "previous_day_same_hour": {
+            "count": 13863,
+            "mae": 48.01171535742625,
+            "rmse": 73.60135330022548,
+            "bias": -0.2510517204068383
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 3239,
+            "mae": 58.176900067249505,
+            "rmse": 79.46085534511897,
+            "bias": -29.648343571681444
+          },
+          "persistence": {
+            "count": 3239,
+            "mae": 73.40452300092622,
+            "rmse": 98.71780791590814,
+            "bias": -21.052562519296078
+          },
+          "previous_day_same_hour": {
+            "count": 3105,
+            "mae": 91.81127214170692,
+            "rmse": 121.46093651140956,
+            "bias": -31.659420289855074
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    },
+    "6": {
+      "validation": {
+        "all_available": {
+          "lightgbm": {
+            "count": 6750,
+            "mae": 45.571770877855954,
+            "rmse": 71.29211805797932,
+            "bias": -10.982222652329115
+          },
+          "persistence": {
+            "count": 6750,
+            "mae": 64.57991407407407,
+            "rmse": 96.62512262630328,
+            "bias": -0.4607792592592593
+          },
+          "previous_day_same_hour": {
+            "count": 6147,
+            "mae": 60.101198958841714,
+            "rmse": 93.15144165478804,
+            "bias": -0.7563445583211322
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 6147,
+            "mae": 46.420375568266756,
+            "rmse": 72.35306521064703,
+            "bias": -11.050452838105668
+          },
+          "persistence": {
+            "count": 6147,
+            "mae": 65.76836993655441,
+            "rmse": 97.56801373151916,
+            "bias": 0.14673661948918168
+          },
+          "previous_day_same_hour": {
+            "count": 6147,
+            "mae": 60.101198958841714,
+            "rmse": 93.15144165478804,
+            "bias": -0.7563445583211322
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2438,
+            "mae": 76.88130458689204,
+            "rmse": 106.7306712098817,
+            "bias": -45.67063160149575
+          },
+          "persistence": {
+            "count": 2438,
+            "mae": 101.891513535685,
+            "rmse": 136.73264077941263,
+            "bias": -31.244532403609515
+          },
+          "previous_day_same_hour": {
+            "count": 2299,
+            "mae": 96.49408873423228,
+            "rmse": 130.10632501804002,
+            "bias": -25.343953892996954
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "test": {
+        "all_available": {
+          "lightgbm": {
+            "count": 14476,
+            "mae": 34.81116617697194,
+            "rmse": 54.17452423786337,
+            "bias": -4.587757036964333
+          },
+          "persistence": {
+            "count": 14476,
+            "mae": 51.572485493230175,
+            "rmse": 79.57909977474506,
+            "bias": 0.015341254490190656
+          },
+          "previous_day_same_hour": {
+            "count": 13789,
+            "mae": 47.68757632895787,
+            "rmse": 73.08460824559482,
+            "bias": -0.03765682790630213
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 13789,
+            "mae": 34.81036602056346,
+            "rmse": 54.16499123648404,
+            "bias": -4.366894031924246
+          },
+          "persistence": {
+            "count": 13789,
+            "mae": 51.88085067807673,
+            "rmse": 79.91160105886647,
+            "bias": 0.21583653636956995
+          },
+          "previous_day_same_hour": {
+            "count": 13789,
+            "mae": 47.68757632895787,
+            "rmse": 73.08460824559482,
+            "bias": -0.03765682790630213
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 3202,
+            "mae": 71.03088253619015,
+            "rmse": 96.41115354556925,
+            "bias": -42.39295916952129
+          },
+          "persistence": {
+            "count": 3202,
+            "mae": 103.31410056214865,
+            "rmse": 135.73338521571407,
+            "bias": -37.17012804497189
+          },
+          "previous_day_same_hour": {
+            "count": 3072,
+            "mae": 91.669921875,
+            "rmse": 121.11925806608612,
+            "bias": -32.197428385416664
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    },
+    "12": {
+      "validation": {
+        "all_available": {
+          "lightgbm": {
+            "count": 6589,
+            "mae": 49.17649370455558,
+            "rmse": 77.65760807447457,
+            "bias": -13.377948616902858
+          },
+          "persistence": {
+            "count": 6589,
+            "mae": 76.89023372287146,
+            "rmse": 114.49609331573363,
+            "bias": -0.7017134618303232
+          },
+          "previous_day_same_hour": {
+            "count": 6068,
+            "mae": 59.98866842452208,
+            "rmse": 93.19177948057136,
+            "bias": -1.399377059986816
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 6068,
+            "mae": 49.63827322027394,
+            "rmse": 78.34811036031451,
+            "bias": -12.701269650312785
+          },
+          "persistence": {
+            "count": 6068,
+            "mae": 78.19529993408042,
+            "rmse": 115.89041588032052,
+            "bias": 0.37204680290046144
+          },
+          "previous_day_same_hour": {
+            "count": 6068,
+            "mae": 59.98866842452208,
+            "rmse": 93.19177948057136,
+            "bias": -1.399377059986816
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2413,
+            "mae": 82.65835365527361,
+            "rmse": 114.83295772782348,
+            "bias": -54.98676141944889
+          },
+          "persistence": {
+            "count": 2413,
+            "mae": 120.94343141317862,
+            "rmse": 159.19416333454095,
+            "bias": -42.82760049730626
+          },
+          "previous_day_same_hour": {
+            "count": 2287,
+            "mae": 95.85205946655007,
+            "rmse": 129.72031970404225,
+            "bias": -25.621119370354176
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "test": {
+        "all_available": {
+          "lightgbm": {
+            "count": 14379,
+            "mae": 37.77890747087664,
+            "rmse": 59.239021223069855,
+            "bias": -5.0437620617158805
+          },
+          "persistence": {
+            "count": 14379,
+            "mae": 59.29518325335558,
+            "rmse": 92.87275663374795,
+            "bias": -0.0031351276166631764
+          },
+          "previous_day_same_hour": {
+            "count": 13737,
+            "mae": 47.69363106937468,
+            "rmse": 73.023344408295,
+            "bias": -0.3355164883162262
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 13737,
+            "mae": 37.73674816235262,
+            "rmse": 58.97232955724541,
+            "bias": -4.7746048005193105
+          },
+          "persistence": {
+            "count": 13737,
+            "mae": 59.53411880323214,
+            "rmse": 93.21144453923912,
+            "bias": 0.25734658222319284
+          },
+          "previous_day_same_hour": {
+            "count": 13737,
+            "mae": 47.69363106937468,
+            "rmse": 73.023344408295,
+            "bias": -0.3355164883162262
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 3168,
+            "mae": 77.04676746229875,
+            "rmse": 105.36326345467768,
+            "bias": -51.35906279732639
+          },
+          "persistence": {
+            "count": 3168,
+            "mae": 123.50875946969697,
+            "rmse": 158.05701718156837,
+            "bias": -51.984927398989896
+          },
+          "previous_day_same_hour": {
+            "count": 3045,
+            "mae": 91.46133004926108,
+            "rmse": 121.19063212332016,
+            "bias": -31.829310344827586
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    },
+    "24": {
+      "validation": {
+        "all_available": {
+          "lightgbm": {
+            "count": 6526,
+            "mae": 50.078183177822986,
+            "rmse": 79.83788035764057,
+            "bias": -14.07280902478341
+          },
+          "persistence": {
+            "count": 6526,
+            "mae": 58.73766319338032,
+            "rmse": 91.3830333614885,
+            "bias": -0.7234646031259577
+          },
+          "previous_day_same_hour": {
+            "count": 6526,
+            "mae": 58.73766319338032,
+            "rmse": 91.3830333614885,
+            "bias": -0.7234646031259577
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 6526,
+            "mae": 50.078183177822986,
+            "rmse": 79.83788035764057,
+            "bias": -14.07280902478341
+          },
+          "persistence": {
+            "count": 6526,
+            "mae": 58.73766319338032,
+            "rmse": 91.3830333614885,
+            "bias": -0.7234646031259577
+          },
+          "previous_day_same_hour": {
+            "count": 6526,
+            "mae": 58.73766319338032,
+            "rmse": 91.3830333614885,
+            "bias": -0.7234646031259577
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2369,
+            "mae": 84.64965022526428,
+            "rmse": 118.61427753912159,
+            "bias": -59.84893460296208
+          },
+          "persistence": {
+            "count": 2369,
+            "mae": 95.22685099197975,
+            "rmse": 128.76630324430005,
+            "bias": -25.005593077247784
+          },
+          "previous_day_same_hour": {
+            "count": 2369,
+            "mae": 95.22685099197975,
+            "rmse": 128.76630324430005,
+            "bias": -25.005593077247784
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "test": {
+        "all_available": {
+          "lightgbm": {
+            "count": 14306,
+            "mae": 39.56261036132432,
+            "rmse": 62.16002529632075,
+            "bias": -5.9189070604836935
+          },
+          "persistence": {
+            "count": 14306,
+            "mae": 47.82856773381798,
+            "rmse": 73.5136118444434,
+            "bias": -0.24967915559904935
+          },
+          "previous_day_same_hour": {
+            "count": 14306,
+            "mae": 47.82856773381798,
+            "rmse": 73.5136118444434,
+            "bias": -0.24967915559904935
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 14306,
+            "mae": 39.56261036132432,
+            "rmse": 62.16002529632075,
+            "bias": -5.9189070604836935
+          },
+          "persistence": {
+            "count": 14306,
+            "mae": 47.82856773381798,
+            "rmse": 73.5136118444434,
+            "bias": -0.24967915559904935
+          },
+          "previous_day_same_hour": {
+            "count": 14306,
+            "mae": 47.82856773381798,
+            "rmse": 73.5136118444434,
+            "bias": -0.24967915559904935
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 3171,
+            "mae": 80.92292636932801,
+            "rmse": 110.74752416969831,
+            "bias": -59.55590620580243
+          },
+          "persistence": {
+            "count": 3171,
+            "mae": 92.08435824660991,
+            "rmse": 121.9009472536757,
+            "bias": -31.972248502049826
+          },
+          "previous_day_same_hour": {
+            "count": 3171,
+            "mae": 92.08435824660991,
+            "rmse": 121.9009472536757,
+            "bias": -31.972248502049826
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    }
+  },
+  "rolling_backtests": {
+    "rolling_2022": {
+      "1": {
+        "all_available": {
+          "lightgbm": {
+            "count": 8498,
+            "mae": 17.024075405604712,
+            "rmse": 30.515530611290963,
+            "bias": -0.7291829217072249
+          },
+          "persistence": {
+            "count": 8498,
+            "mae": 19.52352200517769,
+            "rmse": 34.16558316449626,
+            "bias": 0.028546716874558703
+          },
+          "previous_day_same_hour": {
+            "count": 8304,
+            "mae": 47.90680154142582,
+            "rmse": 75.42668171938558,
+            "bias": 0.3665510597302505
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 8304,
+            "mae": 17.060329890399395,
+            "rmse": 30.590192314216946,
+            "bias": -0.7369873617291252
+          },
+          "persistence": {
+            "count": 8304,
+            "mae": 19.58297928709056,
+            "rmse": 34.291131646678366,
+            "bias": -0.0011536608863198714
+          },
+          "previous_day_same_hour": {
+            "count": 8304,
+            "mae": 47.90680154142582,
+            "rmse": 75.42668171938558,
+            "bias": 0.3665510597302505
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2486,
+            "mae": 32.610118745747215,
+            "rmse": 50.19958471900437,
+            "bias": -6.934601368177852
+          },
+          "persistence": {
+            "count": 2486,
+            "mae": 36.985285599356395,
+            "rmse": 55.65881705470575,
+            "bias": -3.94934835076428
+          },
+          "previous_day_same_hour": {
+            "count": 2440,
+            "mae": 86.07763114754097,
+            "rmse": 114.77579079966526,
+            "bias": -26.999967213114754
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "3": {
+        "all_available": {
+          "lightgbm": {
+            "count": 8443,
+            "mae": 31.635392152569743,
+            "rmse": 51.844144262859054,
+            "bias": -3.868751785470996
+          },
+          "persistence": {
+            "count": 8443,
+            "mae": 41.644546961980346,
+            "rmse": 67.04380517454513,
+            "bias": 0.06420585100082903
+          },
+          "previous_day_same_hour": {
+            "count": 8249,
+            "mae": 48.074806643229486,
+            "rmse": 75.6306178587207,
+            "bias": 0.4371244999393866
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 8249,
+            "mae": 31.727359139675944,
+            "rmse": 51.985882683286206,
+            "bias": -3.9700706906864545
+          },
+          "persistence": {
+            "count": 8249,
+            "mae": 41.81663353133714,
+            "rmse": 67.30388254648472,
+            "bias": -0.09448539216874771
+          },
+          "previous_day_same_hour": {
+            "count": 8249,
+            "mae": 48.074806643229486,
+            "rmse": 75.6306178587207,
+            "bias": 0.4371244999393866
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2479,
+            "mae": 60.02641424965946,
+            "rmse": 84.20872802771588,
+            "bias": -25.905933639596302
+          },
+          "persistence": {
+            "count": 2479,
+            "mae": 77.03902783380396,
+            "rmse": 105.95264288334344,
+            "bias": -19.378269463493346
+          },
+          "previous_day_same_hour": {
+            "count": 2433,
+            "mae": 86.16427044800658,
+            "rmse": 114.8834060525322,
+            "bias": -26.918483353884092
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "6": {
+        "all_available": {
+          "lightgbm": {
+            "count": 8405,
+            "mae": 37.84368295272497,
+            "rmse": 61.65319839674693,
+            "bias": -5.625142113088922
+          },
+          "persistence": {
+            "count": 8405,
+            "mae": 59.22547769185009,
+            "rmse": 94.34363471698626,
+            "bias": -0.026610350981558565
+          },
+          "previous_day_same_hour": {
+            "count": 8212,
+            "mae": 48.16131880175353,
+            "rmse": 75.71954483411488,
+            "bias": 0.5035326351680468
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 8212,
+            "mae": 37.9214284969396,
+            "rmse": 61.78298233117083,
+            "bias": -5.722083626961242
+          },
+          "persistence": {
+            "count": 8212,
+            "mae": 59.46752435460302,
+            "rmse": 94.58971127810933,
+            "bias": -0.28949464198733565
+          },
+          "previous_day_same_hour": {
+            "count": 8212,
+            "mae": 48.16131880175353,
+            "rmse": 75.71954483411488,
+            "bias": 0.5035326351680468
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2476,
+            "mae": 72.80558569746778,
+            "rmse": 100.87212480688605,
+            "bias": -38.038239404506335
+          },
+          "persistence": {
+            "count": 2476,
+            "mae": 111.17073101777059,
+            "rmse": 148.66323807100414,
+            "bias": -39.32629644588045
+          },
+          "previous_day_same_hour": {
+            "count": 2430,
+            "mae": 86.06087242798353,
+            "rmse": 114.80677106829357,
+            "bias": -26.72630452674897
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "12": {
+        "all_available": {
+          "lightgbm": {
+            "count": 8356,
+            "mae": 40.501081979483274,
+            "rmse": 64.72557017843796,
+            "bias": -7.190182305090848
+          },
+          "persistence": {
+            "count": 8356,
+            "mae": 71.84739229296315,
+            "rmse": 112.8554867191281,
+            "bias": 0.4773611775969363
+          },
+          "previous_day_same_hour": {
+            "count": 8179,
+            "mae": 48.16754370949994,
+            "rmse": 75.81492301763679,
+            "bias": 0.5479985328279741
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 8179,
+            "mae": 40.47765970560037,
+            "rmse": 64.65513968846005,
+            "bias": -7.22800313012431
+          },
+          "persistence": {
+            "count": 8179,
+            "mae": 72.04720136936056,
+            "rmse": 113.1684198037827,
+            "bias": 0.4471500183396503
+          },
+          "previous_day_same_hour": {
+            "count": 8179,
+            "mae": 48.16754370949994,
+            "rmse": 75.81492301763679,
+            "bias": 0.5479985328279741
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2456,
+            "mae": 76.44080592196609,
+            "rmse": 105.010502455404,
+            "bias": -48.36949498826405
+          },
+          "persistence": {
+            "count": 2456,
+            "mae": 126.2349348534202,
+            "rmse": 164.8172099454976,
+            "bias": -64.08177524429968
+          },
+          "previous_day_same_hour": {
+            "count": 2418,
+            "mae": 86.3390570719603,
+            "rmse": 115.08199514850902,
+            "bias": -26.79253101736973
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "24": {
+        "all_available": {
+          "lightgbm": {
+            "count": 8351,
+            "mae": 41.48234115610297,
+            "rmse": 64.672353998488,
+            "bias": -7.254644336672252
+          },
+          "persistence": {
+            "count": 8351,
+            "mae": 47.78828882768531,
+            "rmse": 75.26110465638217,
+            "bias": 0.33110765177823015
+          },
+          "previous_day_same_hour": {
+            "count": 8351,
+            "mae": 47.78828882768531,
+            "rmse": 75.26110465638217,
+            "bias": 0.33110765177823015
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 8351,
+            "mae": 41.48234115610297,
+            "rmse": 64.672353998488,
+            "bias": -7.254644336672252
+          },
+          "persistence": {
+            "count": 8351,
+            "mae": 47.78828882768531,
+            "rmse": 75.26110465638217,
+            "bias": 0.33110765177823015
+          },
+          "previous_day_same_hour": {
+            "count": 8351,
+            "mae": 47.78828882768531,
+            "rmse": 75.26110465638217,
+            "bias": 0.33110765177823015
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2447,
+            "mae": 76.89192870802191,
+            "rmse": 103.26585744335979,
+            "bias": -48.90391461910305
+          },
+          "persistence": {
+            "count": 2447,
+            "mae": 86.00568859828361,
+            "rmse": 114.67209555679622,
+            "bias": -27.074139762975072
+          },
+          "previous_day_same_hour": {
+            "count": 2447,
+            "mae": 86.00568859828361,
+            "rmse": 114.67209555679622,
+            "bias": -27.074139762975072
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    },
+    "rolling_2023": {
+      "1": {
+        "all_available": {
+          "lightgbm": {
+            "count": 7892,
+            "mae": 17.673513212995683,
+            "rmse": 30.628682637661214,
+            "bias": -0.6440090688994666
+          },
+          "persistence": {
+            "count": 7892,
+            "mae": 19.93854325054908,
+            "rmse": 34.01615752911903,
+            "bias": 0.07897237709072479
+          },
+          "previous_day_same_hour": {
+            "count": 7522,
+            "mae": 49.926502260037225,
+            "rmse": 78.75456152781906,
+            "bias": 0.1451054684037931
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 7522,
+            "mae": 17.52386791936569,
+            "rmse": 30.413650561456784,
+            "bias": -0.7661528587870661
+          },
+          "persistence": {
+            "count": 7522,
+            "mae": 19.821800496321902,
+            "rmse": 33.747001487832605,
+            "bias": -0.04687361517326954
+          },
+          "previous_day_same_hour": {
+            "count": 7522,
+            "mae": 49.926502260037225,
+            "rmse": 78.75456152781906,
+            "bias": 0.1451054684037931
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2434,
+            "mae": 32.03351851874986,
+            "rmse": 48.767300728974014,
+            "bias": -7.493498325622082
+          },
+          "persistence": {
+            "count": 2434,
+            "mae": 35.69662421254451,
+            "rmse": 53.65878496730809,
+            "bias": -3.903074500136949
+          },
+          "previous_day_same_hour": {
+            "count": 2342,
+            "mae": 86.65083262169087,
+            "rmse": 116.76764690434649,
+            "bias": -24.718367492171936
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "3": {
+        "all_available": {
+          "lightgbm": {
+            "count": 7786,
+            "mae": 31.41095792677495,
+            "rmse": 50.79328472156901,
+            "bias": -3.9921843160956327
+          },
+          "persistence": {
+            "count": 7786,
+            "mae": 41.583500299683195,
+            "rmse": 65.69658353472728,
+            "bias": 0.41509118931415356
+          },
+          "previous_day_same_hour": {
+            "count": 7432,
+            "mae": 49.90732418371008,
+            "rmse": 78.55169930755268,
+            "bias": 0.14947524219590952
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 7432,
+            "mae": 31.24893565461034,
+            "rmse": 50.59668362834076,
+            "bias": -4.091009636874639
+          },
+          "persistence": {
+            "count": 7432,
+            "mae": 41.485017491926804,
+            "rmse": 65.307224902985,
+            "bias": 0.16780812701829928
+          },
+          "previous_day_same_hour": {
+            "count": 7432,
+            "mae": 49.90732418371008,
+            "rmse": 78.55169930755268,
+            "bias": 0.14947524219590952
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2409,
+            "mae": 57.23464180256428,
+            "rmse": 80.86666871936266,
+            "bias": -26.680033417340766
+          },
+          "persistence": {
+            "count": 2409,
+            "mae": 73.1893593468936,
+            "rmse": 100.32039700162626,
+            "bias": -16.06842396568424
+          },
+          "previous_day_same_hour": {
+            "count": 2317,
+            "mae": 86.54894979139692,
+            "rmse": 116.44860827086084,
+            "bias": -24.762156524241117
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "6": {
+        "all_available": {
+          "lightgbm": {
+            "count": 7712,
+            "mae": 37.738218627262306,
+            "rmse": 61.07248269673945,
+            "bias": -6.508713908683451
+          },
+          "persistence": {
+            "count": 7712,
+            "mae": 59.04017116182573,
+            "rmse": 92.01299482019941,
+            "bias": 0.17781811894882435
+          },
+          "previous_day_same_hour": {
+            "count": 7371,
+            "mae": 50.08251481029259,
+            "rmse": 79.190476869592,
+            "bias": 0.24011893456337893
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 7371,
+            "mae": 37.79476626404675,
+            "rmse": 61.21379705429762,
+            "bias": -6.648841499423261
+          },
+          "persistence": {
+            "count": 7371,
+            "mae": 59.58379233934789,
+            "rmse": 92.66547331207293,
+            "bias": 0.15158504047392937
+          },
+          "previous_day_same_hour": {
+            "count": 7371,
+            "mae": 50.08251481029259,
+            "rmse": 79.190476869592,
+            "bias": 0.24011893456337893
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2389,
+            "mae": 70.33594742154473,
+            "rmse": 98.18308578413371,
+            "bias": -41.99831496223013
+          },
+          "persistence": {
+            "count": 2389,
+            "mae": 102.52939863262174,
+            "rmse": 136.6931669483782,
+            "bias": -36.73729593972374
+          },
+          "previous_day_same_hour": {
+            "count": 2304,
+            "mae": 86.51272424768518,
+            "rmse": 117.05342160619398,
+            "bias": -25.162029803240745
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "12": {
+        "all_available": {
+          "lightgbm": {
+            "count": 7638,
+            "mae": 41.73162916763009,
+            "rmse": 67.23295727758469,
+            "bias": -7.857440067358886
+          },
+          "persistence": {
+            "count": 7638,
+            "mae": 73.8886881382561,
+            "rmse": 111.16349525967608,
+            "bias": -0.4511652264990836
+          },
+          "previous_day_same_hour": {
+            "count": 7327,
+            "mae": 49.91529730221554,
+            "rmse": 78.64779407478166,
+            "bias": -0.2369887630226108
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 7327,
+            "mae": 41.3251041817592,
+            "rmse": 66.40046541767754,
+            "bias": -7.175994443777304
+          },
+          "persistence": {
+            "count": 7327,
+            "mae": 74.09230244301898,
+            "rmse": 111.2652585397263,
+            "bias": 0.4758200263864246
+          },
+          "previous_day_same_hour": {
+            "count": 7327,
+            "mae": 49.91529730221554,
+            "rmse": 78.64779407478166,
+            "bias": -0.2369887630226108
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2377,
+            "mae": 77.38293656162726,
+            "rmse": 107.0172796098786,
+            "bias": -49.52834981179161
+          },
+          "persistence": {
+            "count": 2377,
+            "mae": 123.83784882905623,
+            "rmse": 158.13527215574314,
+            "bias": -60.1746879820502
+          },
+          "previous_day_same_hour": {
+            "count": 2285,
+            "mae": 86.14010940919037,
+            "rmse": 116.16218248343291,
+            "bias": -26.595762217359596
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      },
+      "24": {
+        "all_available": {
+          "lightgbm": {
+            "count": 7610,
+            "mae": 42.45994700839096,
+            "rmse": 67.01996426712684,
+            "bias": -6.911699052460242
+          },
+          "persistence": {
+            "count": 7610,
+            "mae": 50.017242663162506,
+            "rmse": 79.19937247673198,
+            "bias": -0.012056504599211563
+          },
+          "previous_day_same_hour": {
+            "count": 7610,
+            "mae": 50.017242663162506,
+            "rmse": 79.19937247673198,
+            "bias": -0.012056504599211563
+          }
+        },
+        "common_baseline_cohort": {
+          "lightgbm": {
+            "count": 7610,
+            "mae": 42.45994700839096,
+            "rmse": 67.01996426712684,
+            "bias": -6.911699052460242
+          },
+          "persistence": {
+            "count": 7610,
+            "mae": 50.017242663162506,
+            "rmse": 79.19937247673198,
+            "bias": -0.012056504599211563
+          },
+          "previous_day_same_hour": {
+            "count": 7610,
+            "mae": 50.017242663162506,
+            "rmse": 79.19937247673198,
+            "bias": -0.012056504599211563
+          }
+        },
+        "high_pollution_observed_target_ge_150": {
+          "lightgbm": {
+            "count": 2369,
+            "mae": 76.99079774677082,
+            "rmse": 105.27918731667893,
+            "bias": -48.72104618139231
+          },
+          "persistence": {
+            "count": 2369,
+            "mae": 87.0556775010553,
+            "rmse": 117.65941522639365,
+            "bias": -25.237962572112
+          },
+          "previous_day_same_hour": {
+            "count": 2369,
+            "mae": 87.0556775010553,
+            "rmse": 117.65941522639365,
+            "bias": -25.237962572112
+          }
+        },
+        "high_pollution_threshold_ugm3": 150,
+        "high_pollution_definition": "observed target >=150 \u00b5g/m\u00b3, descriptive retrospective subset, not a health category"
+      }
+    }
+  },
+  "models": {
+    "1": {
+      "path": "horizon_1h.txt",
+      "sha256": "b9dcfb8965c83a7e450534c59f1f0ae3d83ad00e001ad900e02b8104d5c03b76",
+      "best_iteration": 195,
+      "feature_names": [
+        "pm25_lag_0h",
+        "pm25_lag_0h_missing",
+        "pm25_lag_1h",
+        "pm25_lag_1h_missing",
+        "pm25_lag_2h",
+        "pm25_lag_2h_missing",
+        "pm25_lag_3h",
+        "pm25_lag_3h_missing",
+        "pm25_lag_6h",
+        "pm25_lag_6h_missing",
+        "pm25_lag_12h",
+        "pm25_lag_12h_missing",
+        "pm25_lag_24h",
+        "pm25_lag_24h_missing",
+        "pm25_lag_48h",
+        "pm25_lag_48h_missing",
+        "pm25_lag_72h",
+        "pm25_lag_72h_missing",
+        "pm25_lag_168h",
+        "pm25_lag_168h_missing",
+        "pm25_trailing_6h_mean",
+        "pm25_trailing_6h_std",
+        "pm25_trailing_6h_max",
+        "pm25_trailing_6h_count",
+        "pm25_trailing_24h_mean",
+        "pm25_trailing_24h_std",
+        "pm25_trailing_24h_max",
+        "pm25_trailing_24h_count",
+        "pm25_trailing_168h_mean",
+        "pm25_trailing_168h_std",
+        "pm25_trailing_168h_max",
+        "pm25_trailing_168h_count",
+        "pm25_difference_3h",
+        "pm25_difference_24h",
+        "target_hour_sin",
+        "target_hour_cos",
+        "target_doy_sin",
+        "target_doy_cos",
+        "target_weekend"
+      ]
+    },
+    "3": {
+      "path": "horizon_3h.txt",
+      "sha256": "db305347dd2f3c33059048d6272f230b184070ac097b2ad8e86d16d27b1c23c9",
+      "best_iteration": 196,
+      "feature_names": [
+        "pm25_lag_0h",
+        "pm25_lag_0h_missing",
+        "pm25_lag_1h",
+        "pm25_lag_1h_missing",
+        "pm25_lag_2h",
+        "pm25_lag_2h_missing",
+        "pm25_lag_3h",
+        "pm25_lag_3h_missing",
+        "pm25_lag_6h",
+        "pm25_lag_6h_missing",
+        "pm25_lag_12h",
+        "pm25_lag_12h_missing",
+        "pm25_lag_24h",
+        "pm25_lag_24h_missing",
+        "pm25_lag_48h",
+        "pm25_lag_48h_missing",
+        "pm25_lag_72h",
+        "pm25_lag_72h_missing",
+        "pm25_lag_168h",
+        "pm25_lag_168h_missing",
+        "pm25_trailing_6h_mean",
+        "pm25_trailing_6h_std",
+        "pm25_trailing_6h_max",
+        "pm25_trailing_6h_count",
+        "pm25_trailing_24h_mean",
+        "pm25_trailing_24h_std",
+        "pm25_trailing_24h_max",
+        "pm25_trailing_24h_count",
+        "pm25_trailing_168h_mean",
+        "pm25_trailing_168h_std",
+        "pm25_trailing_168h_max",
+        "pm25_trailing_168h_count",
+        "pm25_difference_3h",
+        "pm25_difference_24h",
+        "target_hour_sin",
+        "target_hour_cos",
+        "target_doy_sin",
+        "target_doy_cos",
+        "target_weekend"
+      ]
+    },
+    "6": {
+      "path": "horizon_6h.txt",
+      "sha256": "5af26ad6b86bf671470fe26d3f2b097d610b77c29e1c6bd2c5c72997fb94cde0",
+      "best_iteration": 199,
+      "feature_names": [
+        "pm25_lag_0h",
+        "pm25_lag_0h_missing",
+        "pm25_lag_1h",
+        "pm25_lag_1h_missing",
+        "pm25_lag_2h",
+        "pm25_lag_2h_missing",
+        "pm25_lag_3h",
+        "pm25_lag_3h_missing",
+        "pm25_lag_6h",
+        "pm25_lag_6h_missing",
+        "pm25_lag_12h",
+        "pm25_lag_12h_missing",
+        "pm25_lag_24h",
+        "pm25_lag_24h_missing",
+        "pm25_lag_48h",
+        "pm25_lag_48h_missing",
+        "pm25_lag_72h",
+        "pm25_lag_72h_missing",
+        "pm25_lag_168h",
+        "pm25_lag_168h_missing",
+        "pm25_trailing_6h_mean",
+        "pm25_trailing_6h_std",
+        "pm25_trailing_6h_max",
+        "pm25_trailing_6h_count",
+        "pm25_trailing_24h_mean",
+        "pm25_trailing_24h_std",
+        "pm25_trailing_24h_max",
+        "pm25_trailing_24h_count",
+        "pm25_trailing_168h_mean",
+        "pm25_trailing_168h_std",
+        "pm25_trailing_168h_max",
+        "pm25_trailing_168h_count",
+        "pm25_difference_3h",
+        "pm25_difference_24h",
+        "target_hour_sin",
+        "target_hour_cos",
+        "target_doy_sin",
+        "target_doy_cos",
+        "target_weekend"
+      ]
+    },
+    "12": {
+      "path": "horizon_12h.txt",
+      "sha256": "9058f611618f0791fea75752e23fa911fc09406c9d24033face1c059022db594",
+      "best_iteration": 99,
+      "feature_names": [
+        "pm25_lag_0h",
+        "pm25_lag_0h_missing",
+        "pm25_lag_1h",
+        "pm25_lag_1h_missing",
+        "pm25_lag_2h",
+        "pm25_lag_2h_missing",
+        "pm25_lag_3h",
+        "pm25_lag_3h_missing",
+        "pm25_lag_6h",
+        "pm25_lag_6h_missing",
+        "pm25_lag_12h",
+        "pm25_lag_12h_missing",
+        "pm25_lag_24h",
+        "pm25_lag_24h_missing",
+        "pm25_lag_48h",
+        "pm25_lag_48h_missing",
+        "pm25_lag_72h",
+        "pm25_lag_72h_missing",
+        "pm25_lag_168h",
+        "pm25_lag_168h_missing",
+        "pm25_trailing_6h_mean",
+        "pm25_trailing_6h_std",
+        "pm25_trailing_6h_max",
+        "pm25_trailing_6h_count",
+        "pm25_trailing_24h_mean",
+        "pm25_trailing_24h_std",
+        "pm25_trailing_24h_max",
+        "pm25_trailing_24h_count",
+        "pm25_trailing_168h_mean",
+        "pm25_trailing_168h_std",
+        "pm25_trailing_168h_max",
+        "pm25_trailing_168h_count",
+        "pm25_difference_3h",
+        "pm25_difference_24h",
+        "target_hour_sin",
+        "target_hour_cos",
+        "target_doy_sin",
+        "target_doy_cos",
+        "target_weekend"
+      ]
+    },
+    "24": {
+      "path": "horizon_24h.txt",
+      "sha256": "8ac9b7ef961e79dfb493c9acf488183bf0ccb92c68f219583499d31d2bfde606",
+      "best_iteration": 68,
+      "feature_names": [
+        "pm25_lag_0h",
+        "pm25_lag_0h_missing",
+        "pm25_lag_1h",
+        "pm25_lag_1h_missing",
+        "pm25_lag_2h",
+        "pm25_lag_2h_missing",
+        "pm25_lag_3h",
+        "pm25_lag_3h_missing",
+        "pm25_lag_6h",
+        "pm25_lag_6h_missing",
+        "pm25_lag_12h",
+        "pm25_lag_12h_missing",
+        "pm25_lag_24h",
+        "pm25_lag_24h_missing",
+        "pm25_lag_48h",
+        "pm25_lag_48h_missing",
+        "pm25_lag_72h",
+        "pm25_lag_72h_missing",
+        "pm25_lag_168h",
+        "pm25_lag_168h_missing",
+        "pm25_trailing_6h_mean",
+        "pm25_trailing_6h_std",
+        "pm25_trailing_6h_max",
+        "pm25_trailing_6h_count",
+        "pm25_trailing_24h_mean",
+        "pm25_trailing_24h_std",
+        "pm25_trailing_24h_max",
+        "pm25_trailing_24h_count",
+        "pm25_trailing_168h_mean",
+        "pm25_trailing_168h_std",
+        "pm25_trailing_168h_max",
+        "pm25_trailing_168h_count",
+        "pm25_difference_3h",
+        "pm25_difference_24h",
+        "target_hour_sin",
+        "target_hour_cos",
+        "target_doy_sin",
+        "target_doy_cos",
+        "target_weekend"
+      ]
+    }
+  },
+  "feature_definitions": [
+    {
+      "name": "pm25_lag_0h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 0h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_0h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 0h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_1h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 1h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_1h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 1h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_2h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 2h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_2h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 2h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_3h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 3h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_3h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 3h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_6h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 6h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_6h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 6h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_12h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 12h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_12h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 12h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_24h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 24h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_24h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 24h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_48h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 48h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_48h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 48h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_72h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 72h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_72h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 72h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_lag_168h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "exact observed PM2.5 at issue - 168h; missing remains NaN"
+    },
+    {
+      "name": "pm25_lag_168h_missing",
+      "unit": "indicator",
+      "formula": "1 iff exact lag 168h is absent; never a substituted concentration"
+    },
+    {
+      "name": "pm25_trailing_6h_mean",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only mean over [issue-5h, issue]; mean/std/max require >=ceil(0.75*6) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_6h_std",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only std over [issue-5h, issue]; mean/std/max require >=ceil(0.75*6) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_6h_max",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only max over [issue-5h, issue]; mean/std/max require >=ceil(0.75*6) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_6h_count",
+      "unit": "count",
+      "formula": "observed-only count over [issue-5h, issue]; mean/std/max require >=ceil(0.75*6) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_24h_mean",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only mean over [issue-23h, issue]; mean/std/max require >=ceil(0.75*24) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_24h_std",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only std over [issue-23h, issue]; mean/std/max require >=ceil(0.75*24) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_24h_max",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only max over [issue-23h, issue]; mean/std/max require >=ceil(0.75*24) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_24h_count",
+      "unit": "count",
+      "formula": "observed-only count over [issue-23h, issue]; mean/std/max require >=ceil(0.75*24) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_168h_mean",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only mean over [issue-167h, issue]; mean/std/max require >=ceil(0.75*168) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_168h_std",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only std over [issue-167h, issue]; mean/std/max require >=ceil(0.75*168) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_168h_max",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "observed-only max over [issue-167h, issue]; mean/std/max require >=ceil(0.75*168) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_trailing_168h_count",
+      "unit": "count",
+      "formula": "observed-only count over [issue-167h, issue]; mean/std/max require >=ceil(0.75*168) observed hours; std ddof=0"
+    },
+    {
+      "name": "pm25_difference_3h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "current observed PM2.5 minus exact lag 3h, NaN if either absent"
+    },
+    {
+      "name": "pm25_difference_24h",
+      "unit": "\u00b5g/m\u00b3",
+      "formula": "current observed PM2.5 minus exact lag 24h, NaN if either absent"
+    },
+    {
+      "name": "target_hour_sin",
+      "unit": "dimensionless",
+      "formula": "sin(2*pi*recorded target hour/24)"
+    },
+    {
+      "name": "target_hour_cos",
+      "unit": "dimensionless",
+      "formula": "cos(2*pi*recorded target hour/24)"
+    },
+    {
+      "name": "target_doy_sin",
+      "unit": "dimensionless",
+      "formula": "sin(2*pi*(recorded target day-of-year-1)/365.25)"
+    },
+    {
+      "name": "target_doy_cos",
+      "unit": "dimensionless",
+      "formula": "cos(2*pi*(recorded target day-of-year-1)/365.25)"
+    },
+    {
+      "name": "target_weekend",
+      "unit": "dimensionless",
+      "formula": "1 iff recorded target weekday is Saturday or Sunday"
+    }
+  ],
+  "publication_note": "Compact derived metrics and hashes only; native models and individual heldout predictions remain local/ignored."
+}

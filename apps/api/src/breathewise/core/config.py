@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     data_mode: Literal["live", "historical_replay", "demo"] = "live"
     web_origin: str = "http://localhost:5173"
     data_root: Path = ROOT / "data"
+    archive_root: Path = ROOT / "data/archive"
+    forecast_registry_root: Path = ROOT / "work/forecast-experiment"
+    routing_base_url: str = ""
     model_artifact_path: Path = ROOT / "artifacts/models/zero_input_aq_weather_model.joblib"
 
 

@@ -2084,5 +2084,6 @@
     "actual_observation_cache_now_available": true,
     "actual_source_evidence": "docs/DATA_EVIDENCE.json",
     "new_user_authorized_archive": "NIErnaya_data/AirScope_India_final; scoped read-only audit in DELHI_DATA_AUDIT.json"
-  }
+  },
+  "scope": "This matrix describes the supplied75-input model only. New independent39-feature retrospective experiment has its own verified definitions/results in FORECAST_EXPERIMENT.md and FORECAST_RESULTS.json; it does not resolve original-model parity."
 }

@@ -60,3 +60,11 @@ feature-snapshot:
 setup-browser-tests:
 	npm ci --prefix tools/browser-tests --no-audit --no-fund
 	PLAYWRIGHT_BROWSERS_PATH="$(CURDIR)/work/browsers" tools/browser-tests/node_modules/.bin/playwright install chromium
+
+# Independent recorded-clock research runtime; API/web environments remain unchanged.
+setup-forecast-experiment:
+	uv sync --locked --project tools/forecast-experiment
+train-forecast-experiment:
+	uv run --locked --project tools/forecast-experiment python scripts/train_forecast.py $(ARGS)
+check-forecast-experiment:
+	uv run --locked --project tools/forecast-experiment pytest -q -c tools/forecast-experiment/pytest.ini tools/forecast-experiment/tests

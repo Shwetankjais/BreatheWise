@@ -7,7 +7,17 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException
 
-from breathewise.api import account, alerts, environment, observations, system
+from breathewise.api import (
+    account,
+    alerts,
+    archive,
+    catalogue,
+    environment,
+    models,
+    observations,
+    routing,
+    system,
+)
 from breathewise.core.config import get_settings
 from breathewise.core.errors import ServiceError, error_body
 from breathewise.schemas.common import CONTRACT_VERSION, ErrorDetail, ErrorResponse
@@ -78,6 +88,10 @@ def create_app():
     app.include_router(observations.router, prefix="/api/v1")
     app.include_router(account.router, prefix="/api/v1")
     app.include_router(alerts.router, prefix="/api/v1")
+    app.include_router(routing.router, prefix="/api/v1")
+    app.include_router(models.router, prefix="/api/v1")
+    app.include_router(archive.router, prefix="/api/v1")
+    app.include_router(catalogue.router, prefix="/api/v1")
     return app
 
 

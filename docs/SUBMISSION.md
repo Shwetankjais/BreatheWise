@@ -1,6 +1,12 @@
 # Verification and checkpoint evidence — 24 November 2026
 
-Status: incomplete product; real-observation backend and native diagnostic milestones delivered on feat/foundation. No operational model inference, main merge or deployment. Current code checkpoint 4e6ccf54c0af54db763a237940c4e24887fe51ce pushed; [CI45291003341](https://github.com/Shwetankjais/BreatheWise/actions/runs/45291003341) succeeded. Earlier checkpoint history is retained after the current evidence.
+Current status: frontend correction milestone accepted at be63911 (implementation0187061). All 8 desktop/mobile behavioral browser journeys, 22 frontend tests/build and current repository checks passed; CI45299269264 passed 46 standard tests + 1 default PostgreSQL-only skip, 18 PostgreSQL and 2 isolated native mechanics cases. Frontend source is committed. No operational model, official AQI, full accessibility, main merge or deployment acceptance.
+Next milestone active: verified multi-station observations, recorded-clock history/explorer/comparison, independent retrospective PM2.5 experiment/evaluation services, and route geometry separated from exposure. Contract plan: NEXT_MILESTONE_CONTRACT.md. Original source-clock/model-parity limitations remain explicit.
+
+## Current new backend features
+Contract1.2.0 adds implemented station catalogue/observed rankings, recorded-clock archive catalogue/explorer/matched comparison, versioned retrospective model evaluation/heldout predictions and separate OSRM route geometry. Actual scopes: fourDelhi stations281PM2.5records;54eligible archive sourceIDs; single-station new modeldelhi-recorded-pm25-v1 with39features and5evaluated horizons. Backend67tests+1defaultPGskip and13isolatedexperimenttests pass; full new UI review awaits Antigravity's current ready snapshot. See FEATURE_MILESTONE_EVIDENCE.json, DELHI_COHORT.json, FORECAST_RESULTS.json and FORECAST_EXPERIMENT.md. Operational forecasts/full trajectory/exposure remain unavailable. Main merge/deployment not performed.
+
+## Historical evidence (old failures/statuses below are superseded)
 
 | Check | Actual result |
 | --- | --- |

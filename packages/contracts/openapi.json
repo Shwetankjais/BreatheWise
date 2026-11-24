@@ -114,9 +114,758 @@
         "title": "Advisory",
         "type": "object"
       },
+      "ArchiveBucket": {
+        "additionalProperties": false,
+        "properties": {
+          "coverage_fraction": {
+            "title": "Coverage Fraction",
+            "type": "number"
+          },
+          "expected_count": {
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "meets_requested_sufficiency": {
+            "title": "Meets Requested Sufficiency",
+            "type": "boolean"
+          },
+          "missing_count": {
+            "title": "Missing Count",
+            "type": "integer"
+          },
+          "period_end": {
+            "format": "date-time",
+            "title": "Period End",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date-time",
+            "title": "Period Start",
+            "type": "string"
+          },
+          "valid_count": {
+            "title": "Valid Count",
+            "type": "integer"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "period_start",
+          "period_end",
+          "value",
+          "valid_count",
+          "expected_count",
+          "missing_count",
+          "coverage_fraction",
+          "meets_requested_sufficiency"
+        ],
+        "title": "ArchiveBucket",
+        "type": "object"
+      },
+      "ArchiveCatalogue": {
+        "additionalProperties": false,
+        "properties": {
+          "clock_basis": {
+            "const": "source_naive_clock_unverified",
+            "default": "source_naive_clock_unverified",
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "dataset_fingerprint": {
+            "title": "Dataset Fingerprint",
+            "type": "string"
+          },
+          "dataset_id": {
+            "default": "delhi_observed_archive_v1",
+            "title": "Dataset Id",
+            "type": "string"
+          },
+          "dataset_mode": {
+            "const": "recorded_clock",
+            "default": "recorded_clock",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "excluded_row_count": {
+            "title": "Excluded Row Count",
+            "type": "integer"
+          },
+          "interval_semantics": {
+            "const": "unverified",
+            "default": "unverified",
+            "title": "Interval Semantics",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "publication_time_known": {
+            "default": false,
+            "title": "Publication Time Known",
+            "type": "boolean"
+          },
+          "source_file_count": {
+            "title": "Source File Count",
+            "type": "integer"
+          },
+          "station_count": {
+            "title": "Station Count",
+            "type": "integer"
+          },
+          "stations": {
+            "items": {
+              "$ref": "#/components/schemas/ArchiveStation"
+            },
+            "title": "Stations",
+            "type": "array"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "null"
+          }
+        },
+        "required": [
+          "dataset_fingerprint",
+          "stations",
+          "station_count",
+          "excluded_row_count",
+          "source_file_count"
+        ],
+        "title": "ArchiveCatalogue",
+        "type": "object"
+      },
+      "ArchiveCompare": {
+        "additionalProperties": false,
+        "properties": {
+          "aggregation": {
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "alignment_status": {
+            "const": "conditional_same_recorded_clock_only",
+            "default": "conditional_same_recorded_clock_only",
+            "title": "Alignment Status",
+            "type": "string"
+          },
+          "clock_assumption": {
+            "const": "same_recorded_clock",
+            "title": "Clock Assumption",
+            "type": "string"
+          },
+          "clock_basis": {
+            "const": "source_naive_clock_unverified",
+            "default": "source_naive_clock_unverified",
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "dataset_fingerprint": {
+            "title": "Dataset Fingerprint",
+            "type": "string"
+          },
+          "dataset_id": {
+            "default": "delhi_observed_archive_v1",
+            "title": "Dataset Id",
+            "type": "string"
+          },
+          "dataset_mode": {
+            "const": "recorded_clock",
+            "default": "recorded_clock",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "end": {
+            "format": "date-time",
+            "title": "End",
+            "type": "string"
+          },
+          "expected_count": {
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "forecast_evaluation": {
+            "default": false,
+            "title": "Forecast Evaluation",
+            "type": "boolean"
+          },
+          "interval_semantics": {
+            "const": "unverified",
+            "default": "unverified",
+            "title": "Interval Semantics",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "matched_hour_count": {
+            "title": "Matched Hour Count",
+            "type": "integer"
+          },
+          "pair_agreement": {
+            "items": {
+              "$ref": "#/components/schemas/ArchivePairAgreement"
+            },
+            "title": "Pair Agreement",
+            "type": "array"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/ArchiveComparisonBucket"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "publication_time_known": {
+            "default": false,
+            "title": "Publication Time Known",
+            "type": "boolean"
+          },
+          "start": {
+            "format": "date-time",
+            "title": "Start",
+            "type": "string"
+          },
+          "station_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Station Ids",
+            "type": "array"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "null"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "unmatched_or_missing_hour_count": {
+            "title": "Unmatched Or Missing Hour Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "dataset_fingerprint",
+          "station_ids",
+          "pollutant",
+          "unit",
+          "start",
+          "end",
+          "aggregation",
+          "clock_assumption",
+          "matched_hour_count",
+          "expected_count",
+          "unmatched_or_missing_hour_count",
+          "points",
+          "pair_agreement"
+        ],
+        "title": "ArchiveCompare",
+        "type": "object"
+      },
+      "ArchiveComparisonBucket": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_count": {
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "means": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Means",
+            "type": "object"
+          },
+          "paired_coverage_fraction": {
+            "title": "Paired Coverage Fraction",
+            "type": "number"
+          },
+          "paired_hour_count": {
+            "title": "Paired Hour Count",
+            "type": "integer"
+          },
+          "period_end": {
+            "format": "date-time",
+            "title": "Period End",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date-time",
+            "title": "Period Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "period_start",
+          "period_end",
+          "paired_hour_count",
+          "expected_count",
+          "paired_coverage_fraction",
+          "means"
+        ],
+        "title": "ArchiveComparisonBucket",
+        "type": "object"
+      },
+      "ArchiveDistribution": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean"
+          },
+          "median": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "p05": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P05"
+          },
+          "p25": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P25"
+          },
+          "p75": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P75"
+          },
+          "p95": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P95"
+          },
+          "stddev": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stddev"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "title": "ArchiveDistribution",
+        "type": "object"
+      },
+      "ArchiveExplore": {
+        "additionalProperties": false,
+        "properties": {
+          "absent_hour_count": {
+            "title": "Absent Hour Count",
+            "type": "integer"
+          },
+          "aggregation": {
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "title": "Aggregation",
+            "type": "string"
+          },
+          "clock_basis": {
+            "const": "source_naive_clock_unverified",
+            "default": "source_naive_clock_unverified",
+            "title": "Clock Basis",
+            "type": "string"
+          },
+          "coverage_fraction": {
+            "title": "Coverage Fraction",
+            "type": "number"
+          },
+          "dataset_fingerprint": {
+            "title": "Dataset Fingerprint",
+            "type": "string"
+          },
+          "dataset_id": {
+            "default": "delhi_observed_archive_v1",
+            "title": "Dataset Id",
+            "type": "string"
+          },
+          "dataset_mode": {
+            "const": "recorded_clock",
+            "default": "recorded_clock",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "distribution": {
+            "$ref": "#/components/schemas/ArchiveDistribution"
+          },
+          "end": {
+            "format": "date-time",
+            "title": "End",
+            "type": "string"
+          },
+          "expected_count": {
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "interval_semantics": {
+            "const": "unverified",
+            "default": "unverified",
+            "title": "Interval Semantics",
+            "type": "string"
+          },
+          "invalid_count": {
+            "title": "Invalid Count",
+            "type": "integer"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "lineage_source_files": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Lineage Source Files",
+            "type": "array"
+          },
+          "min_count": {
+            "title": "Min Count",
+            "type": "integer"
+          },
+          "min_coverage": {
+            "title": "Min Coverage",
+            "type": "number"
+          },
+          "missing_count": {
+            "title": "Missing Count",
+            "type": "integer"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/ArchiveBucket"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "publication_time_known": {
+            "default": false,
+            "title": "Publication Time Known",
+            "type": "boolean"
+          },
+          "source_null_count": {
+            "title": "Source Null Count",
+            "type": "integer"
+          },
+          "start": {
+            "format": "date-time",
+            "title": "Start",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "null"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "valid_count": {
+            "title": "Valid Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "dataset_fingerprint",
+          "station_id",
+          "pollutant",
+          "unit",
+          "start",
+          "end",
+          "aggregation",
+          "min_count",
+          "min_coverage",
+          "valid_count",
+          "expected_count",
+          "missing_count",
+          "source_null_count",
+          "invalid_count",
+          "absent_hour_count",
+          "coverage_fraction",
+          "distribution",
+          "points",
+          "lineage_source_files"
+        ],
+        "title": "ArchiveExplore",
+        "type": "object"
+      },
+      "ArchivePairAgreement": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "interpretation": {
+            "default": "Differences between observed station records, not forecast evaluation",
+            "title": "Interpretation",
+            "type": "string"
+          },
+          "mean_absolute_difference": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Absolute Difference"
+          },
+          "mean_difference": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Difference"
+          },
+          "station_a": {
+            "title": "Station A",
+            "type": "string"
+          },
+          "station_b": {
+            "title": "Station B",
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_a",
+          "station_b",
+          "count",
+          "mean_difference",
+          "mean_absolute_difference"
+        ],
+        "title": "ArchivePairAgreement",
+        "type": "object"
+      },
+      "ArchivePollutantCoverage": {
+        "additionalProperties": false,
+        "properties": {
+          "coverage_fraction": {
+            "title": "Coverage Fraction",
+            "type": "number"
+          },
+          "invalid_count": {
+            "title": "Invalid Count",
+            "type": "integer"
+          },
+          "missing_count": {
+            "title": "Missing Count",
+            "type": "integer"
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "valid_count": {
+            "title": "Valid Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pollutant",
+          "unit",
+          "valid_count",
+          "missing_count",
+          "invalid_count",
+          "coverage_fraction"
+        ],
+        "title": "ArchivePollutantCoverage",
+        "type": "object"
+      },
+      "ArchiveStation": {
+        "additionalProperties": false,
+        "properties": {
+          "absent_hour_count": {
+            "title": "Absent Hour Count",
+            "type": "integer"
+          },
+          "expected_count": {
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "first_record": {
+            "format": "date-time",
+            "title": "First Record",
+            "type": "string"
+          },
+          "grid_rows": {
+            "title": "Grid Rows",
+            "type": "integer"
+          },
+          "labels": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Labels",
+            "type": "array"
+          },
+          "last_record": {
+            "format": "date-time",
+            "title": "Last Record",
+            "type": "string"
+          },
+          "pollutants": {
+            "items": {
+              "$ref": "#/components/schemas/ArchivePollutantCoverage"
+            },
+            "title": "Pollutants",
+            "type": "array"
+          },
+          "source_folders": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source Folders",
+            "type": "array"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_id",
+          "source_folders",
+          "labels",
+          "first_record",
+          "last_record",
+          "grid_rows",
+          "expected_count",
+          "absent_hour_count",
+          "pollutants"
+        ],
+        "title": "ArchiveStation",
+        "type": "object"
+      },
       "Capabilities": {
         "properties": {
           "alerts": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "archive_explorer": {
             "$ref": "#/components/schemas/Capability"
           },
           "calibrated_exceedance_probability": {
@@ -151,10 +900,22 @@
           "model_forecast": {
             "$ref": "#/components/schemas/Capability"
           },
+          "native_diagnostics": {
+            "$ref": "#/components/schemas/Capability"
+          },
           "observations": {
             "$ref": "#/components/schemas/Capability"
           },
+          "observed_rankings": {
+            "$ref": "#/components/schemas/Capability"
+          },
           "population_coverage": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "retrospective_evaluation": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "route_geometry": {
             "$ref": "#/components/schemas/Capability"
           },
           "routes": {
@@ -164,6 +925,12 @@
             "$ref": "#/components/schemas/Capability"
           },
           "spatial_exposure": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "station_catalogue": {
+            "$ref": "#/components/schemas/Capability"
+          },
+          "station_comparison": {
             "$ref": "#/components/schemas/Capability"
           },
           "traffic_live": {
@@ -244,6 +1011,111 @@
         "title": "Capability",
         "type": "object"
       },
+      "CatalogueStation": {
+        "additionalProperties": false,
+        "properties": {
+          "catalogue_verified_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Catalogue Verified At"
+          },
+          "city_id": {
+            "title": "City Id",
+            "type": "string"
+          },
+          "data_mode": {
+            "enum": [
+              "live",
+              "historical_replay",
+              "demo"
+            ],
+            "title": "Data Mode",
+            "type": "string"
+          },
+          "forecast_eligible": {
+            "default": false,
+            "title": "Forecast Eligible",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "last_refresh_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Refresh Status"
+          },
+          "latitude": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "type": "number"
+          },
+          "longitude": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "type": "number"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pollutants": {
+            "items": {
+              "$ref": "#/components/schemas/PollutantAvailability"
+            },
+            "title": "Pollutants",
+            "type": "array"
+          },
+          "provider_location_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Location Id"
+          },
+          "provider_revision_pending": {
+            "default": false,
+            "title": "Provider Revision Pending",
+            "type": "boolean"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "city_id",
+          "latitude",
+          "longitude",
+          "source",
+          "data_mode",
+          "pollutants"
+        ],
+        "title": "CatalogueStation",
+        "type": "object"
+      },
       "City": {
         "additionalProperties": false,
         "properties": {
@@ -309,6 +1181,54 @@
         "title": "Coordinates",
         "type": "object"
       },
+      "Envelope_ArchiveCatalogue_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ArchiveCatalogue"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ArchiveCatalogue]",
+        "type": "object"
+      },
+      "Envelope_ArchiveCompare_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ArchiveCompare"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ArchiveCompare]",
+        "type": "object"
+      },
+      "Envelope_ArchiveExplore_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ArchiveExplore"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ArchiveExplore]",
+        "type": "object"
+      },
       "Envelope_Capabilities_": {
         "properties": {
           "data": {
@@ -339,6 +1259,22 @@
           "data"
         ],
         "title": "Envelope[Forecast]",
+        "type": "object"
+      },
+      "Envelope_GeometryResponse_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GeometryResponse"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[GeometryResponse]",
         "type": "object"
       },
       "Envelope_Health_": {
@@ -405,6 +1341,38 @@
         "title": "Envelope[Measurement]",
         "type": "object"
       },
+      "Envelope_ModelCatalogue_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ModelCatalogue"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ModelCatalogue]",
+        "type": "object"
+      },
+      "Envelope_ModelEvaluation_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ModelEvaluation"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ModelEvaluation]",
+        "type": "object"
+      },
       "Envelope_NotificationView_": {
         "properties": {
           "data": {
@@ -421,6 +1389,22 @@
         "title": "Envelope[NotificationView]",
         "type": "object"
       },
+      "Envelope_ObservedRankings_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ObservedRankings"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[ObservedRankings]",
+        "type": "object"
+      },
       "Envelope_PlaceView_": {
         "properties": {
           "data": {
@@ -435,6 +1419,22 @@
           "data"
         ],
         "title": "Envelope[PlaceView]",
+        "type": "object"
+      },
+      "Envelope_PredictionPage_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PredictionPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[PredictionPage]",
         "type": "object"
       },
       "Envelope_Preferences_": {
@@ -483,6 +1483,22 @@
           "data"
         ],
         "title": "Envelope[RuleView]",
+        "type": "object"
+      },
+      "Envelope_StationCatalogue_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/StationCatalogue"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[StationCatalogue]",
         "type": "object"
       },
       "Envelope_StationView_": {
@@ -658,6 +1674,54 @@
         "title": "ErrorDetail",
         "type": "object"
       },
+      "ErrorMetrics": {
+        "additionalProperties": false,
+        "properties": {
+          "bias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bias"
+          },
+          "count": {
+            "minimum": 0.0,
+            "title": "Count",
+            "type": "integer"
+          },
+          "mae": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mae"
+          },
+          "rmse": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rmse"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "title": "ErrorMetrics",
+        "type": "object"
+      },
       "ErrorResponse": {
         "properties": {
           "error": {
@@ -672,6 +1736,49 @@
           "error"
         ],
         "title": "ErrorResponse",
+        "type": "object"
+      },
+      "EvaluationGroup": {
+        "additionalProperties": false,
+        "properties": {
+          "all_available": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ErrorMetrics"
+            },
+            "title": "All Available",
+            "type": "object"
+          },
+          "common_baseline_cohort": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ErrorMetrics"
+            },
+            "title": "Common Baseline Cohort",
+            "type": "object"
+          },
+          "high_pollution_definition": {
+            "title": "High Pollution Definition",
+            "type": "string"
+          },
+          "high_pollution_observed_target_ge_150": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ErrorMetrics"
+            },
+            "title": "High Pollution Observed Target Ge 150",
+            "type": "object"
+          },
+          "high_pollution_threshold_ugm3": {
+            "title": "High Pollution Threshold Ugm3",
+            "type": "number"
+          }
+        },
+        "required": [
+          "all_available",
+          "common_baseline_cohort",
+          "high_pollution_observed_target_ge_150",
+          "high_pollution_threshold_ugm3",
+          "high_pollution_definition"
+        ],
+        "title": "EvaluationGroup",
         "type": "object"
       },
       "Forecast": {
@@ -808,6 +1915,106 @@
         "title": "ForecastPoint",
         "type": "object"
       },
+      "GeometryRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "alternatives": {
+            "default": 3,
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Alternatives",
+            "type": "integer"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Coordinates"
+          },
+          "mode": {
+            "default": "driving",
+            "enum": [
+              "driving",
+              "walking",
+              "cycling"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/Coordinates"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ],
+        "title": "GeometryRequest",
+        "type": "object"
+      },
+      "GeometryResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "alternatives_returned": {
+            "title": "Alternatives Returned",
+            "type": "integer"
+          },
+          "attribution": {
+            "default": "Routing: OSRM; road data \u00a9 OpenStreetMap contributors",
+            "title": "Attribution",
+            "type": "string"
+          },
+          "cached": {
+            "default": false,
+            "title": "Cached",
+            "type": "boolean"
+          },
+          "duration_method": {
+            "default": "Provider road-network travel estimate; no live traffic or departure-time adjustment",
+            "title": "Duration Method",
+            "type": "string"
+          },
+          "exposure_ready": {
+            "const": false,
+            "default": false,
+            "title": "Exposure Ready",
+            "type": "boolean"
+          },
+          "limitations": {
+            "default": [
+              "Provider may return fewer alternatives than requested",
+              "No pollution exposure estimate or street-level concentration differences",
+              "Public demonstration endpoint has no uptime/data-update guarantee; configure a production provider before deployment"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "profile": {
+            "const": "driving",
+            "default": "driving",
+            "title": "Profile",
+            "type": "string"
+          },
+          "provider": {
+            "default": "OSRM",
+            "title": "Provider",
+            "type": "string"
+          },
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/RouteGeometry"
+            },
+            "title": "Routes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "routes",
+          "alternatives_returned"
+        ],
+        "title": "GeometryResponse",
+        "type": "object"
+      },
       "Health": {
         "properties": {
           "status": {
@@ -819,6 +2026,81 @@
           "status"
         ],
         "title": "Health",
+        "type": "object"
+      },
+      "HeldoutPrediction": {
+        "additionalProperties": false,
+        "properties": {
+          "horizon_h": {
+            "title": "Horizon H",
+            "type": "integer"
+          },
+          "issue_at_recorded": {
+            "title": "Issue At Recorded",
+            "type": "string"
+          },
+          "lightgbm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lightgbm"
+          },
+          "observed": {
+            "title": "Observed",
+            "type": "number"
+          },
+          "persistence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persistence"
+          },
+          "previous_day_same_hour": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Day Same Hour"
+          },
+          "split": {
+            "title": "Split",
+            "type": "string"
+          },
+          "station_id": {
+            "title": "Station Id",
+            "type": "string"
+          },
+          "target_at_recorded": {
+            "title": "Target At Recorded",
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_id",
+          "split",
+          "horizon_h",
+          "issue_at_recorded",
+          "target_at_recorded",
+          "observed",
+          "lightgbm",
+          "persistence",
+          "previous_day_same_hour"
+        ],
+        "title": "HeldoutPrediction",
         "type": "object"
       },
       "History": {
@@ -920,6 +2202,28 @@
         "title": "HistoryPoint",
         "type": "object"
       },
+      "HorizonEvaluation": {
+        "additionalProperties": false,
+        "properties": {
+          "horizon_h": {
+            "title": "Horizon H",
+            "type": "integer"
+          },
+          "splits": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/EvaluationGroup"
+            },
+            "title": "Splits",
+            "type": "object"
+          }
+        },
+        "required": [
+          "horizon_h",
+          "splits"
+        ],
+        "title": "HorizonEvaluation",
+        "type": "object"
+      },
       "Identity": {
         "additionalProperties": false,
         "properties": {
@@ -936,6 +2240,41 @@
           "preferences"
         ],
         "title": "Identity",
+        "type": "object"
+      },
+      "LineString": {
+        "additionalProperties": false,
+        "properties": {
+          "coordinates": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            "maxItems": 20000,
+            "minItems": 2,
+            "title": "Coordinates",
+            "type": "array"
+          },
+          "type": {
+            "const": "LineString",
+            "default": "LineString",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "coordinates"
+        ],
+        "title": "LineString",
         "type": "object"
       },
       "Measurement": {
@@ -1016,7 +2355,7 @@
       "Metadata": {
         "properties": {
           "contract_version": {
-            "default": "1.1.0",
+            "default": "1.2.0",
             "title": "Contract Version",
             "type": "string"
           },
@@ -1068,6 +2407,253 @@
           "source"
         ],
         "title": "Metadata",
+        "type": "object"
+      },
+      "ModelCatalogue": {
+        "additionalProperties": false,
+        "properties": {
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/ModelSummary"
+            },
+            "title": "Models",
+            "type": "array"
+          }
+        },
+        "required": [
+          "models"
+        ],
+        "title": "ModelCatalogue",
+        "type": "object"
+      },
+      "ModelEvaluation": {
+        "additionalProperties": false,
+        "properties": {
+          "dataset_mode": {
+            "const": "recorded_clock",
+            "default": "recorded_clock",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "dataset_sha256": {
+            "title": "Dataset Sha256",
+            "type": "string"
+          },
+          "horizons": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonEvaluation"
+            },
+            "title": "Horizons",
+            "type": "array"
+          },
+          "input_availability_assumption": {
+            "title": "Input Availability Assumption",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "live_forecast_ready": {
+            "const": false,
+            "default": false,
+            "title": "Live Forecast Ready",
+            "type": "boolean"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "preprocessing": {
+            "title": "Preprocessing",
+            "type": "string"
+          },
+          "publication_time_known": {
+            "const": false,
+            "default": false,
+            "title": "Publication Time Known",
+            "type": "boolean"
+          },
+          "retrospective_only": {
+            "const": true,
+            "default": true,
+            "title": "Retrospective Only",
+            "type": "boolean"
+          },
+          "rolling_backtests": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/HorizonEvaluation"
+              },
+              "type": "array"
+            },
+            "title": "Rolling Backtests",
+            "type": "object"
+          },
+          "splits": {
+            "items": {
+              "$ref": "#/components/schemas/RecordedSplit"
+            },
+            "title": "Splits",
+            "type": "array"
+          },
+          "station_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Station Ids",
+            "type": "array"
+          },
+          "supported_horizons": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Supported Horizons",
+            "type": "array"
+          },
+          "target_transform": {
+            "title": "Target Transform",
+            "type": "string"
+          },
+          "target_unit": {
+            "title": "Target Unit",
+            "type": "string"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "null"
+          }
+        },
+        "required": [
+          "model_version",
+          "station_ids",
+          "dataset_sha256",
+          "target_unit",
+          "target_transform",
+          "supported_horizons",
+          "splits",
+          "horizons",
+          "rolling_backtests",
+          "preprocessing",
+          "input_availability_assumption",
+          "limitations"
+        ],
+        "title": "ModelEvaluation",
+        "type": "object"
+      },
+      "ModelSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "continuous_trajectory_ready": {
+            "const": false,
+            "default": false,
+            "title": "Continuous Trajectory Ready",
+            "type": "boolean"
+          },
+          "dataset_mode": {
+            "enum": [
+              "diagnostic",
+              "recorded_clock"
+            ],
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "native_diagnostic",
+              "retrospective_forecast"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "live_forecast_ready": {
+            "const": false,
+            "default": false,
+            "title": "Live Forecast Ready",
+            "type": "boolean"
+          },
+          "live_supported_horizons": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Live Supported Horizons",
+            "type": "array"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "native_diagnostics_ready": {
+            "default": false,
+            "title": "Native Diagnostics Ready",
+            "type": "boolean"
+          },
+          "pollutant": {
+            "default": "pm25",
+            "title": "Pollutant",
+            "type": "string"
+          },
+          "retrospective_evaluation_ready": {
+            "default": false,
+            "title": "Retrospective Evaluation Ready",
+            "type": "boolean"
+          },
+          "station_ids": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Station Ids",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "artifact_unavailable",
+              "artifact_invalid"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "supported_horizons": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Supported Horizons",
+            "type": "array"
+          },
+          "target_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Unit"
+          }
+        },
+        "required": [
+          "model_version",
+          "kind",
+          "dataset_mode",
+          "status",
+          "limitations"
+        ],
+        "title": "ModelSummary",
         "type": "object"
       },
       "NotificationView": {
@@ -1125,6 +2711,113 @@
           "status"
         ],
         "title": "NotificationView",
+        "type": "object"
+      },
+      "ObservedRank": {
+        "additionalProperties": false,
+        "properties": {
+          "coverage_state": {
+            "enum": [
+              "reported_complete",
+              "reported_partial",
+              "unknown"
+            ],
+            "title": "Coverage State",
+            "type": "string"
+          },
+          "measurement": {
+            "$ref": "#/components/schemas/Measurement"
+          },
+          "provider_revision_pending": {
+            "default": false,
+            "title": "Provider Revision Pending",
+            "type": "boolean"
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          },
+          "station": {
+            "$ref": "#/components/schemas/StationView"
+          }
+        },
+        "required": [
+          "rank",
+          "station",
+          "measurement",
+          "coverage_state"
+        ],
+        "title": "ObservedRank",
+        "type": "object"
+      },
+      "ObservedRankings": {
+        "additionalProperties": false,
+        "properties": {
+          "city_id": {
+            "title": "City Id",
+            "type": "string"
+          },
+          "excluded_missing_count": {
+            "title": "Excluded Missing Count",
+            "type": "integer"
+          },
+          "excluded_stale_count": {
+            "title": "Excluded Stale Count",
+            "type": "integer"
+          },
+          "includes_stale": {
+            "title": "Includes Stale",
+            "type": "boolean"
+          },
+          "input_cutoff_at": {
+            "format": "date-time",
+            "title": "Input Cutoff At",
+            "type": "string"
+          },
+          "limitations": {
+            "default": [
+              "Latest station observations may have different measurement times and partial coverage",
+              "Not predicted hotspots, forecasts, area-wide concentration or a common-time city average"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "ranking_kind": {
+            "const": "observed_concentration",
+            "default": "observed_concentration",
+            "title": "Ranking Kind",
+            "type": "string"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ObservedRank"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "unit": {
+            "const": "\u00b5g/m\u00b3",
+            "default": "\u00b5g/m\u00b3",
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "city_id",
+          "pollutant",
+          "input_cutoff_at",
+          "includes_stale",
+          "excluded_missing_count",
+          "excluded_stale_count",
+          "rows"
+        ],
+        "title": "ObservedRankings",
         "type": "object"
       },
       "PlaceInput": {
@@ -1204,6 +2897,189 @@
         "title": "Pollutant",
         "type": "string"
       },
+      "PollutantAvailability": {
+        "additionalProperties": false,
+        "properties": {
+          "coverage_state": {
+            "default": "unknown",
+            "enum": [
+              "reported_complete",
+              "reported_partial",
+              "unknown"
+            ],
+            "title": "Coverage State",
+            "type": "string"
+          },
+          "freshness": {
+            "enum": [
+              "fresh",
+              "stale",
+              "no_observations"
+            ],
+            "title": "Freshness",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "measurement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Measurement"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pollutant": {
+            "$ref": "#/components/schemas/Pollutant"
+          },
+          "provider_revision_pending": {
+            "default": false,
+            "title": "Provider Revision Pending",
+            "type": "boolean"
+          },
+          "reported_sensor_units": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reported Sensor Units",
+            "type": "array"
+          },
+          "revision_pending_count": {
+            "default": 0,
+            "title": "Revision Pending Count",
+            "type": "integer"
+          },
+          "selected_sensor_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Sensor Unit"
+          },
+          "selected_unit_compatible": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Unit Compatible"
+          },
+          "sensor_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensor Id"
+          },
+          "sensor_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Sensor Ids",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "stale",
+              "no_observations",
+              "sensor_unavailable",
+              "coverage_unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pollutant",
+          "status",
+          "freshness"
+        ],
+        "title": "PollutantAvailability",
+        "type": "object"
+      },
+      "PredictionPage": {
+        "additionalProperties": false,
+        "properties": {
+          "dataset_mode": {
+            "const": "recorded_clock",
+            "default": "recorded_clock",
+            "title": "Dataset Mode",
+            "type": "string"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/HeldoutPrediction"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "publication_time_known": {
+            "const": false,
+            "default": false,
+            "title": "Publication Time Known",
+            "type": "boolean"
+          },
+          "retrospective_only": {
+            "const": true,
+            "default": true,
+            "title": "Retrospective Only",
+            "type": "boolean"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "null"
+          },
+          "total_count": {
+            "title": "Total Count",
+            "type": "integer"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_version",
+          "unit",
+          "total_count",
+          "offset",
+          "limit",
+          "points"
+        ],
+        "title": "PredictionPage",
+        "type": "object"
+      },
       "Preferences": {
         "additionalProperties": false,
         "properties": {
@@ -1263,6 +3139,76 @@
           "database"
         ],
         "title": "Readiness",
+        "type": "object"
+      },
+      "RecordedSplit": {
+        "additionalProperties": false,
+        "properties": {
+          "end_recorded_at_exclusive": {
+            "title": "End Recorded At Exclusive",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "start_recorded_at": {
+            "title": "Start Recorded At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "start_recorded_at",
+          "end_recorded_at_exclusive"
+        ],
+        "title": "RecordedSplit",
+        "type": "object"
+      },
+      "RouteGeometry": {
+        "additionalProperties": false,
+        "properties": {
+          "distance_m": {
+            "minimum": 0.0,
+            "title": "Distance M",
+            "type": "number"
+          },
+          "estimated_duration_s": {
+            "minimum": 0.0,
+            "title": "Estimated Duration S",
+            "type": "number"
+          },
+          "exposure": {
+            "title": "Exposure",
+            "type": "null"
+          },
+          "exposure_status": {
+            "const": "unavailable",
+            "default": "unavailable",
+            "title": "Exposure Status",
+            "type": "string"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/LineString"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "traffic_aware": {
+            "const": false,
+            "default": false,
+            "title": "Traffic Aware",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "geometry",
+          "distance_m",
+          "estimated_duration_s"
+        ],
+        "title": "RouteGeometry",
         "type": "object"
       },
       "RouteRequest": {
@@ -1414,6 +3360,51 @@
         "title": "RuleView",
         "type": "object"
       },
+      "StationCatalogue": {
+        "additionalProperties": false,
+        "properties": {
+          "catalogue_verified_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Catalogue Verified At"
+          },
+          "city_id": {
+            "title": "City Id",
+            "type": "string"
+          },
+          "input_cutoff_at": {
+            "format": "date-time",
+            "title": "Input Cutoff At",
+            "type": "string"
+          },
+          "scope": {
+            "default": "bounded imported station cohort; not all-city coverage",
+            "title": "Scope",
+            "type": "string"
+          },
+          "stations": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogueStation"
+            },
+            "title": "Stations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "city_id",
+          "input_cutoff_at",
+          "stations"
+        ],
+        "title": "StationCatalogue",
+        "type": "object"
+      },
       "StationView": {
         "additionalProperties": false,
         "properties": {
@@ -1509,7 +3500,7 @@
   },
   "info": {
     "title": "BreatheWise API",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -2170,6 +4161,364 @@
           }
         ],
         "summary": "Read Alert"
+      }
+    },
+    "/api/v1/archive/catalogue": {
+      "get": {
+        "operationId": "catalogue_api_v1_archive_catalogue_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ArchiveCatalogue_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Catalogue",
+        "tags": [
+          "Recorded-clock archive"
+        ]
+      }
+    },
+    "/api/v1/archive/compare": {
+      "get": {
+        "operationId": "compare_api_v1_archive_compare_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "station_ids",
+            "required": true,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 4,
+              "minItems": 2,
+              "title": "Station Ids",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "Start",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "End",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "clock_assumption",
+            "required": true,
+            "schema": {
+              "const": "same_recorded_clock",
+              "title": "Clock Assumption",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "aggregation",
+            "required": false,
+            "schema": {
+              "default": "daily",
+              "enum": [
+                "daily",
+                "monthly"
+              ],
+              "title": "Aggregation",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ArchiveCompare_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Compare",
+        "tags": [
+          "Recorded-clock archive"
+        ]
+      }
+    },
+    "/api/v1/archive/explore": {
+      "get": {
+        "operationId": "explore_api_v1_archive_explore_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "station_id",
+            "required": true,
+            "schema": {
+              "title": "Station Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "Start",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "End",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "aggregation",
+            "required": false,
+            "schema": {
+              "default": "daily",
+              "enum": [
+                "daily",
+                "monthly"
+              ],
+              "title": "Aggregation",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_count",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 744,
+              "minimum": 1,
+              "title": "Min Count",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_coverage",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Min Coverage",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ArchiveExplore_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Explore",
+        "tags": [
+          "Recorded-clock archive"
+        ]
       }
     },
     "/api/v1/capabilities": {
@@ -2860,7 +5209,9 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ModelEvaluation_"
+                }
               }
             },
             "description": "Successful Response"
@@ -2917,6 +5268,425 @@
           }
         },
         "summary": "Performance"
+      }
+    },
+    "/api/v1/models": {
+      "get": {
+        "operationId": "catalogue_api_v1_models_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ModelCatalogue_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Catalogue"
+      }
+    },
+    "/api/v1/models/{model_version}/evaluation": {
+      "get": {
+        "operationId": "evaluation_api_v1_models__model_version__evaluation_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_version",
+            "required": true,
+            "schema": {
+              "title": "Model Version",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizon_h",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Horizon H"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ModelEvaluation_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Evaluation"
+      }
+    },
+    "/api/v1/models/{model_version}/predictions": {
+      "get": {
+        "operationId": "predictions_api_v1_models__model_version__predictions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_version",
+            "required": true,
+            "schema": {
+              "title": "Model Version",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "horizon_h",
+            "required": true,
+            "schema": {
+              "title": "Horizon H",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "split",
+            "required": false,
+            "schema": {
+              "default": "test",
+              "enum": [
+                "test",
+                "validation",
+                "rolling_2022",
+                "rolling_2023"
+              ],
+              "title": "Split",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000000,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_PredictionPage_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Predictions"
+      }
+    },
+    "/api/v1/observed-rankings": {
+      "get": {
+        "operationId": "rankings_api_v1_observed_rankings_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": false,
+            "schema": {
+              "default": "delhi",
+              "title": "City Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pollutant",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Pollutant",
+              "default": "pm25"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_stale",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Include Stale",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "issue_at",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Issue At"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ObservedRankings_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Rankings"
       }
     },
     "/api/v1/preferences": {
@@ -3215,6 +5985,84 @@
           }
         },
         "summary": "Routes"
+      }
+    },
+    "/api/v1/routes/geometry": {
+      "post": {
+        "operationId": "route_geometry_api_v1_routes_geometry_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeometryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_GeometryResponse_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Route Geometry"
       }
     },
     "/api/v1/saved-places": {
@@ -3616,6 +6464,103 @@
         "summary": "Weather"
       }
     },
+    "/api/v1/station-catalogue": {
+      "get": {
+        "operationId": "catalogue_api_v1_station_catalogue_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": false,
+            "schema": {
+              "default": "delhi",
+              "title": "City Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "issue_at",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Issue At"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_StationCatalogue_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Catalogue"
+      }
+    },
     "/api/v1/stations": {
       "get": {
         "operationId": "stations_api_v1_stations_get",
@@ -3868,6 +6813,22 @@
                 }
               ],
               "title": "Horizons"
+            }
+          },
+          {
+            "in": "query",
+            "name": "model_version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Model Version"
             }
           }
         ],

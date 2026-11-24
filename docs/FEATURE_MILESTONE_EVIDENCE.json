@@ -1,0 +1,259 @@
+{
+  "verified_at": "2026-11-24T00:57:23.335814+00:00",
+  "contract_version": "1.2.0",
+  "checks": [
+    {
+      "path": "/api/v1/station-catalogue?city_id=delhi",
+      "status": 200,
+      "stations": 4,
+      "revision_pending": [
+        "openaq-235"
+      ]
+    },
+    {
+      "path": "/api/v1/observed-rankings?city_id=delhi&pollutant=pm25",
+      "status": 200,
+      "ranking_kind": "observed_concentration",
+      "count": 4,
+      "stations": [
+        {
+          "id": "openaq-8472",
+          "value": 119.0,
+          "measured_at": "2026-11-23T22:30:00Z",
+          "stale": true,
+          "coverage_state": "reported_partial"
+        },
+        {
+          "id": "openaq-50",
+          "value": 108.0,
+          "measured_at": "2026-11-23T22:30:00Z",
+          "stale": true,
+          "coverage_state": "reported_complete"
+        },
+        {
+          "id": "openaq-8365",
+          "value": 101.0,
+          "measured_at": "2026-11-23T22:30:00Z",
+          "stale": true,
+          "coverage_state": "reported_complete"
+        },
+        {
+          "id": "openaq-235",
+          "value": 88.0,
+          "measured_at": "2026-11-23T22:30:00Z",
+          "stale": true,
+          "coverage_state": "reported_partial"
+        }
+      ]
+    },
+    {
+      "path": "/api/v1/archive/catalogue",
+      "status": 200,
+      "dataset_mode": "recorded_clock",
+      "timezone": null,
+      "publication_time_known": false,
+      "station_count": 54,
+      "valid_count": null,
+      "expected_count": null,
+      "point_count": 0,
+      "paired_hour_count": null
+    },
+    {
+      "path": "/api/v1/archive/explore",
+      "status": 200,
+      "dataset_mode": "recorded_clock",
+      "timezone": null,
+      "publication_time_known": false,
+      "station_count": null,
+      "valid_count": 740,
+      "expected_count": 744,
+      "point_count": 31,
+      "paired_hour_count": null
+    },
+    {
+      "path": "/api/v1/archive/compare",
+      "status": 200,
+      "dataset_mode": "recorded_clock",
+      "timezone": null,
+      "publication_time_known": false,
+      "station_count": null,
+      "valid_count": null,
+      "expected_count": 744,
+      "point_count": 31,
+      "matched_hour_count": 732
+    },
+    {
+      "path": "/api/v1/models",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/models/delhi-recorded-pm25-v1/evaluation",
+      "status": 200,
+      "version": "delhi-recorded-pm25-v1",
+      "live_forecast_ready": false,
+      "horizons": [
+        {
+          "horizon": 1,
+          "test_common": {
+            "lightgbm": {
+              "count": 13977,
+              "mae": 18.91331214063145,
+              "rmse": 30.124761391597087,
+              "bias": -0.3058271178801104
+            },
+            "persistence": {
+              "count": 13977,
+              "mae": 20.87049152178579,
+              "rmse": 33.11853166799563,
+              "bias": 0.06959004078128353
+            },
+            "previous_day_same_hour": {
+              "count": 13977,
+              "mae": 47.92171639121414,
+              "rmse": 73.50225081676459,
+              "bias": -0.6632975602775989
+            }
+          }
+        },
+        {
+          "horizon": 3,
+          "test_common": {
+            "lightgbm": {
+              "count": 13863,
+              "mae": 30.223220420739125,
+              "rmse": 46.39303312033514,
+              "bias": -3.2991646765886466
+            },
+            "persistence": {
+              "count": 13863,
+              "mae": 38.89990478251461,
+              "rmse": 59.53357350186324,
+              "bias": 0.09599942292433096
+            },
+            "previous_day_same_hour": {
+              "count": 13863,
+              "mae": 48.01171535742625,
+              "rmse": 73.60135330022548,
+              "bias": -0.2510517204068383
+            }
+          }
+        },
+        {
+          "horizon": 6,
+          "test_common": {
+            "lightgbm": {
+              "count": 13789,
+              "mae": 34.81036602056346,
+              "rmse": 54.16499123648404,
+              "bias": -4.366894031924246
+            },
+            "persistence": {
+              "count": 13789,
+              "mae": 51.88085067807673,
+              "rmse": 79.91160105886647,
+              "bias": 0.21583653636956995
+            },
+            "previous_day_same_hour": {
+              "count": 13789,
+              "mae": 47.68757632895787,
+              "rmse": 73.08460824559482,
+              "bias": -0.03765682790630213
+            }
+          }
+        },
+        {
+          "horizon": 12,
+          "test_common": {
+            "lightgbm": {
+              "count": 13737,
+              "mae": 37.73674816235262,
+              "rmse": 58.97232955724541,
+              "bias": -4.7746048005193105
+            },
+            "persistence": {
+              "count": 13737,
+              "mae": 59.53411880323214,
+              "rmse": 93.21144453923912,
+              "bias": 0.25734658222319284
+            },
+            "previous_day_same_hour": {
+              "count": 13737,
+              "mae": 47.69363106937468,
+              "rmse": 73.023344408295,
+              "bias": -0.3355164883162262
+            }
+          }
+        },
+        {
+          "horizon": 24,
+          "test_common": {
+            "lightgbm": {
+              "count": 14306,
+              "mae": 39.56261036132432,
+              "rmse": 62.16002529632075,
+              "bias": -5.9189070604836935
+            },
+            "persistence": {
+              "count": 14306,
+              "mae": 47.82856773381798,
+              "rmse": 73.5136118444434,
+              "bias": -0.24967915559904935
+            },
+            "previous_day_same_hour": {
+              "count": 14306,
+              "mae": 47.82856773381798,
+              "rmse": 73.5136118444434,
+              "bias": -0.24967915559904935
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=6&limit=2",
+      "status": 200,
+      "total_count": 14476,
+      "returned": 2
+    },
+    {
+      "path": "/api/v1/stations/openaq-235/forecast?model_version=delhi-recorded-pm25-v1",
+      "status": 409,
+      "error": "MODEL_RETROSPECTIVE_ONLY"
+    },
+    {
+      "path": "/api/v1/capabilities",
+      "status": 200,
+      "states": {
+        "model_forecast": false,
+        "retrospective_evaluation": true,
+        "archive_explorer": true,
+        "route_geometry": true,
+        "spatial_exposure": false,
+        "continuous_hourly_trajectory": false
+      }
+    }
+  ],
+  "route_geometry": {
+    "status": 200,
+    "provider": "OSRM",
+    "cached": true,
+    "exposure_ready": false,
+    "alternatives": [
+      {
+        "distance_m": 2822.5,
+        "estimated_duration_s": 206.7,
+        "points": 117,
+        "exposure": null,
+        "traffic_aware": false
+      },
+      {
+        "distance_m": 2712.6,
+        "estimated_duration_s": 231.6,
+        "points": 96,
+        "exposure": null,
+        "traffic_aware": false
+      }
+    ]
+  },
+  "verification_scope": "Actual configured local archive/model registry/live observation cache; TestClient HTTP against the real application; route provider response previously fetched then cached. Browser UI verification separate."
+}

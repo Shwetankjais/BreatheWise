@@ -1,4 +1,5 @@
 from breathewise.main import app
+from breathewise.schemas.common import CONTRACT_VERSION
 from fastapi.testclient import TestClient
 
 client = TestClient(app)
@@ -7,7 +8,7 @@ client = TestClient(app)
 def test_liveness_has_contract_metadata():
     response = client.get("/api/v1/health")
     assert response.status_code == 200
-    assert response.json()["meta"]["contract_version"] == "1.1.0"
+    assert response.json()["meta"]["contract_version"] == CONTRACT_VERSION
     assert response.headers["x-request-id"] == response.json()["meta"]["request_id"]
 
 

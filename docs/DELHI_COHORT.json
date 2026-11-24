@@ -1,0 +1,186 @@
+{
+  "verified_at": "2026-11-24T00:56:03.479162+00:00",
+  "data_mode": "live",
+  "scope": "Four verified stationary Delhi DPCC PM2.5 monitors, not all Delhi coverage",
+  "station_count": 4,
+  "observation_count": 281,
+  "pollutants_ingested": [
+    "pm25"
+  ],
+  "stations": [
+    {
+      "station_id": "openaq-235",
+      "name": "Anand Vihar, New Delhi - DPCC",
+      "latitude": 28.646835,
+      "longitude": 77.316032,
+      "sensor_id": 12235610,
+      "observations": 71,
+      "latest_value": 88.0,
+      "unit": "\u00b5g/m\u00b3",
+      "latest_measured_at": "2026-11-23T22:30:00Z",
+      "first_seen_available_at": "2026-11-24T00:53:25.465595Z",
+      "freshness": "stale",
+      "coverage_state": "reported_partial",
+      "quality_flags": [
+        "availability_first_seen_at_fetch",
+        "city_from_source_station_name_and_owner",
+        "original_model_preprocessing_unverified",
+        "provider_license_metadata_unavailable",
+        "provider_partial_hour",
+        "provider_revision_pending"
+      ],
+      "provider_revision_pending": true,
+      "revision_pending_count": 1,
+      "last_refresh_status": "partial"
+    },
+    {
+      "station_id": "openaq-50",
+      "name": "Punjabi Bagh, Delhi - DPCC",
+      "latitude": 28.674045,
+      "longitude": 77.131023,
+      "sensor_id": 12234796,
+      "observations": 70,
+      "latest_value": 108.0,
+      "unit": "\u00b5g/m\u00b3",
+      "latest_measured_at": "2026-11-23T22:30:00Z",
+      "first_seen_available_at": "2026-11-24T00:51:04.519185Z",
+      "freshness": "stale",
+      "coverage_state": "reported_complete",
+      "quality_flags": [
+        "availability_first_seen_at_fetch",
+        "city_from_source_station_name_and_owner",
+        "original_model_preprocessing_unverified",
+        "provider_license_metadata_unavailable"
+      ],
+      "provider_revision_pending": false,
+      "revision_pending_count": 0,
+      "last_refresh_status": "success"
+    },
+    {
+      "station_id": "openaq-8365",
+      "name": "Nehru Nagar, Delhi - DPCC",
+      "latitude": 28.56789,
+      "longitude": 77.250515,
+      "sensor_id": 12235083,
+      "observations": 70,
+      "latest_value": 101.0,
+      "unit": "\u00b5g/m\u00b3",
+      "latest_measured_at": "2026-11-23T22:30:00Z",
+      "first_seen_available_at": "2026-11-24T00:51:06.182539Z",
+      "freshness": "stale",
+      "coverage_state": "reported_complete",
+      "quality_flags": [
+        "availability_first_seen_at_fetch",
+        "city_from_source_station_name_and_owner",
+        "original_model_preprocessing_unverified",
+        "provider_license_metadata_unavailable"
+      ],
+      "provider_revision_pending": false,
+      "revision_pending_count": 0,
+      "last_refresh_status": "success"
+    },
+    {
+      "station_id": "openaq-8472",
+      "name": "Bawana, Delhi - DPCC",
+      "latitude": 28.7762,
+      "longitude": 77.051074,
+      "sensor_id": 12235294,
+      "observations": 70,
+      "latest_value": 119.0,
+      "unit": "\u00b5g/m\u00b3",
+      "latest_measured_at": "2026-11-23T22:30:00Z",
+      "first_seen_available_at": "2026-11-24T00:51:05.792265Z",
+      "freshness": "stale",
+      "coverage_state": "reported_partial",
+      "quality_flags": [
+        "availability_first_seen_at_fetch",
+        "city_from_source_station_name_and_owner",
+        "original_model_preprocessing_unverified",
+        "provider_license_metadata_unavailable",
+        "provider_partial_hour"
+      ],
+      "provider_revision_pending": false,
+      "revision_pending_count": 0,
+      "last_refresh_status": "success"
+    }
+  ],
+  "api_verification": {
+    "station_catalogue": 200,
+    "observed_rankings": 200,
+    "ranked_stations": 4,
+    "ranking_kind": "observed_concentration",
+    "forecasts_produced": false
+  },
+  "refresh_command": "DATABASE_URL=sqlite:///work/delhi-live.db DATA_MODE=live uv run --locked python scripts/refresh_delhi.py --verify",
+  "incremental_command": "same command without --verify; default72h bounded initial history,2h overlap thereafter",
+  "refresh_repeat_results": [
+    {
+      "status": "success",
+      "inserted": 0,
+      "location_id": 8365,
+      "skipped": {},
+      "archive_sha256": "37a3d26fc54a4829b06125d0ee17b03009377a151c3260eea90593ed96b1745b"
+    },
+    {
+      "status": "success",
+      "inserted": 0,
+      "location_id": 8472,
+      "skipped": {},
+      "archive_sha256": "028e119641b1bd28771b553031f8fcb8ce519e151d102cc94b291ff6f1ecaa5e"
+    },
+    {
+      "status": "success",
+      "inserted": 0,
+      "location_id": 50,
+      "skipped": {},
+      "archive_sha256": "25c2f9f87db8dc70b98623333ba79038e558129c7b5c4384b8d57692e6081a42"
+    },
+    {
+      "status": "partial",
+      "inserted": 0,
+      "location_id": 235,
+      "skipped": {
+        "provider_revisions_quarantined": 1
+      },
+      "archive_sha256": "5791552ce9ad8c3319c6fedf27f2644b17e75ac6153c85a9978a977d07a6bc27"
+    }
+  ],
+  "revision_policy": {
+    "actual_example": {
+      "station_id": "openaq-235",
+      "measured_at": "2026-11-23T21:30:00Z",
+      "stored_value_ugm3": 98.0,
+      "incoming_provider_value_ugm3": 95.5
+    },
+    "action": "quarantine changed overlapping provider records in raw archive and ingestion details, keep stored originals and first-seen availability, admit independent new hours; partial/nonzero refresh remains visible until explicit reconciliation",
+    "catalogue_exposes": [
+      "provider_revision_pending",
+      "revision_pending_count",
+      "last_refresh_status",
+      "measurement.quality_flags"
+    ]
+  },
+  "limitations": [
+    "Current observed ranking is not a forecast/hotspot prediction or a common-time city average",
+    "Only PM2.5 ingestion verified for this cohort; other listed provider sensors are metadata-only until imported with verified units",
+    "Provider license metadata absent and retained as quality flag",
+    "Sensor lifetime coverage summaries exceed100% and are not used; actual hourly row coverage flags preserved",
+    "R K Puram candidate12234787 checked but excluded from final initialcohort due substantiallyolder source timestamp; finalfour selectedusingexplicit current sensors and usable hourly observations",
+    "No operational model inference or historical clock reconciliation enabled"
+  ],
+  "actual_http_smoke": {
+    "station-catalogue?city_id=delhi": {
+      "http": 200,
+      "count": 4
+    },
+    "observed-rankings?city_id=delhi&pollutant=pm25": {
+      "http": 200,
+      "count": 4
+    },
+    "observed-rankings?city_id=delhi&pollutant=pm25&include_stale=false": {
+      "http": 200,
+      "count": 0
+    },
+    "owned_api_process_stopped_after_check": true
+  }
+}
