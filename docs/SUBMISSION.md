@@ -67,3 +67,5 @@ See DATA_EVIDENCE.json for exact measured/available timestamps, source IDs and a
 
 ## Delhi archive comparison follow-up
 Read-only full pollutant archive audit and bounded real OpenAQ overlap check completed; DELHI_DATA_COMPARISON.md records the hybrid recommendation and DELHI_DATA_AUDIT.json records actual counts/hashes. All 75 candidate archive sources/blockers are mapped in DELHI_FEATURE_INPUTS.csv. Clock/interval/availability uncertainty prevents authoritative historical UTC import. No original model semantics or operational forecast readiness promoted. Current mobile frontend regressions and remaining AQI/mode-title review are in the Codex handoff; source ownership preserved.
+
+Archive-audit code checkpoint cfe5631 passed [CI45297386248](https://github.com/Shwetankjais/BreatheWise/actions/runs/45297386248): 46 standard tests + 1 default skip, 18 PostgreSQL, 2 isolated native mechanics and backend wheel. Local full make check/frontend typecheck passed; 22 owner frontend unit tests/build passed; latest browser result remains 6 passed/2 failed on mobile. No original model/golden parity or scientific frontend acceptance inferred.
