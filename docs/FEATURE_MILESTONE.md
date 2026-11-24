@@ -4,7 +4,7 @@ The accepted frontend baseline remains be63911. Contract 1.2.0 adds implemented 
 
 | Feature | Verified scope |
 | --- | --- |
-| Observations | Four Delhi DPCC PM2.5 stations; 281 cached actual hourly records; stale/partial/revision flags preserved |
+| Observations | Four Delhi DPCC PM2.5 stations; 297 cached actual hourly records (281 initial +16 resumed refresh); stale/partial/revision flags preserved |
 | Archive | 54 eligible source IDs; recorded-clock daily/monthly aggregates, distributions, coverage and conditional matched-hour comparison |
 | New model |delhi-recorded-pm25-v1; source 301, 39 causal features; target horizons 1/3/6/12/24h; retrospective only |
 | Evaluation |Frozen chronological splits, two rolling folds, 186,839 persisted heldout rows, model/prediction hash checks |
@@ -47,3 +47,7 @@ The earlier snapshot review (FRONTEND_FEATURE_REVIEW.json) found missing API wir
 Backend verification:72 tests passed with1 default PostgreSQL-only skip; Ruff and generated contract checks pass. The isolated forecasting runtime has13 passing tests. CI45302715024 atf6f30c2 succeeded with68 standard+1 default skip,25 PostgreSQL tests,13 new forecasting mechanics,2 supplied-native mechanics and packaging. Pending hardening preserves metadata/revision warnings on failed identity re-verification and skips rejected sensor ingestion; new failure-path tests pass. Current frontend unit libraries had34 passing cases, but build/typecheck is blocked by the moving JSX snapshot. Neither old green CI nor unit tests substitute for that pending integration check. No branch switch, main merge or deployment.
 
 Large native models, heldout predictions and raw data stay in ignored local storage. Credentials remain local. A clone alone will not contain the local archive or trained artifacts; ESSENTIALS.md documents setup/reproduction.
+
+
+## Resumed verified checkpoint
+Backend hardening410ab20 passed CI45329609117:72 standard tests+1 default skip,29 actual PostgreSQL cases,13 independent forecasting mechanics,2 supplied-native mechanics and packaging. All pending backend/model source slices are committed. Incremental live refresh added16 actual hours while retaining overlap revision warnings. New UI acceptance remains blocked on a corrected/frozen snapshot after the observed JSX preflight failure. The editing window is explicitly OPEN for those owner corrections; no main merge or deployment.

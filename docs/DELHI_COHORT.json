@@ -182,5 +182,49 @@
       "count": 0
     },
     "owned_api_process_stopped_after_check": true
+  },
+  "incremental_refresh_followup": {
+    "verified_at": "2026-11-24T04:59:38.216316+00:00",
+    "observation_count": 297,
+    "incremental_inserted": 16,
+    "partial_status_reason": "Provider overlap revisions quarantined; originals/first-seen retained; independent new hours admitted",
+    "stations": [
+      {
+        "station_id": "openaq-235",
+        "value": 87.0,
+        "measured_at": "2026-11-24T02:30:00Z",
+        "available_at": "2026-11-24T04:56:33.424643Z",
+        "stale": true,
+        "coverage_state": "reported_partial",
+        "revision_pending_count": 1
+      },
+      {
+        "station_id": "openaq-50",
+        "value": 133.0,
+        "measured_at": "2026-11-24T02:30:00Z",
+        "available_at": "2026-11-24T04:56:33.847037Z",
+        "stale": true,
+        "coverage_state": "reported_complete",
+        "revision_pending_count": 0
+      },
+      {
+        "station_id": "openaq-8365",
+        "value": 136.0,
+        "measured_at": "2026-11-24T02:30:00Z",
+        "available_at": "2026-11-24T04:56:34.961044Z",
+        "stale": true,
+        "coverage_state": "reported_complete",
+        "revision_pending_count": 0
+      },
+      {
+        "station_id": "openaq-8472",
+        "value": 155.0,
+        "measured_at": "2026-11-24T02:30:00Z",
+        "available_at": "2026-11-24T04:56:34.232817Z",
+        "stale": true,
+        "coverage_state": "reported_partial",
+        "revision_pending_count": 1
+      }
+    ]
   }
 }
