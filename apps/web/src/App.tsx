@@ -51,6 +51,9 @@ export const App: React.FC = () => {
   const [hotspotsResult, setHotspotsResult] = useState<ApiResult<any> | null>(null);
   const [capabilities, setCapabilities] = useState<Capabilities | null>(null);
   const [advisories, setAdvisories] = useState<Advisory[]>([]);
+  const [advisoryError, setAdvisoryError] = useState<string | null>(null);
+  const [advisoryLoading, setAdvisoryLoading] = useState(false);
+  const [advisoryRetry, setAdvisoryRetry] = useState(0);
   const [selectedPollutant, setSelectedPollutant] = useState<Pollutant>('pm25');
   const [selectedHotspotHorizon, setSelectedHotspotHorizon] = useState<1 | 3 | 6 | 24>(6);
   const [isLoadingForecast, setIsLoadingForecast] = useState(false);
@@ -69,6 +72,8 @@ export const App: React.FC = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [savePlaceModalStation, setSavePlaceModalStation] = useState<StationView | null>(null);
   const [savePlaceLabel, setSavePlaceLabel] = useState('');
+  const [savePlaceError, setSavePlaceError] = useState<string | null>(null);
+  const [isSavingPlace, setIsSavingPlace] = useState(false);
 
   // Refresh Account Data (Places, Rules, Alerts, Identity)
   const loadPlacesAndRules = useCallback(async () => {
@@ -92,15 +97,14 @@ export const App: React.FC = () => {
     else setIdentity(null);
   }, []);
 
-  // 1. Initial Load: Cities, Capabilities, Advisories, Account
+  // 1. Initial Load: Cities, Capabilities, Account
   useEffect(() => {
     let isMounted = true;
 
     async function initData() {
-      const [citiesRes, capsRes, advRes] = await Promise.all([
+      const [citiesRes, capsRes] = await Promise.all([
         apiClient.getCities(),
-        apiClient.getCapabilities(),
-        apiClient.getAdvisories('pm25')
+        apiClient.getCapabilities()
       ]);
 
       if (!isMounted) return;
@@ -110,10 +114,6 @@ export const App: React.FC = () => {
         if (!apiClient.getDemoMode()) {
           setDataMode(capsRes.meta?.data_mode || 'live');
         }
-      }
-
-      if (advRes.ok) {
-        setAdvisories(advRes.data);
       }
 
       if (citiesRes.ok) {
@@ -137,6 +137,21 @@ export const App: React.FC = () => {
     };
   }, [loadPlacesAndRules]);
 
+  // Keep health content matched to its selected pollutant; never relabel a prior advisory.
+  useEffect(() => {
+    let current = true;
+    setAdvisories([]);
+    setAdvisoryError(null);
+    setAdvisoryLoading(true);
+    apiClient.getAdvisories(selectedPollutant).then(result => {
+      if (!current) return;
+      setAdvisories(result.ok ? result.data : []);
+      setAdvisoryError(result.ok ? null : `${result.error.code}: ${result.error.message}`);
+      setAdvisoryLoading(false);
+    });
+    return () => { current = false; };
+  }, [selectedPollutant, isDemoMode, advisoryRetry]);
+
   // 2. Load Stations & Hotspots when City or Demo Mode Changes
   useEffect(() => {
     if (!selectedCity) return;
@@ -146,7 +161,9 @@ export const App: React.FC = () => {
     async function loadCityData() {
       const [stationsRes, hotspotsRes] = await Promise.all([
         apiClient.getStations(currentCity.id),
-        apiClient.getHotspots(currentCity.id, selectedHotspotHorizon)
+        capabilities?.model_forecast.supported
+          ? apiClient.getHotspots(currentCity.id, selectedHotspotHorizon)
+          : Promise.resolve(null)
       ]);
 
       if (!isMounted) return;
@@ -170,7 +187,7 @@ export const App: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [selectedCity, selectedHotspotHorizon, isDemoMode]);
+  }, [selectedCity, selectedHotspotHorizon, isDemoMode, capabilities?.model_forecast.supported]);
 
   // 3. Load Latest Readings for all stations when City, Stations or Pollutant Changes
   useEffect(() => {
@@ -202,8 +219,9 @@ export const App: React.FC = () => {
 
   // 4. Load Forecast when Selected Station or Pollutant Changes
   useEffect(() => {
-    if (!selectedStation) {
+    if (!selectedStation || !capabilities?.model_forecast.supported) {
       setForecastResult(null);
+      setIsLoadingForecast(false);
       return;
     }
 
@@ -221,7 +239,7 @@ export const App: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [selectedStation, selectedPollutant, isDemoMode]);
+  }, [selectedStation, selectedPollutant, isDemoMode, capabilities?.model_forecast.supported]);
 
   // Demo Mode Switcher
   const handleToggleDemoMode = async (enabled: boolean) => {
@@ -290,14 +308,18 @@ export const App: React.FC = () => {
   };
 
   const handleSavePlaceSubmit = async () => {
-    if (!savePlaceModalStation || !savePlaceLabel.trim()) return;
-
-    await apiClient.createSavedPlace({
-      label: savePlaceLabel.trim(),
-      latitude: savePlaceModalStation.latitude,
+    if (!savePlaceModalStation || !savePlaceLabel.trim() || isSavingPlace) return;
+    setIsSavingPlace(true);
+    setSavePlaceError(null);
+    const result = await apiClient.createSavedPlace({
+      label: savePlaceLabel.trim(), latitude: savePlaceModalStation.latitude,
       longitude: savePlaceModalStation.longitude
     });
-
+    setIsSavingPlace(false);
+    if (!result.ok) {
+      setSavePlaceError(`${result.error.code}: ${result.error.message}`);
+      return;
+    }
     setSavePlaceModalStation(null);
     setSavePlaceLabel('');
     await loadPlacesAndRules();
@@ -412,10 +434,16 @@ export const App: React.FC = () => {
       {selectedCity && (
         <AtmosphericHero
           selectedCity={selectedCity}
+          selectedStation={selectedStation}
+          currentMeasurement={currentMeasurement}
           onExploreDashboard={() => {
             setActiveTab('overview');
             const el = document.getElementById('dashboard-workspace');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onExploreReplay={() => {
+            setActiveTab('planner');
+            document.getElementById('dashboard-workspace')?.scrollIntoView({ behavior: 'smooth' });
           }}
         />
       )}
@@ -454,6 +482,7 @@ export const App: React.FC = () => {
               onOpenSavePlaceModal={stn => {
                 setSavePlaceModalStation(stn);
                 setSavePlaceLabel(stn.name.split(',')[0]);
+                setSavePlaceError(null);
               }}
               onOpenAlertModal={() => setActiveTab('saved-places')}
               onNavigateToTab={setActiveTab}
@@ -486,6 +515,9 @@ export const App: React.FC = () => {
           {activeTab === 'health' && (
             <HealthView
               advisories={advisories}
+              advisoryError={advisoryError}
+              advisoryLoading={advisoryLoading}
+              onRetryAdvisory={() => setAdvisoryRetry(x => x + 1)}
               selectedPollutant={selectedPollutant}
               onSelectPollutant={setSelectedPollutant}
             />
@@ -540,7 +572,7 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-bold text-[#1C1E24]">BreatheWise India</span>
             <span>•</span>
-            <span>National CAAQMS Ingestion & Multi-Horizon LightGBM Pipeline</span>
+            <span>Station observations & retrospective multi-horizon models</span>
           </div>
 
           <div className="flex items-center gap-4 text-[#7D8592]">
@@ -574,13 +606,14 @@ export const App: React.FC = () => {
             <Button variant="outline" size="sm" onClick={() => setSavePlaceModalStation(null)}>
               Cancel
             </Button>
-            <Button variant="primary" size="sm" onClick={handleSavePlaceSubmit}>
-              Save Place
+            <Button variant="primary" size="sm" onClick={handleSavePlaceSubmit} disabled={isSavingPlace}>
+              {isSavingPlace ? 'Saving…' : 'Save Place'}
             </Button>
           </>
         }
       >
         <div className="space-y-3 text-xs">
+          {savePlaceError && <p role="alert" className="rounded-lg border border-red-300 bg-red-50 p-2 text-red-800">{savePlaceError}</p>}
           <div>
             <label className="font-semibold text-[#1C1E24] block mb-1">Place Name</label>
             <input

@@ -16,7 +16,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
+    'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b47aa] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
   const sizeClasses = {
     sm: 'min-h-[36px] sm:min-h-[32px] px-3 text-xs gap-1.5',
@@ -25,7 +25,7 @@ export const Button: React.FC<ButtonProps> = ({
   }[size];
 
   const variantClasses = {
-    primary: 'bg-[#0D9488] text-white hover:bg-[#0F766E] shadow-sm',
+    primary: 'bg-[#71348A] text-white hover:bg-[#59236f] shadow-sm',
     ochre: 'bg-[#C88A2E] text-white hover:bg-[#B27724] shadow-sm',
     secondary: 'bg-[#F5F1EA] text-[#1C1E24] hover:bg-[#EDE8DF] border border-[#E5DFD3]',
     outline: 'border border-[#D8CFBC] text-[#2D3139] bg-white hover:bg-[#FAF8F5] shadow-xs',

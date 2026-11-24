@@ -28,10 +28,10 @@
   --border-strong: #C4B99F;
 
   /* Brand / Primary Accent (Vintage Ochre & Restrained Teal) */
-  --brand-primary: #0D9488;
-  --brand-primary-hover: #0F766E;
-  --brand-primary-light: #F0FDFA;
-  --brand-primary-border: #99F6E4;
+  --brand-primary: #71348A;
+  --brand-primary-hover: #59236F;
+  --brand-primary-light: #F6ECFA;
+  --brand-primary-border: #DEC6E6;
 
   /* Vintage Ochre / Gold Controls (Key visual reference accent) */
   --accent-ochre: #E29E2E;
@@ -59,6 +59,9 @@
   --haze-terracotta: #C3583C;
   --haze-sandstone: #E29E2E;
   --haze-sky-mist: #EAE6DB;
+  --hero-ink: #28182f;
+  --hero-violet: #7652af;
+  --hero-pink: #cc5594;
 
   /* CPCB Official AQI Categories & Semantic Colors */
   --aqi-good-bg: #DCFCE7;

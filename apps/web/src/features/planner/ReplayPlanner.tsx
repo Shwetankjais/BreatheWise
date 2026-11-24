@@ -406,7 +406,8 @@ export function ReplayPlanner({ supportedVersions }: Props) {
                 </div>
 
                 {/* 24-Hour Timeline Bar Grid */}
-                <div className="grid grid-cols-24 gap-1 h-9 items-center">
+                <div className="overflow-x-auto pb-2" aria-label="Twenty-four historical forecast horizons">
+                <div className="grid gap-1 h-9 items-center min-w-[650px]" style={{ gridTemplateColumns: 'repeat(24, minmax(18px, 1fr))' }}>
                   {Array.from({ length: 24 }).map((_, idx) => {
                     const h = idx + 1;
                     const isWithinActive =
@@ -429,6 +430,7 @@ export function ReplayPlanner({ supportedVersions }: Props) {
                     );
                   })}
                 </div>
+                </div>
                 <div className="flex justify-between text-[10px] text-[#7A7368] font-mono">
                   <span>+1h (Issue + 1)</span>
                   <span>+12h</span>
@@ -445,6 +447,15 @@ export function ReplayPlanner({ supportedVersions }: Props) {
                   <article
                     key={w.rank}
                     onClick={() => setActiveWindowIndex(idx)}
+                    onKeyDown={event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setActiveWindowIndex(idx);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Inspect historical window rank ${w.rank}`}
                     className={`rounded-2xl border p-4 transition-all cursor-pointer shadow-xs ${
                       isSelected
                         ? 'border-2 border-[#E29E2E] bg-[#FBF4E6] ring-2 ring-[#E29E2E]/20'

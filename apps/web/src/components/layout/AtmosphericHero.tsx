@@ -1,14 +1,18 @@
 import React from 'react';
-import { City } from '../../lib/api/types';
+import { City, Measurement, StationView } from '../../lib/api/types';
 
 interface AtmosphericHeroProps {
   selectedCity: City;
+  selectedStation: StationView | null;
+  currentMeasurement: Measurement | null;
   onExploreDashboard?: () => void;
+  onExploreReplay?: () => void;
 }
 
-export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, onExploreDashboard }) => {
+export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, selectedStation, currentMeasurement, onExploreDashboard, onExploreReplay }) => {
   return (
-    <div className="relative overflow-hidden bg-[#F7F3E9] border-b border-[#DDD3BC] pt-6 pb-10 sm:pt-10 sm:pb-14">
+    <div className="bw-hero-frame relative overflow-hidden px-3 py-4 sm:px-6 sm:py-7">
+      <div className="bw-hero-panel relative overflow-hidden rounded-[1.6rem] border border-[#f1e3d4] bg-[#f8f4ec] shadow-[0_24px_70px_rgba(15,8,25,.28)]">
       {/* Background Subtle Radial Glow */}
       <div
         className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-br from-[#E29E2E]/10 via-[#C3583C]/5 to-transparent rounded-full blur-3xl pointer-events-none"
@@ -16,38 +20,38 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
       />
 
       {/* Main Content Container */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="relative max-w-7xl mx-auto px-5 py-7 sm:px-8 sm:py-8 lg:px-10">
+        <div className="bw-hero-grid grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-center">
           {/* Left Column (7 cols): Hero Title, Description & Reference Feature Cards */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="bw-hero-copy lg:col-span-5 space-y-4 min-w-0">
             {/* National Telemetry Header Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFFDF9] text-[#1C1A1F] border border-[#DDD3BC] shadow-xs">
+            <div className="bw-hero-eyebrow inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFFDF9] text-[#1C1A1F] border border-[#DDD3BC] shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse-subtle" />
-              <span>National CAAQMS Telemetry & ML Forensics</span>
+              <span>Station observations & model research</span>
               <span className="text-[#968F83]">|</span>
               <span className="text-[#8C5D14] font-bold">{selectedCity.name}</span>
             </div>
 
             {/* Main Editorial Headline */}
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1C1A1F] tracking-tight leading-[1.12]">
-              Hyperlocal Atmospheric Intelligence & ML Forecasting for India’s Cities
+            <h1 className="bw-hero-title text-3xl sm:text-[2.7rem] font-extrabold text-[#24182b] tracking-tight leading-[1.08]">
+              See the air around <span className="bw-hero-title-accent">India’s cities.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm sm:text-base text-[#4A453E] leading-relaxed font-normal max-w-2xl">
-              Integrating air quality observations, weather drivers, and geographic data to evaluate pollutant concentrations and map pollution episodes across historical and retrospective horizons.
+            <p className="bw-hero-lede text-sm sm:text-base text-[#4A453E] leading-relaxed font-normal max-w-2xl">
+              Explore reported pollution, compare city stations, and inspect independently evaluated +1h to +24h historical model predictions.
             </p>
 
             {/* Three Conceptual Feature Cards matching Reference Image 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+            <div className="bw-hero-cards grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-2 gap-2.5 pt-1">
               {/* Card 1: 24-Hour Forward Projection / Replay Trajectory */}
-              <div className="bg-[#FFFDF9] p-3.5 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
+              <div className="sm:col-span-3 lg:col-span-2 bg-[#FFFDF9] p-3 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="text-[11px] font-bold text-[#1C1A1F] uppercase tracking-wider">
                     24-Hour Trajectory
                   </div>
                   <div className="text-[10px] text-[#6E675D] mt-0.5">
-                    Saved forecast curve
+                    Illustrative trace · actual values in Model Audit
                   </div>
                 </div>
 
@@ -94,7 +98,7 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
               </div>
 
               {/* Card 2: ML-Driven Insights */}
-              <div className="bg-[#FFFDF9] p-3.5 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
+              <div className="bg-[#FFFDF9] p-3 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="text-[11px] font-bold text-[#1C1A1F] uppercase tracking-wider">
                     ML-Driven Insights
@@ -109,30 +113,19 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
               </div>
 
               {/* Card 3: Replay Windows */}
-              <div className="bg-[#FFFDF9] p-3.5 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
+              <div className="bg-[#FFFDF9] p-3 rounded-xl border border-[#DDD3BC] shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="text-[11px] font-bold text-[#1C1A1F] uppercase tracking-wider">
-                    Replay Windows
+                    Historical Replay
                   </div>
-                  <div className="mt-1.5 space-y-1 text-[10px]">
-                    <div className="flex items-center gap-1.5 text-[#14532D] font-medium bg-[#DCFCE7] px-1.5 py-0.5 rounded">
-                      <span>●</span>
-                      <span>Lowest: 12:00 – 14:00</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[#7F1D1D] font-medium bg-[#FEE2E2] px-1.5 py-0.5 rounded">
-                      <span>▲</span>
-                      <span>Peak: 07:00 – 09:00</span>
-                    </div>
-                  </div>
+                  <p className="mt-1.5 text-[11px] text-[#4A453E] leading-snug">Compare complete saved forecast issues and ranked past windows.</p>
                 </div>
-                <div className="mt-2 text-[9px] text-[#968F83] italic border-t border-[#EBE3D3] pt-1">
-                  Historical comparison only
-                </div>
+                <button type="button" onClick={onExploreReplay} className="mt-2 text-xs font-bold text-[#78439b] text-left underline underline-offset-2">Open replay planner →</button>
               </div>
             </div>
 
             {/* Call to Action Button */}
-            <div className="pt-2 flex items-center gap-3">
+            <div className="bw-hero-actions pt-1 flex flex-wrap items-center gap-3">
               <button
                 onClick={onExploreDashboard}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm bg-[#E29E2E] hover:bg-[#C88A2E] text-[#1C1A1F] border-2 border-[#1C1A1F] shadow-sm transition-all cursor-pointer"
@@ -147,13 +140,13 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
           </div>
 
           {/* Right Column (5 cols): Isometric India Gate Plinth Artwork matching Reference Image 1 */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-[460px] aspect-[4/3] flex items-center justify-center">
+          <div className="bw-hero-art-wrapper lg:col-span-7 flex justify-center min-w-0">
+            <div className="bw-hero-art relative w-full max-w-[630px] aspect-[4/3] flex items-center justify-center">
               {/* Decorative Isometric SVG Canvas */}
               <svg
                 viewBox="0 0 500 380"
-                className="w-full h-full overflow-visible drop-shadow-[0_16px_32px_rgba(28,26,31,0.18)]"
-                aria-label="Isometric illustration of India Gate plinth and Delhi atmospheric network"
+                className="w-full h-full overflow-visible drop-shadow-[0_18px_24px_rgba(35,18,44,0.28)]"
+                aria-label="Decorative isometric illustration of India Gate on a stylized map"
                 role="img"
               >
                 <defs>
@@ -187,6 +180,10 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
                     <stop offset="50%" stopColor="#F5B272" />
                     <stop offset="100%" stopColor="#B36B34" />
                   </linearGradient>
+                  <clipPath id="heroMapClip"><polygon points="250,70 450,190 250,310 50,190" /></clipPath>
+                  <radialGradient id="heroRose"><stop stopColor="#cf5990" stopOpacity=".72" /><stop offset="1" stopColor="#cf5990" stopOpacity="0" /></radialGradient>
+                  <radialGradient id="heroViolet"><stop stopColor="#8852bb" stopOpacity=".7" /><stop offset="1" stopColor="#8852bb" stopOpacity="0" /></radialGradient>
+                  <radialGradient id="heroGold"><stop stopColor="#e4a23c" stopOpacity=".68" /><stop offset="1" stopColor="#e4a23c" stopOpacity="0" /></radialGradient>
                 </defs>
 
                 {/* 1. Isometric Block 3D Side Thickness */}
@@ -202,6 +199,16 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
                   stroke="#DDD3BC"
                   strokeWidth="2"
                 />
+
+                {/* Abstract color and roads are decorative, not an interpolated pollution surface. */}
+                <g clipPath="url(#heroMapClip)">
+                  <ellipse cx="340" cy="175" rx="95" ry="63" fill="url(#heroRose)" />
+                  <ellipse cx="165" cy="228" rx="100" ry="60" fill="url(#heroViolet)" />
+                  <ellipse cx="265" cy="215" rx="118" ry="72" fill="url(#heroGold)" />
+                  <path d="M15 150 Q125 110 245 162 T505 145 M10 224 Q150 191 247 220 T510 241 M75 55 Q135 165 215 340 M170 45 Q230 175 325 345 M315 43 Q340 175 440 340 M425 84 Q328 205 456 270" fill="none" stroke="#fffaf1" strokeWidth="8" opacity=".9" />
+                  <path d="M15 150 Q125 110 245 162 T505 145 M10 224 Q150 191 247 220 T510 241 M75 55 Q135 165 215 340 M170 45 Q230 175 325 345 M315 43 Q340 175 440 340 M425 84 Q328 205 456 270" fill="none" stroke="#7d665d" strokeWidth="1.3" opacity=".65" />
+                  <path d="M70 155 102 139 128 154 111 174 80 173 M340 132 377 118 405 137 374 151 M118 245 152 233 177 249 150 269 M342 250 377 233 408 252 375 270" fill="#9fad83" opacity=".6" />
+                </g>
 
                 {/* 3. Radial Street & Concentric Ring Network */}
                 <g opacity="0.65" stroke="#C4B99F" strokeWidth="1.2">
@@ -243,7 +250,7 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
                 <ellipse cx="250" cy="195" rx="48" ry="24" fill="#E8BD80" stroke="#8C6534" strokeWidth="1" />
 
                 {/* 6. India Gate Architectural Arch Vector */}
-                <g id="indiaGateMonument">
+                <g id="indiaGateMonument" transform="translate(-125 -94) scale(1.5)">
                   {/* Monument Base Pedestal */}
                   <polygon points="228,190 272,190 268,182 232,182" fill="#B36B34" />
 
@@ -281,10 +288,9 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
                   {/* Pin Callout Card */}
                   <g transform="translate(-55, -80)">
                     <rect x="0" y="0" width="110" height="42" rx="8" fill="#1C1A1F" stroke="#332F38" strokeWidth="1" />
-                    <text x="8" y="14" fill="#FFFFFF" fontSize="9" fontWeight="bold">Anand Vihar</text>
-                    <text x="8" y="27" fill="#E29E2E" fontSize="11" fontWeight="800">147.0 µg/m³</text>
-                    <text x="70" y="27" fill="#C3583C" fontSize="9" fontWeight="bold">PM2.5</text>
-                    <text x="8" y="37" fill="#A8A1B0" fontSize="7.5">CAAQMS Monitor</text>
+                    <text x="8" y="14" fill="#FFFFFF" fontSize="9" fontWeight="bold">{selectedStation?.name.split(',')[0].slice(0, 16) || 'Selected station'}</text>
+                    <text x="8" y="28" fill="#E6B1F6" fontSize="10" fontWeight="800">{currentMeasurement ? `${currentMeasurement.value.toFixed(1)} ${currentMeasurement.unit}` : 'No reported sample'}</text>
+                    <text x="8" y="37" fill="#d7cad8" fontSize="7.5">{currentMeasurement ? `${currentMeasurement.pollutant.toUpperCase()} · station sample` : 'Open the map for details'}</text>
                   </g>
                 </g>
 
@@ -314,18 +320,19 @@ export const AtmosphericHero: React.FC<AtmosphericHeroProps> = ({ selectedCity, 
                 <g transform="translate(300, 280)">
                   <rect x="0" y="0" width="95" height="24" rx="12" fill="#FFFDF9" stroke="#DDD3BC" strokeWidth="1.5" />
                   <text x="47" y="16" textAnchor="middle" fill="#1C1A1F" fontSize="10" fontWeight="bold">
-                    Delhi NCR
+                    {selectedCity.name}
                   </text>
                 </g>
               </svg>
 
               {/* Artwork Label Disclaimer */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] text-[#7A7368] font-mono bg-[#FFFDF9]/90 px-3 py-1 rounded-full border border-[#DDD3BC] shadow-xs">
-                Original architectural artwork · decorative illustration, not a dispersion model
+              <div className="bw-hero-art-label absolute bottom-0 left-1/2 -translate-x-1/2 text-[11px] text-[#56445b] bg-[#FFFDF9]/95 px-3 py-1 rounded-full border border-[#DDD3BC] shadow-xs text-center">
+                India Gate illustration · colors are artwork, not measured pollution
               </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

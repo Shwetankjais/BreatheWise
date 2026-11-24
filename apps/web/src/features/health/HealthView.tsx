@@ -4,6 +4,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../..
 
 interface HealthViewProps {
   advisories: Advisory[];
+  advisoryError: string | null;
+  advisoryLoading: boolean;
+  onRetryAdvisory: () => void;
   selectedPollutant: Pollutant;
   onSelectPollutant: (pollutant: Pollutant) => void;
 }
@@ -70,10 +73,13 @@ const WHO_2021_STANDARDS: WHOStandard[] = [
 
 export const HealthView: React.FC<HealthViewProps> = ({
   advisories,
+  advisoryError,
+  advisoryLoading,
+  onRetryAdvisory,
   selectedPollutant,
   onSelectPollutant
 }) => {
-  const currentAdvisory = advisories.find(a => a.pollutant === selectedPollutant) || advisories[0];
+  const currentAdvisory = advisories.find(a => a.pollutant === selectedPollutant);
   const activeStandard = WHO_2021_STANDARDS.find(s => s.pollutant === selectedPollutant);
 
   return (
@@ -90,7 +96,7 @@ export const HealthView: React.FC<HealthViewProps> = ({
               Criteria Pollutants Health & Environmental Education
             </h2>
             <p className="text-xs sm:text-sm text-[#555C68] mt-1 max-w-2xl leading-relaxed">
-              Educational facts sourced from World Health Organization (WHO 2021) documents and peer-reviewed environmental health literature.
+              Educational context from the World Health Organization’s 2021 Global Air Quality Guidelines and the cited advisory record below.
             </p>
           </div>
 
@@ -212,8 +218,9 @@ export const HealthView: React.FC<HealthViewProps> = ({
           </CardContent>
         </Card>
       ) : (
-        <div className="p-8 text-center text-[#7D8592] text-xs bg-white rounded-xl border border-[#E5DFD3]">
-          Loading health advisory content...
+        <div role={advisoryError ? 'alert' : 'status'} className="p-8 text-center text-[#555C68] text-sm bg-white rounded-xl border border-[#E5DFD3]">
+          <p>{advisoryLoading ? `Loading ${selectedPollutant.toUpperCase()} educational advisory…` : `The ${selectedPollutant.toUpperCase()} advisory is unavailable. ${advisoryError || ''}`}</p>
+          {!advisoryLoading && <button type="button" onClick={onRetryAdvisory} className="mt-3 rounded-full border border-[#8b47aa] px-4 py-2 font-bold text-[#78439b] hover:bg-[#f6eafa]">Retry advisory</button>}
         </div>
       )}
 
@@ -224,7 +231,8 @@ export const HealthView: React.FC<HealthViewProps> = ({
             WHO 2021 Global Air Quality Guidelines Reference Summary (All 6 Criteria Pollutants)
           </CardTitle>
           <CardDescription className="text-xs text-[#555C68]">
-            Comparison matrix of health-based guidelines across criteria air contaminants
+            Comparison matrix of health-based guidelines across criteria air contaminants.{' '}
+            <a href="https://www.who.int/publications/i/item/9789240034228" target="_blank" rel="noopener noreferrer" className="underline text-[#78439b]">Read the WHO source</a>.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">

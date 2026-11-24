@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   City,
   StationView,
@@ -49,6 +49,9 @@ function haversineDistanceKm(lat1: number, lon1: number, lat2: number, lon2: num
   return R * c;
 }
 
+// UI proximity guard only; this is not an air-pollution coverage radius.
+const MAX_NEAREST_STATION_DISTANCE_KM = 50;
+
 function formatToUTC(isoString: string): string {
   try {
     const d = new Date(isoString);
@@ -93,6 +96,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     message: string;
     distanceKm?: number;
   } | null>(null);
+  const automaticLocationAttempted = useRef(false);
 
   // Fetch Station Catalogue (Contract 1.2.0)
   useEffect(() => {
@@ -162,10 +166,18 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           }
         }
 
+        if (minDist > MAX_NEAREST_STATION_DISTANCE_KM) {
+          setLocationNotice({
+            type: 'error',
+            message: `Device position received (${latitude.toFixed(3)}°, ${longitude.toFixed(3)}°), but the nearest available ${selectedCity.name} monitor is ${minDist.toFixed(0)} km away. Choose a supported city or station; this reading does not represent your location.`,
+            distanceKm: minDist
+          });
+          return;
+        }
         onSelectStation(nearest);
         setLocationNotice({
           type: 'success',
-          message: `Nearest monitor located: ${nearest.name} (${minDist.toFixed(1)} km from your current location).`,
+          message: `Browser location (${latitude.toFixed(3)}°, ${longitude.toFixed(3)}°): nearest available monitor is ${nearest.name}, ${minDist.toFixed(1)} km away. This is the station reading, not pollution measured at your device.`,
           distanceKm: minDist
         });
       },
@@ -173,7 +185,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         setIsLocating(false);
         let msg = 'Unable to retrieve location. Defaulting to station directory.';
         if (err.code === err.PERMISSION_DENIED) {
-          msg = 'Location permission was denied. Defaulting to station directory / Anand Vihar.';
+          msg = 'Location permission was denied. Select a city or station manually; no IP location service is configured.';
         } else if (err.code === err.POSITION_UNAVAILABLE) {
           msg = 'Location information is currently unavailable. Defaulting to station directory.';
         } else if (err.code === err.TIMEOUT) {
@@ -187,6 +199,16 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       { timeout: 10000, enableHighAccuracy: false }
     );
   };
+
+  // One browser-permission request per session. Coordinates stay in this page and are
+  // used only to pick a nearby monitor; no unsupported reverse-geocode is implied.
+  useEffect(() => {
+    if (!stations.length || automaticLocationAttempted.current) return;
+    automaticLocationAttempted.current = true;
+    if (sessionStorage.getItem('breathewise_location_attempted') === '1') return;
+    sessionStorage.setItem('breathewise_location_attempted', '1');
+    handleLocateNearestStation();
+  }, [stations]);
 
   // Filter stations based on search query and active filter mode
   const filteredStations = useMemo(() => {
@@ -835,7 +857,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     Forecast & Replay Trajectory
                   </CardTitle>
                   <CardDescription className="text-[11px] text-[#6E675D]">
-                    Declared horizons [+1h, +3h, +6h, +12h, +24h]
+                    Operational station forecast is unavailable; inspect actual held-out model predictions in Model Audit.
                   </CardDescription>
                 </CardHeader>
 

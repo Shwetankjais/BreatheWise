@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </div>
               <p className="text-[11px] text-[#6E675D] font-medium hidden md:block">
-                National CAAQMS + ML Forensics
+                City monitoring pilot · ML research
               </p>
             </div>
           </div>

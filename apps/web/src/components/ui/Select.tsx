@@ -33,7 +33,7 @@ export const Select: React.FC<SelectProps> = ({
       <div className="relative">
         <select
           id={generatedId}
-          className={`w-full appearance-none rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 disabled:cursor-not-allowed disabled:bg-slate-100 pr-10 transition-colors ${className}`}
+          className={`w-full appearance-none rounded-lg border border-[#d9c9dc] bg-white px-3.5 py-2 text-sm text-[#24182b] shadow-sm focus:border-[#8b47aa] focus:outline-none focus:ring-2 focus:ring-[#8b47aa]/20 disabled:cursor-not-allowed disabled:bg-slate-100 pr-10 transition-colors ${className}`}
           {...props}
         >
           {options.map(opt => (
