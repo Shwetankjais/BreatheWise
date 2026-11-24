@@ -1080,6 +1080,12 @@ export interface components {
             provider_revision_pending: boolean;
             /** Source */
             source: string;
+            /** Verification Attempted At */
+            verification_attempted_at?: string | null;
+            /** Verification Error Code */
+            verification_error_code?: string | null;
+            /** Verification Status */
+            verification_status?: ("verified" | "verification_failed" | "unknown") | null;
         };
         /** City */
         City: {

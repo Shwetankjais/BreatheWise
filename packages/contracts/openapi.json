@@ -1101,6 +1101,45 @@
           "source": {
             "title": "Source",
             "type": "string"
+          },
+          "verification_attempted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Attempted At"
+          },
+          "verification_error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Error Code"
+          },
+          "verification_status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "verified",
+                  "verification_failed",
+                  "unknown"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Status"
           }
         },
         "required": [

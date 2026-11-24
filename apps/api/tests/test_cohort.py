@@ -263,3 +263,160 @@ def test_cached_only_station_and_pending_revision_are_visible(backend, monkeypat
         assert pm.measurement is None
         earlier = station_catalogue(db, "delhi", datetime(2026, 11, 20, 1, tzinfo=UTC)).stations[0]
         assert not earlier.provider_revision_pending
+
+
+@pytest.mark.integration
+def test_failed_reverification_preserves_pending_journal_and_observations(backend, monkeypatch):
+    from breathewise.services import catalogue
+
+    previous = {
+        "schema_version": "1.0",
+        "verified_at": "2026-11-20T01:00:00+00:00",
+        "stations": [
+            {
+                "location_id": 235,
+                "name": "Synthetic prior verified station",
+                "coordinates": {"latitude": 28.6, "longitude": 77.2},
+                "verified_at": "2026-11-20T01:00:00+00:00",
+                "sensors": {"pm25": [{"id": 42, "unit": "µg/m³"}]},
+                "selected_sensors": {"pm25": 42},
+                "pending_revisions": [
+                    {
+                        "pollutant": "pm25",
+                        "measured_at": "2026-11-20T00:00:00Z",
+                        "detected_at": "2026-11-20T01:10:00+00:00",
+                    }
+                ],
+            }
+        ],
+    }
+    failure = {
+        "schema_version": "1.0",
+        "verified_at": "2026-11-20T01:30:00+00:00",
+        "stations": [],
+        "rejected": [{"location_id": 235, "code": "OPENAQ_NETWORK_ERROR"}],
+    }
+    merged = catalogue.merge_verification(previous, failure)
+    assert merged["verified_at"] == previous["verified_at"]
+    cached = merged["stations"][0]
+    assert cached["verified_at"] == previous["stations"][0]["verified_at"]
+    assert cached["pending_revisions"] == previous["stations"][0]["pending_revisions"]
+    assert cached["verification_status"] == "verification_failed"
+    assert cached["verification_error_code"] == "OPENAQ_NETWORK_ERROR"
+    assert cached["verification_attempted_at"] == failure["verified_at"]
+    monkeypatch.setenv("DATA_MODE", "live")
+    get_settings.cache_clear()
+    monkeypatch.setattr(catalogue, "load_cache", lambda: merged)
+    from breathewise.db.models import Observation
+
+    with Session(engine()) as db, db.begin():
+        db.add(
+            Station(
+                id="openaq-235",
+                name="Synthetic prior verified station",
+                city_id="delhi",
+                latitude=28.6,
+                longitude=77.2,
+                source="synthetic",
+                data_mode="live",
+            )
+        )
+        db.flush()
+        db.add(
+            Observation(
+                station_id="openaq-235",
+                pollutant="pm25",
+                measured_at=datetime(2026, 11, 20, tzinfo=UTC),
+                available_at=datetime(2026, 11, 20, 0, 5, tzinfo=UTC),
+                value=98,
+                unit="µg/m³",
+                original_value=98,
+                original_unit="µg/m³",
+                source="synthetic",
+                quality_flags=[],
+            )
+        )
+    with Session(engine()) as db:
+        result = station_catalogue(db, "delhi", datetime(2026, 11, 20, 2, tzinfo=UTC)).stations[0]
+        assert result.verification_status == "verification_failed"
+        assert result.last_refresh_status == "verification_failed"
+        pm = next(x for x in result.pollutants if x.pollutant == "pm25")
+        assert pm.measurement.value == 98
+        assert pm.provider_revision_pending and pm.revision_pending_count == 1
+        assert "provider_verification_failed" in pm.measurement.quality_flags
+        assert any("verification failed" in x for x in pm.limitations)
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    "failure_code",
+    ["OPENAQ_NETWORK_ERROR", "OPENAQ_AUTH_FAILED", "OPENAQ_PARAMETER_OR_UNITS_UNSUPPORTED"],
+)
+def test_refresh_skips_ingestion_for_retained_rejected_sensor(
+    backend, monkeypatch, tmp_path, failure_code
+):
+    import importlib.util
+    import json
+    import sys
+    from types import SimpleNamespace
+
+    from breathewise.core.config import ROOT
+    from pydantic import SecretStr
+
+    spec = importlib.util.spec_from_file_location(
+        "cohort_refresh_failure_test", ROOT / "scripts/refresh_delhi.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    path = tmp_path / "catalogue.json"
+    previous = {
+        "schema_version": "1.0",
+        "verified_at": "2026-11-20T01:00:00+00:00",
+        "scope": "synthetic",
+        "stations": [
+            {
+                "location_id": 235,
+                "verified_at": "2026-11-20T01:00:00+00:00",
+                "selected_sensors": {"pm25": 42},
+                "pending_revisions": [
+                    {
+                        "pollutant": "pm25",
+                        "measured_at": "2026-11-20T00:00:00Z",
+                        "detected_at": "2026-11-20T01:10:00+00:00",
+                    }
+                ],
+            }
+        ],
+        "rejected": [],
+    }
+    path.write_text(json.dumps(previous))
+    monkeypatch.setattr(module, "cache_path", lambda: path)
+    monkeypatch.setattr(module, "load_cache", lambda: json.loads(path.read_text()))
+    monkeypatch.setattr(
+        module,
+        "get_settings",
+        lambda: SimpleNamespace(data_mode="live", openaq_api_key=SecretStr("synthetic-key")),
+    )
+    monkeypatch.setattr(
+        module,
+        "verify_cohort",
+        lambda client, key: {
+            "schema_version": "1.0",
+            "verified_at": "2026-11-20T01:30:00+00:00",
+            "scope": "synthetic",
+            "stations": [],
+            "rejected": [{"location_id": 235, "code": failure_code}],
+        },
+    )
+
+    def forbidden_ingestion(*args, **kwargs):
+        pytest.fail("Rejected retained sensor must not be ingested with cached identity")
+
+    monkeypatch.setattr(module, "run_cycle", forbidden_ingestion)
+    monkeypatch.setattr(sys, "argv", ["refresh_delhi.py", "--verify"])
+    assert module.main() == 1
+    retained = json.loads(path.read_text())["stations"][0]
+    assert retained["verification_status"] == "verification_failed"
+    assert retained["verification_error_code"] == failure_code
+    assert retained["verified_at"] == previous["stations"][0]["verified_at"]
+    assert retained["pending_revisions"] == previous["stations"][0]["pending_revisions"]

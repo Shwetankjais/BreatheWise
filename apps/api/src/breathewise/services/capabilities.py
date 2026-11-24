@@ -134,6 +134,9 @@ def capabilities() -> Capabilities:
     )
     if ready_models:
         result.evaluation = result.retrospective_evaluation
+    if settings.routing_base_url:
+        result.routes.requirements_missing = ["validated spatial estimator and coverage"]
+        result.routes.method = "Road geometry available separately through route_geometry; pollution comparison unavailable"
     result.route_geometry = Capability(
         supported=bool(settings.routing_base_url),
         method="configured OSRM driving geometry; cached/throttled; no exposure/traffic",

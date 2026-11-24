@@ -16,6 +16,7 @@ from breathewise.services.catalogue import (
     cache_path,
     incremental_start,
     load_cache,
+    merge_verification,
     quarantine_revisions,
 )
 from breathewise.services.imports import archive_provider
@@ -130,23 +131,36 @@ def main():
         if (
             args.verify
             or not cached
+            or any(
+                x.get("verification_status") == "verification_failed"
+                for x in cached.get("stations", [])
+            )
             or datetime.now(UTC) - parse_time(cached["verified_at"]) > timedelta(hours=24)
         ):
             # Discovery/cache publication shares the existing job lock; HTTP never runs in API requests.
             with cycle_lock(engine()):
-                previous = {x["location_id"]: x for x in cached.get("stations", [])}
-                cached = verify_cohort(client, key)
-                for item in cached["stations"]:
-                    item["pending_revisions"] = previous.get(item["location_id"], {}).get(
-                        "pending_revisions", []
-                    )
+                cached = merge_verification(cached, verify_cohort(client, key))
                 path = cache_path()
                 path.parent.mkdir(parents=True, exist_ok=True)
                 temp = path.with_suffix(".tmp")
                 temp.write_text(json.dumps(cached, indent=2, allow_nan=False) + "\n")
                 temp.replace(path)
         results = []
+        rejected_ids = {x["location_id"] for x in cached.get("rejected", [])}
         for station in cached["stations"]:
+            if (
+                station.get("verification_status") == "verification_failed"
+                or station["location_id"] in rejected_ids
+            ):
+                results.append(
+                    {
+                        "location_id": station["location_id"],
+                        "status": "verification_failed",
+                        "inserted": 0,
+                        "code": station.get("verification_error_code", "OPENAQ_NOT_REVERIFIED"),
+                    }
+                )
+                continue
 
             def fetch(station=station):
                 end = datetime.now(UTC)

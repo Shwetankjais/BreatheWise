@@ -31,6 +31,9 @@ class CatalogueStation(StationView):
     catalogue_verified_at: AwareDatetime | None = None
     provider_revision_pending: bool = False
     last_refresh_status: str | None = None
+    verification_status: Literal["verified", "verification_failed", "unknown"] | None = None
+    verification_error_code: str | None = None
+    verification_attempted_at: AwareDatetime | None = None
 
 
 class StationCatalogue(StrictModel):

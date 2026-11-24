@@ -120,6 +120,10 @@ def station_catalogue(db, city_id, cutoff):
                 value.quality_flags = sorted(
                     set(value.quality_flags + ["provider_revision_pending"])
                 )
+            if detail.get("verification_status") == "verification_failed" and value:
+                value.quality_flags = sorted(
+                    set(value.quality_flags + ["provider_verification_failed"])
+                )
             cov = coverage_state(record) if record else "unknown"
             freshness = "no_observations" if not value else "stale" if value.stale else "fresh"
             status = (
@@ -155,6 +159,13 @@ def station_catalogue(db, city_id, cutoff):
                     revision_pending_count=len(pending),
                     limitations=(
                         [
+                            "Latest provider identity/unit verification failed; prior verified metadata and stored observations retained; ingestion skipped"
+                        ]
+                        if detail.get("verification_status") == "verification_failed"
+                        else []
+                    )
+                    + (
+                        [
                             "Changed provider overlap records quarantined; stored originals retained pending explicit reconciliation"
                         ]
                         if pending
@@ -177,6 +188,9 @@ def station_catalogue(db, city_id, cutoff):
                 catalogue_verified_at=detail.get("verified_at"),
                 provider_revision_pending=any(x.provider_revision_pending for x in available),
                 last_refresh_status=detail.get("last_refresh_status"),
+                verification_status=detail.get("verification_status", "unknown"),
+                verification_error_code=detail.get("verification_error_code"),
+                verification_attempted_at=detail.get("verification_attempted_at"),
             )
         )
     return StationCatalogue(
@@ -272,3 +286,45 @@ def quarantine_revisions(db, batch):
         else:
             retained.append(row)
     return batch.model_copy(update={"observations": retained}), quarantine
+
+
+def merge_verification(previous, attempted):
+    """A failed identity check never erases earlier verified facts or pending revisions.
+
+    Failed retained entries are display-only until a later successful verification.
+    Their original verification timestamp is preserved, not advanced to attempt time.
+    """
+    previous_stations = {x["location_id"]: x for x in previous.get("stations", [])}
+    rejected = {x["location_id"]: x["code"] for x in attempted.get("rejected", [])}
+    succeeded = {x["location_id"]: x for x in attempted.get("stations", [])}
+    attempted_at = attempted["verified_at"]
+    merged = []
+    for location_id in sorted(set(previous_stations) | set(succeeded)):
+        prior = previous_stations.get(location_id, {})
+        if location_id in succeeded and location_id not in rejected:
+            item = succeeded[location_id] | {
+                "pending_revisions": prior.get("pending_revisions", []),
+                "verification_status": "verified",
+                "verification_error_code": None,
+                "verification_attempted_at": attempted_at,
+            }
+        else:
+            item = prior | {
+                "verification_status": "verification_failed",
+                "verification_error_code": rejected.get(location_id, "OPENAQ_NOT_REVERIFIED"),
+                "verification_attempted_at": attempted_at,
+                "last_refresh_status": "verification_failed",
+            }
+        merged.append(item)
+    result = attempted | {
+        "stations": merged,
+        "verification_attempted_at": attempted_at,
+        "verification_status": "verified"
+        if not rejected
+        else "partial"
+        if succeeded
+        else "verification_failed",
+    }
+    if not succeeded and previous.get("verified_at"):
+        result["verified_at"] = previous["verified_at"]
+    return result

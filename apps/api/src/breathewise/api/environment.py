@@ -115,8 +115,8 @@ def routes(body: RouteRequest):
     raise ServiceError(
         409,
         "ROUTE_COMPARISON_UNAVAILABLE",
-        "Routing and spatial pollution estimation are not configured",
-        ["routing endpoint", "validated spatial estimator"],
+        "Pollution-exposure comparison is unavailable; use /routes/geometry for road geometry",
+        ["validated spatial estimator and coverage"],
     )
 
 
@@ -152,8 +152,8 @@ def performance(
     raise ServiceError(
         503,
         "EVALUATION_UNAVAILABLE",
-        "No actual held-out predictions, splits or baseline results supplied",
-        ["evaluation predictions and chronological split dates"],
+        "Select a registered retrospective model_version via /models; supplied-model evaluation remains unavailable",
+        ["explicit model_version with registered evaluation artifacts"],
     )
 
 

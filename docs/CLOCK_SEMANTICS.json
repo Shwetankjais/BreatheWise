@@ -1,0 +1,43 @@
+{
+  "source_parquet": "data/cleaned/pollutants/Aanad Vihar.parquet",
+  "raw_timestamp_header": "Timestamp",
+  "parquet_timestamp_schema": [
+    {
+      "file_name": "data/cleaned/pollutants/Aanad Vihar.parquet",
+      "name": "timestamp",
+      "type": "INT64",
+      "type_length": null,
+      "repetition_type": "OPTIONAL",
+      "num_children": null,
+      "converted_type": null,
+      "scale": null,
+      "precision": null,
+      "field_id": null,
+      "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=<null>, NANOS=NanoSeconds()))",
+      "duckdb_type": "TIMESTAMP_NS",
+      "column_id": 1
+    }
+  ],
+  "pandas_timestamp_metadata": {
+    "timestamp_column": [
+      {
+        "name": "timestamp",
+        "field_name": "timestamp",
+        "pandas_type": "datetime",
+        "numpy_type": "datetime64[ns]",
+        "metadata": null
+      }
+    ],
+    "creator": {
+      "library": "pyarrow",
+      "version": "23.0.1"
+    },
+    "pandas_version": "2.2.3"
+  },
+  "documentation_review": [
+    "documentation/Data_Dictionary.md: naive recorded clock/timezone unverified",
+    "documentation/Timeline_Coverage.md: source coverage, not clock convention proof",
+    "notebooks/Complete_EDA.ipynb: parsed source clocks retained; provisional weather clock scenarios distinct from verification"
+  ],
+  "conclusion": "Neither metadata nor raw header establishes source timezone or interval start/end. Keep recorded-clock archive/experiment separate from live UTC and leave historical publication time unknown. Numerical agreement does not establish an authoritative shift."
+}
