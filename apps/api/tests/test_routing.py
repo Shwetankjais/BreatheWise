@@ -67,3 +67,34 @@ def test_routing_network_failure_does_not_fabricate(tmp_path, monkeypatch):
         assert error.value.detail.code == "ROUTING_PROVIDER_UNAVAILABLE"
     finally:
         get_settings.cache_clear()
+
+
+def test_provider_no_segment_is_unsupported_route_not_service_outage(tmp_path, monkeypatch):
+    monkeypatch.setenv("DATA_ROOT", str(tmp_path))
+    monkeypatch.setenv("ROUTING_BASE_URL", "https://routing.example")
+    get_settings.cache_clear()
+    try:
+        body = GeometryRequest(
+            origin={"latitude": 28.6, "longitude": 77.2},
+            destination={"latitude": 28.65, "longitude": 77.25},
+        )
+        with (
+            httpx.Client(
+                transport=httpx.MockTransport(
+                    lambda r: httpx.Response(
+                        400,
+                        json={
+                            "code": "NoSegment",
+                            "message": "provider raw body should not be echoed",
+                        },
+                    )
+                )
+            ) as client,
+            pytest.raises(ServiceError) as error,
+        ):
+            geometry(body, client)
+        assert error.value.status == 409
+        assert error.value.detail.code == "ROUTE_NOT_FOUND"
+        assert "provider raw body" not in error.value.detail.message
+    finally:
+        get_settings.cache_clear()

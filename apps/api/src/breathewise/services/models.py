@@ -47,6 +47,7 @@ def catalogue():
             kind="native_diagnostic",
             dataset_mode="diagnostic",
             supported_horizons=[1, 3, 6, 12, 24],
+            feature_count=75,
             native_diagnostics_ready=get_settings().model_artifact_path.is_file(),
             status="available"
             if get_settings().model_artifact_path.is_file()
@@ -66,6 +67,9 @@ def catalogue():
                 dataset_mode="recorded_clock",
                 station_ids=manifest["source_station_ids"],
                 target_unit=manifest["target_unit"],
+                feature_count=len(manifest["models"]["1"]["feature_names"]),
+                dataset_sha256=manifest["dataset_sha256"],
+                artifact_hashes={h: item["sha256"] for h, item in manifest["models"].items()},
                 supported_horizons=manifest["supported_horizons"],
                 retrospective_evaluation_ready=True,
                 status="available",
@@ -116,6 +120,7 @@ def evaluation(version, horizon=None):
             ]
             for name, scores in m["rolling_backtests"].items()
         },
+        features={str(h): m["models"][str(h)]["features"] for h in horizons},
         preprocessing=m["preprocessing"],
         input_availability_assumption=m["input_availability_assumption"],
         limitations=m["limitations"],

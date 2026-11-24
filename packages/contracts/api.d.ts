@@ -1304,6 +1304,15 @@ export interface components {
             /** High Pollution Threshold Ugm3 */
             high_pollution_threshold_ugm3: number;
         };
+        /** FeatureDefinition */
+        FeatureDefinition: {
+            /** Formula */
+            formula: string;
+            /** Name */
+            name: string;
+            /** Unit */
+            unit: string;
+        };
         /** Forecast */
         Forecast: {
             /**
@@ -1613,6 +1622,10 @@ export interface components {
             dataset_mode: "recorded_clock";
             /** Dataset Sha256 */
             dataset_sha256: string;
+            /** Features */
+            features: {
+                [key: string]: components["schemas"]["FeatureDefinition"][];
+            };
             /** Horizons */
             horizons: components["schemas"]["HorizonEvaluation"][];
             /** Input Availability Assumption */
@@ -1661,6 +1674,13 @@ export interface components {
         /** ModelSummary */
         ModelSummary: {
             /**
+             * Artifact Hashes
+             * @default {}
+             */
+            artifact_hashes: {
+                [key: string]: string;
+            };
+            /**
              * Continuous Trajectory Ready
              * @default false
              * @constant
@@ -1671,6 +1691,10 @@ export interface components {
              * @enum {string}
              */
             dataset_mode: "diagnostic" | "recorded_clock";
+            /** Dataset Sha256 */
+            dataset_sha256?: string | null;
+            /** Feature Count */
+            feature_count?: number | null;
             /**
              * Kind
              * @enum {string}

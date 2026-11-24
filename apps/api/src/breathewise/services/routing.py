@@ -86,6 +86,15 @@ def geometry(body, client=None):
                 raise ServiceError(
                     503, "ROUTING_RATE_LIMITED", "Provider rate limit; try later", retryable=True
                 )
+            if response.status_code == 400:
+                try:
+                    no_route = response.json().get("code") in {"NoRoute", "NoSegment"}
+                except (ValueError, AttributeError):
+                    no_route = False
+                if no_route:
+                    raise ServiceError(
+                        409, "ROUTE_NOT_FOUND", "No provider route between supported endpoints"
+                    )
             if response.status_code != 200:
                 raise ServiceError(
                     503,

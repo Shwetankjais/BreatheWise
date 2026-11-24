@@ -11,6 +11,9 @@ class ModelSummary(StrictModel):
     station_ids: list[str] = []
     pollutant: str = "pm25"
     target_unit: str | None = None
+    feature_count: int | None = None
+    dataset_sha256: str | None = None
+    artifact_hashes: dict[str, str] = {}
     supported_horizons: list[int] = []
     live_supported_horizons: list[int] = []
     native_diagnostics_ready: bool = False
@@ -51,6 +54,12 @@ class RecordedSplit(StrictModel):
     end_recorded_at_exclusive: str
 
 
+class FeatureDefinition(StrictModel):
+    name: str
+    unit: str
+    formula: str
+
+
 class ModelEvaluation(StrictModel):
     model_version: str
     dataset_mode: Literal["recorded_clock"] = "recorded_clock"
@@ -66,6 +75,7 @@ class ModelEvaluation(StrictModel):
     splits: list[RecordedSplit]
     horizons: list[HorizonEvaluation]
     rolling_backtests: dict[str, list[HorizonEvaluation]]
+    features: dict[str, list[FeatureDefinition]]
     preprocessing: str
     input_availability_assumption: str
     limitations: list[str]

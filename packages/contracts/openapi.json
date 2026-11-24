@@ -1781,6 +1781,30 @@
         "title": "EvaluationGroup",
         "type": "object"
       },
+      "FeatureDefinition": {
+        "additionalProperties": false,
+        "properties": {
+          "formula": {
+            "title": "Formula",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "unit",
+          "formula"
+        ],
+        "title": "FeatureDefinition",
+        "type": "object"
+      },
       "Forecast": {
         "additionalProperties": false,
         "properties": {
@@ -2439,6 +2463,16 @@
             "title": "Dataset Sha256",
             "type": "string"
           },
+          "features": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/FeatureDefinition"
+              },
+              "type": "array"
+            },
+            "title": "Features",
+            "type": "object"
+          },
           "horizons": {
             "items": {
               "$ref": "#/components/schemas/HorizonEvaluation"
@@ -2537,6 +2571,7 @@
           "splits",
           "horizons",
           "rolling_backtests",
+          "features",
           "preprocessing",
           "input_availability_assumption",
           "limitations"
@@ -2547,6 +2582,14 @@
       "ModelSummary": {
         "additionalProperties": false,
         "properties": {
+          "artifact_hashes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "title": "Artifact Hashes",
+            "type": "object"
+          },
           "continuous_trajectory_ready": {
             "const": false,
             "default": false,
@@ -2560,6 +2603,28 @@
             ],
             "title": "Dataset Mode",
             "type": "string"
+          },
+          "dataset_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Sha256"
+          },
+          "feature_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Count"
           },
           "kind": {
             "enum": [
