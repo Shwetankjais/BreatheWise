@@ -1,0 +1,559 @@
+{
+  "audited_at_utc": "2026-11-24T06:02:33.124412+00:00",
+  "authoritative_provider_docs": [
+    "https://docs.openaq.org/using-the-api/dates-datetimes",
+    "https://docs.openaq.org/resources/measurements",
+    "https://docs.openaq.org/resources/latest",
+    "https://docs.openaq.org/resources/sensors"
+  ],
+  "archive": {
+    "source_station_id": "site_301",
+    "crosswalk_evidence": {
+      "site_id": "site_301",
+      "source_folder": "Aanad Vihar",
+      "label": "Anand Vihar",
+      "weather_location": "Anand_Vihar",
+      "coordinate_status": "user-supplied approximate location; not official registry verified",
+      "identity_policy": "site IDs kept separate; no merge across replacement IDs"
+    },
+    "approximate_weather_coordinate_context": {
+      "label": "Anand_Vihar",
+      "latitude": 28.6476,
+      "longitude": 77.3158
+    },
+    "crosswalk_sha256": "9e51fd22389231090e0c615e5742121d2d1fef9bbaa5e5e42fe516448e079399",
+    "clock_basis": "naive_recorded_clock_unverified",
+    "timezone": null,
+    "interval_start_or_end": null,
+    "historical_publication_time_known": false,
+    "authoritative_crosswalk_to_openaq235": false,
+    "conclusion": "Name/provider lineage supports candidate association only. Approximate supplied weather coordinates are not official station registry proof. Neither source filenames nor Parquet UTC-adjustment=false proves IST or UTC. No shift applied or numerical-alignment optimization performed."
+  },
+  "utc_native": {
+    "station_id": "openaq-235",
+    "sensor_id": 12235610,
+    "provider_location": {
+      "id": 235,
+      "name": "Anand Vihar, New Delhi - DPCC",
+      "locality": null,
+      "timezone": "Asia/Kolkata",
+      "country": {
+        "id": 9,
+        "code": "IN",
+        "name": "India"
+      },
+      "owner": {
+        "id": 8524,
+        "name": "Delhi Pollution Control Committee"
+      },
+      "provider": {
+        "id": 168,
+        "name": "CPCB"
+      },
+      "isMobile": false,
+      "isMonitor": true,
+      "instruments": [
+        {
+          "id": 2,
+          "name": "Government Monitor"
+        },
+        {
+          "id": 2,
+          "name": "Government Monitor"
+        }
+      ],
+      "sensors": [
+        {
+          "id": 12235605,
+          "name": "co ppb",
+          "parameter": {
+            "id": 102,
+            "name": "co",
+            "units": "ppb",
+            "displayName": "CO"
+          }
+        },
+        {
+          "id": 385,
+          "name": "co \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 4,
+            "name": "co",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "CO mass"
+          }
+        },
+        {
+          "id": 12235606,
+          "name": "no ppb",
+          "parameter": {
+            "id": 24,
+            "name": "no",
+            "units": "ppb",
+            "displayName": "NO"
+          }
+        },
+        {
+          "id": 382,
+          "name": "no2 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 5,
+            "name": "no2",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "NO\u2082 mass"
+          }
+        },
+        {
+          "id": 12235607,
+          "name": "no2 ppb",
+          "parameter": {
+            "id": 15,
+            "name": "no2",
+            "units": "ppb",
+            "displayName": "NO\u2082"
+          }
+        },
+        {
+          "id": 14340864,
+          "name": "nox ppb",
+          "parameter": {
+            "id": 23,
+            "name": "nox",
+            "units": "ppb",
+            "displayName": "NOX"
+          }
+        },
+        {
+          "id": 380,
+          "name": "o3 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 3,
+            "name": "o3",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "O\u2083 mass"
+          }
+        },
+        {
+          "id": 12235608,
+          "name": "o3 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 3,
+            "name": "o3",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "O\u2083 mass"
+          }
+        },
+        {
+          "id": 12235609,
+          "name": "pm10 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 1,
+            "name": "pm10",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "PM10"
+          }
+        },
+        {
+          "id": 381,
+          "name": "pm10 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 1,
+            "name": "pm10",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "PM10"
+          }
+        },
+        {
+          "id": 384,
+          "name": "pm25 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 2,
+            "name": "pm25",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "PM2.5"
+          }
+        },
+        {
+          "id": 12235610,
+          "name": "pm25 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 2,
+            "name": "pm25",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "PM2.5"
+          }
+        },
+        {
+          "id": 12235611,
+          "name": "relativehumidity %",
+          "parameter": {
+            "id": 98,
+            "name": "relativehumidity",
+            "units": "%",
+            "displayName": "RH"
+          }
+        },
+        {
+          "id": 383,
+          "name": "so2 \u00b5g/m\u00b3",
+          "parameter": {
+            "id": 6,
+            "name": "so2",
+            "units": "\u00b5g/m\u00b3",
+            "displayName": "SO\u2082 mass"
+          }
+        },
+        {
+          "id": 12235612,
+          "name": "so2 ppb",
+          "parameter": {
+            "id": 101,
+            "name": "so2",
+            "units": "ppb",
+            "displayName": "SO\u2082"
+          }
+        },
+        {
+          "id": 12235613,
+          "name": "temperature c",
+          "parameter": {
+            "id": 100,
+            "name": "temperature",
+            "units": "c",
+            "displayName": "Temperature (C)"
+          }
+        },
+        {
+          "id": 14340865,
+          "name": "wind_direction deg",
+          "parameter": {
+            "id": 22,
+            "name": "wind_direction",
+            "units": "deg",
+            "displayName": "Wind direction"
+          }
+        },
+        {
+          "id": 14340866,
+          "name": "wind_speed m/s",
+          "parameter": {
+            "id": 34,
+            "name": "wind_speed",
+            "units": "m/s",
+            "displayName": "Wind speed"
+          }
+        }
+      ],
+      "coordinates": {
+        "latitude": 28.646835,
+        "longitude": 77.316032
+      },
+      "licenses": null,
+      "bounds": [
+        77.316032,
+        28.646835,
+        77.316032,
+        28.646835
+      ],
+      "distance": null,
+      "datetimeFirst": {
+        "utc": "2016-02-05T14:15:00Z",
+        "local": "2016-02-05T19:45:00+05:30"
+      },
+      "datetimeLast": {
+        "utc": "2026-11-24T03:15:00Z",
+        "local": "2026-11-24T08:45:00+05:30"
+      }
+    },
+    "provider_metadata_fetched_at_utc": "2026-11-24T05:57:53.546620+00:00",
+    "clock_basis": "UTC",
+    "local_timezone": "Asia/Kolkata",
+    "interval": "provider period datetimeFrom inclusive to datetimeTo exclusive; measured_at=period.datetimeTo.utc",
+    "phase": "hour-ending UTC minute30 retained; IST whole-hour endpoint",
+    "unit": "\u00b5g/m\u00b3",
+    "aggregation": "provider /hours reported value; not recomputed from rounded source summaries",
+    "coverage_caveat": "Provider percentCoverage and flagInfo are retained.100% is provider-declared completeness, not independent proof; coverage support bounds can differ from period bounds.",
+    "raw_rows_coverage_start_differs_from_period_start": 12903,
+    "raw_rows_value_differs_from_summary_avg": 5551,
+    "examples": [
+      {
+        "raw_file": "20250219T0000-20250319T0000-p1.json",
+        "period": {
+          "label": "1hour",
+          "interval": "01:00:00",
+          "datetimeFrom": {
+            "utc": "2025-02-18T23:30:00Z",
+            "local": "2025-02-19T05:00:00+05:30"
+          },
+          "datetimeTo": {
+            "utc": "2025-02-19T00:30:00Z",
+            "local": "2025-02-19T06:00:00+05:30"
+          }
+        },
+        "coverage": {
+          "expectedCount": 4,
+          "expectedInterval": "01:00:00",
+          "observedCount": 4,
+          "observedInterval": "01:00:00",
+          "percentComplete": 100.0,
+          "percentCoverage": 100.0,
+          "datetimeFrom": {
+            "utc": "2025-02-18T22:45:00Z",
+            "local": "2025-02-19T04:15:00+05:30"
+          },
+          "datetimeTo": {
+            "utc": "2025-02-19T00:30:00Z",
+            "local": "2025-02-19T06:00:00+05:30"
+          }
+        },
+        "value": 105.0,
+        "summary_avg": 104.75
+      },
+      {
+        "raw_file": "20250219T0000-20250319T0000-p1.json",
+        "period": {
+          "label": "1hour",
+          "interval": "01:00:00",
+          "datetimeFrom": {
+            "utc": "2025-02-19T00:30:00Z",
+            "local": "2025-02-19T06:00:00+05:30"
+          },
+          "datetimeTo": {
+            "utc": "2025-02-19T01:30:00Z",
+            "local": "2025-02-19T07:00:00+05:30"
+          }
+        },
+        "coverage": {
+          "expectedCount": 4,
+          "expectedInterval": "01:00:00",
+          "observedCount": 4,
+          "observedInterval": "01:00:00",
+          "percentComplete": 100.0,
+          "percentCoverage": 100.0,
+          "datetimeFrom": {
+            "utc": "2025-02-18T23:45:00Z",
+            "local": "2025-02-19T05:15:00+05:30"
+          },
+          "datetimeTo": {
+            "utc": "2025-02-19T01:30:00Z",
+            "local": "2025-02-19T07:00:00+05:30"
+          }
+        },
+        "value": 102.0,
+        "summary_avg": 102.25
+      }
+    ],
+    "history_manifest": {
+      "schema_version": "1.0",
+      "station_id": "openaq-235",
+      "sensor_id": 12235610,
+      "location_name": "Anand Vihar, New Delhi - DPCC",
+      "coordinates": {
+        "latitude": 28.646835,
+        "longitude": 77.316032
+      },
+      "owner": {
+        "id": 8524,
+        "name": "Delhi Pollution Control Committee"
+      },
+      "provider": {
+        "id": 168,
+        "name": "CPCB"
+      },
+      "sensor_first_measurement": {
+        "utc": "2025-02-18T22:15:00Z",
+        "local": "2025-02-19T03:45:00+05:30"
+      },
+      "sensor_last_measurement": {
+        "utc": "2026-11-24T03:15:00Z",
+        "local": "2026-11-24T08:45:00+05:30"
+      },
+      "requested_start_utc": "2025-02-19T00:00:00+00:00",
+      "requested_end_utc_exclusive": "2026-11-01T00:00:00+00:00",
+      "dataset_mode": "utc_native_historical_observations",
+      "timezone": "UTC",
+      "local_timezone": "Asia/Kolkata",
+      "interval_semantics": "exclusive_hour_ending",
+      "pollutant": "pm25",
+      "unit": "\u00b5g/m\u00b3",
+      "observations": 13188,
+      "complete_hour_training_rows": 9509,
+      "partial_or_unknown_coverage_rows": 3679,
+      "first_observation_utc": "2025-02-19T00:30:00+00:00",
+      "last_observation_utc": "2026-10-31T23:30:00+00:00",
+      "historical_publication_time_known": false,
+      "availability_semantics": "first_seen_at_utc is this actual fetch, never historical publication",
+      "rejected": {
+        "flagged_or_unknown_quality": 2,
+        "invalid_or_missing_value": 3
+      },
+      "network_requests_this_run": 0,
+      "cache_hits_this_run": 25,
+      "dataset_sha256": "90779cc9e54d54523af906ddc3d2c63c75a8e84d51d7ac7b1222d6192c09ef04",
+      "raw_response_count": 25,
+      "raw_response_hashes": {
+        "20250219T0000-20250319T0000-p1.json": "f2febd65cc2072bbde1ae171f132a10b5654eac1898869100347e8a5460cea31",
+        "20250319T0000-20250416T0000-p1.json": "fba27c756334418d254ac7f7156b2cd4a88ae69daaee2e84e0d3a098d8f8ee32",
+        "20250416T0000-20250514T0000-p1.json": "17a212b6e778dbb3eed61b43e2e10e5662125b5ee1fe13078de3aff63ee75abd",
+        "20250514T0000-20250611T0000-p1.json": "a77d1fa5922ec6875ae093184380e102e0ac32538df66f942143ac548605bddb",
+        "20250611T0000-20250709T0000-p1.json": "c6c7a6e5e213859ec2888f1b30bb8a549b603f1df7210e7bc87e597920d7d130",
+        "20250709T0000-20250806T0000-p1.json": "d10e7f8e0b5310320074b3eace9f867eeacc5bb8d18dffcbe0eb2efd779e43ad",
+        "20250806T0000-20250903T0000-p1.json": "e931f89eb2c59f0462f41b92f087f517cc39f7df1f1708023121f92f7c188d2a",
+        "20250903T0000-20251001T0000-p1.json": "6cea418e0ec206dc03b91fcba025ce219c691110725e8cbfd44ea45c7d9774c3",
+        "20251001T0000-20251029T0000-p1.json": "7c0231dabdc29aad801d38c83349adacf596d352c091c99a3c0c863d2a737d19",
+        "20251029T0000-20251126T0000-p1.json": "afcbe2020f6a1f3a9347f98c402105dfe1d40952084cf48009c6939a76b7ea26",
+        "20251126T0000-20251224T0000-p1.json": "cf6b546d96244322a85e9cd397c28a32f3b65c2b98602fddb89ca5e14d455c48",
+        "20251224T0000-20260121T0000-p1.json": "63e5a5c85a9408b2f17ae19b30444400e2e1ffc8670cefe8d245bec17725f0e0",
+        "20260121T0000-20260218T0000-p1.json": "be7479fe63a99b5bb62df25352af8d5439483e124280c12c3b3ad9b5bf4ee858",
+        "20260218T0000-20260318T0000-p1.json": "21f2d880a71fc289e8f74d974346b465a8fdfcd4dbcb960b19a5338aa9f4f3c2",
+        "20260318T0000-20260415T0000-p1.json": "376a276165eb844eaa4421975696baaa262ee5ad221c022723905046c67986c1",
+        "20260415T0000-20260513T0000-p1.json": "7eca672b91e2e74e491d4c95525c005125d97605d741e6649ec98ad5a6940b84",
+        "20260513T0000-20260610T0000-p1.json": "e05a0ae07441d61dc884395d94d024c8d026d8a3e81cb71008fb7f88ddd0e4e6",
+        "20260610T0000-20260708T0000-p1.json": "411c77ba1ec4dbfee3c070f2c82ac45b07db307747215f69f5435e08e03701f6",
+        "20260708T0000-20260805T0000-p1.json": "170782378cffcf6ffccd110787da9e78239666b148678b84de7f6c37f9779eee",
+        "20260805T0000-20260902T0000-p1.json": "846390327f884b22888ea259f2aca88f1d3c75ce310c05849782b43d204cc7d3",
+        "20260902T0000-20260930T0000-p1.json": "0ba9423faef9265288013d71dba3faf6709d147ebb0f7229f024e3757fc17aa2",
+        "20260930T0000-20261028T0000-p1.json": "d7284f2b9139db3ef34e333ded60b0dd6d9e738d55f5137a002c048d9b63b9d7",
+        "20261028T0000-20261101T0000-p1.json": "b3c74f77343fb620c8e80dde5509a3113d7d46d1aa6582d9e5901c0fd2587868",
+        "location-235.json": "1becf288921e8276a6ffb38db20f609ef58a728d1b972b064ab4468ec3fa1271",
+        "sensor-12235610.json": "3f3fd85cba78d91f769ade53610c838aed6c8a661c14dcfeaf923b4c91f4343c"
+      },
+      "training_readiness": "observed_complete_hours_available_for_separate_UTC_retrospective_protocol; historical_issue_availability_unknown",
+      "live_compatibility": "Requires exact sensor, UTC hour-ending phase, complete/stale policy and prospective availability checks"
+    },
+    "cache_replay_verified": {
+      "network_requests": 0,
+      "cache_hits": 25,
+      "dataset_sha256_unchanged": true
+    }
+  },
+  "availability": {
+    "historical_publication_time_known": false,
+    "actual_cached_recent_first_seen_examples": [
+      {
+        "measured_at_utc": "2026-11-24T03:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T06:00:57.386971+00:00",
+        "value": 108.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable",
+          "provider_partial_hour"
+        ],
+        "first_seen_lag_minutes": 150.95644951666665
+      },
+      {
+        "measured_at_utc": "2026-11-24T02:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T04:56:33.424643+00:00",
+        "value": 87.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable",
+          "provider_partial_hour"
+        ],
+        "first_seen_lag_minutes": 146.55707738333334
+      },
+      {
+        "measured_at_utc": "2026-11-24T01:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T04:56:33.424643+00:00",
+        "value": 81.5,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable"
+        ],
+        "first_seen_lag_minutes": 206.55707738333334
+      },
+      {
+        "measured_at_utc": "2026-11-24T00:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T04:56:33.424643+00:00",
+        "value": 89.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable"
+        ],
+        "first_seen_lag_minutes": 266.55707738333336
+      },
+      {
+        "measured_at_utc": "2026-11-23T23:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T04:56:33.424643+00:00",
+        "value": 88.5,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable"
+        ],
+        "first_seen_lag_minutes": 326.5570773833333
+      },
+      {
+        "measured_at_utc": "2026-11-23T22:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-24T00:53:25.465595+00:00",
+        "value": 88.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable",
+          "provider_partial_hour"
+        ],
+        "first_seen_lag_minutes": 143.42442658333331
+      },
+      {
+        "measured_at_utc": "2026-11-23T21:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-23T23:34:46.264325+00:00",
+        "value": 98.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable",
+          "provider_partial_hour"
+        ],
+        "first_seen_lag_minutes": 124.77107208333334
+      },
+      {
+        "measured_at_utc": "2026-11-23T20:30:00+00:00",
+        "actual_first_seen_at_utc": "2026-11-23T23:34:46.264325+00:00",
+        "value": 97.0,
+        "unit": "\u00b5g/m\u00b3",
+        "quality_flags": [
+          "availability_first_seen_at_fetch",
+          "city_from_source_station_name_and_owner",
+          "original_model_preprocessing_unverified",
+          "provider_license_metadata_unavailable"
+        ],
+        "first_seen_lag_minutes": 184.77107208333334
+      }
+    ],
+    "interpretation": "First_seen minus measurement end is observed retrieval lag and an upper bound on publication lag, not exact provider reporting delay. Backfill first_seen dates must never masquerade as historical issue-time availability. OpenAQ may deliver old measurements out of order; latest alone cannot recover all updates."
+  },
+  "feature_cutoff_rules": [
+    "UTC model must use exact verified station/sensor and hour-ending phase; no recorded-clock model promotion",
+    "For retrospective UTC studies assume earlier measurements available only explicitly; historical publication is unknown",
+    "For shadow issue time require first_seen_at<=issue_at and measurement_end<=input_cutoff<=issue_at",
+    "Choose freshest eligible completed hour, reject stale newest input per declared limit and never zero-fill gaps",
+    "Use exact elapsed-hour lags; rolling statistics only through cutoff; explicit missingness and full-hour target policy",
+    "Log actual forecast issue/input cutoff/target/model version and score only subsequently first-seen compatible observations"
+  ],
+  "readiness": {
+    "recorded_clock_v1_live_compatible": false,
+    "utc_native_history_available": true,
+    "historical_issue_availability_verified": false,
+    "public_live_forecast_ready": false,
+    "remaining": "Separate UTC training and honest retrospective validation; prospective input availability/staleness/coverage and forecast outcomes. No city or station-crosswalk generalization implied."
+  }
+}
