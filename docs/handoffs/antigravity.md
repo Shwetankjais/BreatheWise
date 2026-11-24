@@ -1,10 +1,62 @@
 # Antigravity handoff
 
 Agent: shwetank's-antigravity (Senior UI/UX Designer & Frontend FDE).  
-Status: DEPLOYMENT_READINESS_AND_TEAM_RELEASE_COMPLETE (All earlier freeze statements superseded).  
+Status: APPLICATION_COMPLETION_MILESTONE_COMPLETE (All earlier freeze statements superseded).  
 Git authority: User explicitly authorized commit and push to `feat/foundation` for this milestone, overriding the prior sole-Codex-Git-writer arrangement for this serialized release window. Codex-owned files and tests are strictly preserved.  
 Orchestrator: Original project chat (docs/ORCHESTRATOR.md).  
 Branch Context: `feat/foundation`  
+
+---
+
+## Application Completion Milestone Record
+
+**COMPLETION_ACK — 2026-11-24T19:50:00+05:30:**  
+Full application completion work is finished and verified on `feat/foundation`. All earlier freeze statements are superseded.
+
+### 1. Delivered Backend Endpoints & Adapters
+1. **Open-Meteo NWP Weather Adapter (`apps/api/src/breathewise/adapters/openmeteo.py`):**
+   - In-memory TTL caching (10 minutes), 5.0s timeout, explicit WMO weather interpretation code mappings.
+   - Gridded numerical weather prediction model estimates (temperature, apparent temperature, relative humidity, surface pressure, wind speed/direction, precipitation).
+   - Explicit scientific attribution: disclaims numerical model predictions from ground sensor readings.
+2. **Location & Environmental Context Service (`apps/api/src/breathewise/services/location.py`):**
+   - Haversine distance calculations and strict 50 km Delhi boundary limit enforcement (`in_bounds: false` with out-of-bounds guidance).
+   - Multi-pollutant ground sensor aggregation (`get_station_pollutants`) across all 6 criteria air contaminants (PM2.5, PM10, NO₂, SO₂, CO, O₃) with 1-hour indicative tags, quality flags, and unavailable indicators.
+3. **API Routes Added & Tested:**
+   - `GET /api/v1/environment/context`: Takes `latitude`, `longitude`, `city_id`; returns `Envelope[LocationContext]`.
+   - `GET /api/v1/stations/{station_id}/pollutants`: Returns `Envelope[dict[str, PollutantReading]]`.
+4. **Contract Verification:**
+   - Generated `packages/contracts/openapi.json` and `packages/contracts/api.d.ts`.
+   - Passes `npm run contracts:check` and `npm run typecheck:contracts`.
+
+### 2. Frontend Journeys & UI Enhancements
+1. **Overview & Station Telemetry (`OverviewView.tsx`):**
+   - Rendered **"All Monitored Pollutants"** card for the selected station showing all 6 criteria pollutants with 1-hr averaging badge, quality flags, and the official CPCB 24-hour averaging disclaimer.
+   - Rendered **"Meteorological Context"** card displaying Open-Meteo NWP conditions (weather description, temperature, humidity, wind, pressure) with explicit model attribution and gridded disclaimer.
+   - Wired geolocation button to invoke the context endpoint, updating location context and nearest station selection.
+2. **Historical Replay Planner (`ReplayPlanner.tsx`):**
+   - Added complete forecast issue date and text filter input for rapid issue navigation across thousands of complete issues.
+   - Added actionable "Suggested Adjustments" section when `result.status === 'no_suitable_window'`.
+3. **Criteria Pollutant Health Guidance (`HealthView.tsx`):**
+   - Added dedicated **"Practical Precautions for Respiratory-Sensitive Populations"** card providing actionable guidance for Asthma, COPD, children, and the elderly (rescue bronchodilators, high-traffic arterial corridor avoidance during morning inversions, true HEPA filtration, N95 respirators, and non-clinical public health disclaimer).
+4. **Model Performance & Audit Verification (`ModelAuditView.tsx`):**
+   - Verified playback split selector strictly excludes training data (`test` and `validation` only).
+   - Retained and verified legacy v1 boundary limitation note and feature-time causal input assumptions.
+
+### 3. Verification Evidence
+1. **Full Backend Pytest Suite (`uv run pytest -q`):**
+   - **130 passed, 1 skipped** (PostgreSQL concurrency test) in 6.05s.
+   - Code formatting: `uv run ruff format --check apps/api` (86 files formatted, 0 unformatted).
+   - Lint check: `uv run ruff check apps/api` (All checks passed).
+2. **Frontend Vitest Suite (`npm --workspace=@breathewise/web run test`):**
+   - **60 passed, 0 failed** across all test suites in 288ms.
+3. **TypeScript Typechecks:**
+   - Web workspace: `npm --workspace=@breathewise/web run typecheck` (`tsc --noEmit`) passed with 0 errors.
+   - Contracts: `npm run typecheck:contracts` passed with 0 errors.
+4. **Vite Production Build:**
+   - `npm --workspace=@breathewise/web run build` completed in 979ms.
+5. **Live Prototype Endpoints & Browser Verification:**
+   - Live curl queries to `http://127.0.0.1:8000/api/v1/health`, `/api/v1/environment/context`, and `/api/v1/stations/openaq-235/pollutants` returned 200 OK with correct JSON envelopes.
+   - Headless Playwright sweep against live prototype (`http://127.0.0.1:5173`) passed at 1440px desktop and 390px mobile with **0 horizontal scroll overflow** (`scrollWidth === 390px` on mobile).
 
 ---
 

@@ -478,4 +478,31 @@ describe('BreatheWise API Client — Contract 1.1.0 & Regression Tests', () => {
       globalThis.fetch = originalFetch;
     }
   });
+
+  it('ENVIRONMENT CONTEXT: getLocationContext returns nearest station and Open-Meteo weather context', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getLocationContext(28.6139, 77.2090, 'delhi');
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.in_bounds).toBe(true);
+      expect(res.data.nearest_station).toBeDefined();
+      expect(res.data.weather).toBeDefined();
+      expect(res.data.weather?.source).toContain('Open-Meteo');
+      expect(res.data.weather?.estimate_type).toBe('gridded_numerical_weather_prediction');
+      expect(res.data.ground_pollutants).toBeDefined();
+      expect(res.data.ground_pollutants['pm25'].available).toBe(true);
+    }
+  });
+
+  it('STATION POLLUTANTS: getStationPollutants returns all criteria pollutants with availability flags', async () => {
+    apiClient.setDemoMode(true);
+    const res = await apiClient.getStationPollutants('demo-stn-1');
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data['pm25']).toBeDefined();
+      expect(res.data['pm25'].available).toBe(true);
+      expect(res.data['o3']).toBeDefined();
+      expect(res.data['o3'].available).toBe(false);
+    }
+  });
 });

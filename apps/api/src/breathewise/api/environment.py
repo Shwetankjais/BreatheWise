@@ -14,6 +14,7 @@ from breathewise.schemas.models import ModelEvaluation
 from breathewise.services.advisories import Advisory, advisory
 from breathewise.services.capabilities import MODEL_MISSING
 from breathewise.services.cities import cities, validate_city
+from breathewise.services.location import LocationContext, resolve_location_context
 from fastapi import APIRouter, Query, Request
 
 
@@ -182,4 +183,25 @@ def advisories(request: Request, pollutant: Pollutant):
     return Envelope(
         meta=metadata(request, "WHO educational facts; engineering source review"),
         data=[advisory(pollutant)],
+    )
+
+
+@router.get("/environment/context", response_model=Envelope[LocationContext])
+def environment_context(
+    request: Request,
+    latitude: float = Query(..., ge=-90, le=90),
+    longitude: float = Query(..., ge=-180, le=180),
+    city_id: str = Query("delhi"),
+):
+    from breathewise.db.session import engine
+    from sqlalchemy.orm import Session
+
+    with Session(engine()) as db:
+        data = resolve_location_context(db, latitude, longitude, city_id)
+    return Envelope(
+        meta=metadata(
+            request,
+            "Bounded OpenAQ ground station selection and Open-Meteo NWP gridded weather context",
+        ),
+        data=data,
     )

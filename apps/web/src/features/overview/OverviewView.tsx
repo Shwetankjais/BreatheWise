@@ -9,7 +9,9 @@ import {
   ForecastPoint,
   ApiResult,
   StationCatalogue,
-  ObservedRankings
+  ObservedRankings,
+  LocationContext,
+  PollutantReading
 } from '../../lib/api/types';
 import { apiClient } from '../../lib/api/client';
 import { calculateSubIndex, formatToIST, formatTimeAgo } from '../../lib/aqi';
@@ -89,6 +91,12 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   const [isLoadingRankings, setIsLoadingRankings] = useState(false);
   const [stationCatalogue, setStationCatalogue] = useState<StationCatalogue | null>(null);
 
+  // Station Pollutants & Environmental Weather Context
+  const [stationPollutants, setStationPollutants] = useState<Record<string, PollutantReading> | null>(null);
+  const [isLoadingPollutants, setIsLoadingPollutants] = useState(false);
+  const [locationContext, setLocationContext] = useState<LocationContext | null>(null);
+  const [isLoadingContext, setIsLoadingContext] = useState(false);
+
   // Geolocation state
   const [isLocating, setIsLocating] = useState(false);
   const [locationNotice, setLocationNotice] = useState<{
@@ -132,6 +140,50 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     };
   }, [selectedCity.id, selectedPollutant, isDemoMode]);
 
+  // Fetch All Monitored Criteria Pollutants for selected station
+  useEffect(() => {
+    if (!selectedStation) {
+      setStationPollutants(null);
+      return;
+    }
+    let isMounted = true;
+    setIsLoadingPollutants(true);
+    apiClient.getStationPollutants(selectedStation.id).then(res => {
+      if (!isMounted) return;
+      setIsLoadingPollutants(false);
+      if (res.ok) {
+        setStationPollutants(res.data);
+      } else {
+        setStationPollutants(null);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedStation?.id, isDemoMode]);
+
+  // Fetch Environmental and Weather Context for selected station
+  useEffect(() => {
+    if (!selectedStation) {
+      setLocationContext(null);
+      return;
+    }
+    let isMounted = true;
+    setIsLoadingContext(true);
+    apiClient.getLocationContext(selectedStation.latitude, selectedStation.longitude, selectedCity.id).then(res => {
+      if (!isMounted) return;
+      setIsLoadingContext(false);
+      if (res.ok) {
+        setLocationContext(res.data);
+      } else {
+        setLocationContext(null);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedStation?.id, selectedStation?.latitude, selectedStation?.longitude, selectedCity.id, isDemoMode]);
+
   const catalogueStation = useMemo(() => {
     if (!selectedStation || !stationCatalogue) return null;
     return stationCatalogue.stations.find(s => s.id === selectedStation.id) || null;
@@ -165,6 +217,12 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             nearest = stations[i];
           }
         }
+
+        apiClient.getLocationContext(latitude, longitude, selectedCity.id).then(res => {
+          if (res.ok) {
+            setLocationContext(res.data);
+          }
+        });
 
         if (minDist > MAX_NEAREST_STATION_DISTANCE_KM) {
           setLocationNotice({
@@ -482,6 +540,84 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   {selectedCity.observed_station_count} CAAQMS monitors active across {selectedCity.name}.
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Card 4: Meteorological Context (Open-Meteo NWP) */}
+          <Card className="border-[#DDD3BC]" data-testid="meteorological-context">
+            <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                  Meteorological Context
+                </CardTitle>
+                <span className="text-[9px] font-mono px-2 py-0.5 bg-[#F0FDFA] text-[#0D9488] border border-[#99F6E4] rounded-full font-bold">
+                  NWP Gridded
+                </span>
+              </div>
+              <CardDescription className="text-[11px] text-[#6E675D]">
+                Open-Meteo numerical weather prediction
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-3.5 space-y-2.5 text-xs">
+              {isLoadingContext ? (
+                <div className="py-4 text-center text-[#968F83] text-xs animate-pulse">
+                  Retrieving weather context…
+                </div>
+              ) : locationContext?.weather?.available ? (
+                <>
+                  <div className="p-2.5 bg-[#FFFDF9] rounded-xl border border-[#DDD3BC] space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[#6E675D] font-medium">Condition</span>
+                      <span className="font-bold text-[#1C1A1F]">
+                        {locationContext.weather.condition_description}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#EBE3D3] text-[11px]">
+                      <div>
+                        <span className="text-[#968F83] block">Temperature</span>
+                        <span className="font-bold text-[#1C1A1F]">
+                          {locationContext.weather.temperature_c !== null && locationContext.weather.temperature_c !== undefined
+                            ? `${locationContext.weather.temperature_c.toFixed(1)} °C`
+                            : '—'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[#968F83] block">Humidity</span>
+                        <span className="font-bold text-[#1C1A1F]">
+                          {locationContext.weather.relative_humidity_pct !== null && locationContext.weather.relative_humidity_pct !== undefined
+                            ? `${locationContext.weather.relative_humidity_pct.toFixed(0)}%`
+                            : '—'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[#968F83] block">Wind Speed</span>
+                        <span className="font-bold text-[#1C1A1F]">
+                          {locationContext.weather.wind_speed_kmh !== null && locationContext.weather.wind_speed_kmh !== undefined
+                            ? `${locationContext.weather.wind_speed_kmh.toFixed(1)} km/h`
+                            : '—'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[#968F83] block">Pressure</span>
+                        <span className="font-bold text-[#1C1A1F]">
+                          {locationContext.weather.surface_pressure_hpa !== null && locationContext.weather.surface_pressure_hpa !== undefined
+                            ? `${locationContext.weather.surface_pressure_hpa.toFixed(0)} hPa`
+                            : '—'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-[#F0FDFA] border border-[#99F6E4] text-[10px] text-[#0F766E] leading-relaxed">
+                    <strong className="block text-[#0D9488]">Model Estimate Attribution:</strong>
+                    {locationContext.weather.disclaimer}
+                  </div>
+                </>
+              ) : (
+                <div className="p-3 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] text-center text-[#7A7368] text-xs">
+                  Weather context is currently unavailable for this coordinate.
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -848,6 +984,87 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     </div>
                   )}
                 </CardHeader>
+              </Card>
+
+              {/* All Criteria Pollutants for Station (Ground Sensors) */}
+              <Card className="border-[#DDD3BC]" data-testid="station-pollutants-card">
+                <CardHeader className="py-3 px-4 bg-[#FAF6EE] border-b border-[#DDD3BC]">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#1C1A1F]">
+                      All Monitored Pollutants
+                    </CardTitle>
+                    <span className="text-[9px] font-mono px-2 py-0.5 bg-[#FFFDF9] text-[#1C1A1F] border border-[#DDD3BC] rounded-full font-bold">
+                      Ground Sensors
+                    </span>
+                  </div>
+                  <CardDescription className="text-[11px] text-[#6E675D]">
+                    Continuous CAAQMS readings for {selectedStation.name}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-3.5 space-y-3">
+                  {isLoadingPollutants ? (
+                    <div className="py-4 text-center text-[#968F83] text-xs animate-pulse">
+                      Checking station sensors…
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { key: 'pm25', label: 'PM2.5' },
+                        { key: 'pm10', label: 'PM10' },
+                        { key: 'no2', label: 'NO₂' },
+                        { key: 'so2', label: 'SO₂' },
+                        { key: 'co', label: 'CO' },
+                        { key: 'o3', label: 'O₃' }
+                      ].map(({ key, label }) => {
+                        const reading = stationPollutants?.[key];
+                        const isAvail = reading && reading.available && reading.value !== null && reading.value !== undefined;
+                        const isCurrentActive = selectedPollutant === key;
+
+                        return (
+                          <div
+                            key={key}
+                            onClick={() => onSelectPollutant(key as Pollutant)}
+                            className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                              isCurrentActive
+                                ? 'bg-[#FBF4E6] border-2 border-[#E29E2E] shadow-xs'
+                                : 'bg-[#FFFDF9] border-[#DDD3BC] hover:bg-[#F2ECE0]'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-extrabold text-xs text-[#1C1A1F]">{label}</span>
+                              <span className="text-[9px] text-[#968F83] font-mono">1-hr</span>
+                            </div>
+
+                            {isAvail ? (
+                              <div className="mt-1">
+                                <div className="text-sm font-extrabold text-[#1C1A1F]">
+                                  {reading.value!.toFixed(1)}{' '}
+                                  <span className="text-[10px] font-semibold text-[#6E675D]">{reading.unit}</span>
+                                </div>
+                                <div className="text-[9px] text-[#16A34A] font-semibold mt-0.5">
+                                  {reading.stale ? '⚠️ Stale' : '✓ Available'}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mt-1">
+                                <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#F2ECE0] text-[#7A7368] border border-[#DDD3BC]">
+                                  Unavailable
+                                </span>
+                                <div className="text-[9px] text-[#968F83] mt-0.5">Sensor unverified</div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Scientific Guidance: 1-hour readings vs 24-hour CPCB NAQI */}
+                  <div className="p-2.5 rounded-xl bg-[#FAF6EE] border border-[#DDD3BC] text-[10px] text-[#6E675D] leading-relaxed">
+                    <strong className="text-[#1C1A1F]">CPCB NAQI Guidance: </strong>
+                    Official National Air Quality Index requires 24-hour averaging across at least three criteria pollutants with 16+ valid hours. Values displayed here are 1-hour indicative ground readings, not an official overall AQI.
+                  </div>
+                </CardContent>
               </Card>
 
               {/* Forecast / Replay Trajectory Card matching Reference */}

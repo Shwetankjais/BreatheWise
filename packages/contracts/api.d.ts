@@ -227,6 +227,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/environment/context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Environment Context */
+        get: operations["environment_context_api_v1_environment_context_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/forecast-runs": {
         parameters: {
             query?: never;
@@ -681,6 +698,23 @@ export interface paths {
         };
         /** Latest */
         get: operations["latest_api_v1_stations__station_id__latest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/stations/{station_id}/pollutants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Station Pollutants */
+        get: operations["station_pollutants_api_v1_stations__station_id__pollutants_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1424,6 +1458,11 @@ export interface components {
             data: components["schemas"]["Identity"];
             meta: components["schemas"]["Metadata"];
         };
+        /** Envelope[LocationContext] */
+        Envelope_LocationContext_: {
+            data: components["schemas"]["LocationContext"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** Envelope[Measurement] */
         Envelope_Measurement_: {
             data: components["schemas"]["Measurement"];
@@ -1502,6 +1541,14 @@ export interface components {
         /** Envelope[UtcPredictionPage] */
         Envelope_UtcPredictionPage_: {
             data: components["schemas"]["UtcPredictionPage"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** Envelope[dict[str, PollutantReading]] */
+        Envelope_dict_str__PollutantReading__: {
+            /** Data */
+            data: {
+                [key: string]: components["schemas"]["PollutantReading"];
+            };
             meta: components["schemas"]["Metadata"];
         };
         /** Envelope[list[Advisory]] */
@@ -1937,6 +1984,36 @@ export interface components {
              */
             type: "LineString";
         };
+        /** LocationContext */
+        LocationContext: {
+            /** Boundary Message */
+            boundary_message?: string | null;
+            /**
+             * Bounds Limit Km
+             * @default 50
+             */
+            bounds_limit_km: number;
+            /** Distance Km */
+            distance_km?: number | null;
+            /**
+             * Ground Pollutants
+             * @default {}
+             */
+            ground_pollutants: {
+                [key: string]: components["schemas"]["PollutantReading"];
+            };
+            /**
+             * In Bounds
+             * @default true
+             */
+            in_bounds: boolean;
+            nearest_station?: components["schemas"]["StationView"] | null;
+            /** User Latitude */
+            user_latitude: number;
+            /** User Longitude */
+            user_longitude: number;
+            weather?: components["schemas"]["WeatherContext"] | null;
+        };
         /** Measurement */
         Measurement: {
             /**
@@ -2314,6 +2391,36 @@ export interface components {
              * @enum {string}
              */
             status: "available" | "stale" | "no_observations" | "sensor_unavailable" | "coverage_unknown";
+        };
+        /** PollutantReading */
+        PollutantReading: {
+            /** Available */
+            available: boolean;
+            /**
+             * Averaging Period
+             * @default 1-hour reading
+             */
+            averaging_period: string;
+            /** Measured At */
+            measured_at?: string | null;
+            /** Pollutant */
+            pollutant: string;
+            /**
+             * Quality Flags
+             * @default []
+             */
+            quality_flags: string[];
+            /** Source */
+            source?: string | null;
+            /**
+             * Stale
+             * @default false
+             */
+            stale: boolean;
+            /** Unit */
+            unit?: string | null;
+            /** Value */
+            value?: number | null;
         };
         /** PredictionPage */
         PredictionPage: {
@@ -3016,6 +3123,52 @@ export interface components {
              * Format: date-time
              */
             start_at_utc: string;
+        };
+        /** WeatherContext */
+        WeatherContext: {
+            /** Apparent Temperature C */
+            apparent_temperature_c?: number | null;
+            /**
+             * Available
+             * @default true
+             */
+            available: boolean;
+            /**
+             * Condition Description
+             * @default Unknown
+             */
+            condition_description: string;
+            /**
+             * Disclaimer
+             * @default Gridded meteorological model estimate from numerical weather prediction (NWP); not a calibrated ground station observation.
+             */
+            disclaimer: string;
+            /**
+             * Estimate Type
+             * @default gridded_numerical_weather_prediction
+             */
+            estimate_type: string;
+            /** Precipitation Mm */
+            precipitation_mm?: number | null;
+            /** Relative Humidity Pct */
+            relative_humidity_pct?: number | null;
+            /**
+             * Source
+             * @default Open-Meteo.com (ECMWF/GFS Gridded NWP)
+             */
+            source: string;
+            /** Source Timestamp */
+            source_timestamp?: string | null;
+            /** Surface Pressure Hpa */
+            surface_pressure_hpa?: number | null;
+            /** Temperature C */
+            temperature_c?: number | null;
+            /** Weather Code */
+            weather_code?: number | null;
+            /** Wind Direction Deg */
+            wind_direction_deg?: number | null;
+            /** Wind Speed Kmh */
+            wind_speed_kmh?: number | null;
         };
         /** WeatherRequest */
         WeatherRequest: {
@@ -4007,6 +4160,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    environment_context_api_v1_environment_context_get: {
+        parameters: {
+            query: {
+                latitude: number;
+                longitude: number;
+                city_id?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_LocationContext_"];
                 };
             };
             /** @description Unauthorized */
@@ -6073,6 +6295,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_Measurement_"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    station_pollutants_api_v1_stations__station_id__pollutants_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                station_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__PollutantReading__"];
                 };
             };
             /** @description Unauthorized */

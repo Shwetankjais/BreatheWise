@@ -87,6 +87,11 @@ export type ShadowPoint = Schemas['ShadowPoint'];
 
 export type DataMode = 'live' | 'historical_replay' | 'demo';
 
+// Environmental and Location Context
+export type LocationContext = Schemas['LocationContext'];
+export type PollutantReading = Schemas['PollutantReading'];
+export type WeatherContext = Schemas['WeatherContext'];
+
 // Official CPCB Breakpoint Categories
 export type AQICategory =
   | 'Good'

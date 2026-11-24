@@ -47,7 +47,10 @@ import {
   ForecastRunView,
   ForecastRunDetail,
   ShadowPoint,
-  Schemas
+  Schemas,
+  LocationContext,
+  PollutantReading,
+  WeatherContext
 } from './types';
 
 import {
@@ -65,7 +68,8 @@ import {
   DEMO_MODELS,
   DEMO_MODEL_EVALUATION,
   DEMO_PREDICTION_PAGE,
-  DEMO_GEOMETRY_RESPONSE
+  DEMO_GEOMETRY_RESPONSE,
+  DEMO_LOCATION_CONTEXT
 } from './demoData';
 
 class MemoryStorage {
@@ -364,6 +368,44 @@ export class BreatheWiseApiClient {
       };
     }
     return this.request<Measurement>(`/stations/${stationId}/latest?pollutant=${pollutant}`);
+  }
+
+  async getLocationContext(latitude: number, longitude: number, cityId: string = 'delhi'): Promise<ApiResult<LocationContext>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: {
+          ...DEMO_LOCATION_CONTEXT,
+          user_latitude: latitude,
+          user_longitude: longitude
+        },
+        meta: {
+          contract_version: '1.4.0',
+          data_mode: 'demo',
+          request_id: 'demo-location-ctx',
+          source: 'synthetic demo fixture'
+        },
+        status: 200
+      };
+    }
+    return this.request<LocationContext>(`/environment/context?latitude=${latitude}&longitude=${longitude}&city_id=${cityId}`);
+  }
+
+  async getStationPollutants(stationId: string): Promise<ApiResult<Record<string, PollutantReading>>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: DEMO_LOCATION_CONTEXT.ground_pollutants,
+        meta: {
+          contract_version: '1.4.0',
+          data_mode: 'demo',
+          request_id: 'demo-pollutants',
+          source: 'synthetic demo fixture'
+        },
+        status: 200
+      };
+    }
+    return this.request<Record<string, PollutantReading>>(`/stations/${stationId}/pollutants`);
   }
 
   async getForecast(stationId: string, pollutant: Pollutant = 'pm25', horizons?: number[]): Promise<ApiResult<Forecast>> {

@@ -269,6 +269,76 @@ export const HealthView: React.FC<HealthViewProps> = ({
           </table>
         </CardContent>
       </Card>
+
+      {/* Practical Precautions for Respiratory-Sensitive Groups Card */}
+      <Card className="border-[#DDD3BC] bg-[#FFFDF9]" data-testid="respiratory-precautions-card">
+        <CardHeader className="bg-[#FAF6EE] border-b border-[#DDD3BC] p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-[#8C5D14] uppercase bg-[#FBF4E6] px-2.5 py-1 rounded-full border border-[#E8D1A0]">
+              Clinical Context & Risk Reduction
+            </span>
+            <span className="text-xs text-[#7A7368] font-mono">
+              Asthma · COPD · Children · Elderly
+            </span>
+          </div>
+          <CardTitle className="text-base sm:text-lg font-bold text-[#1C1A1F] mt-2">
+            Practical Precautions for Respiratory-Sensitive Populations
+          </CardTitle>
+          <CardDescription className="text-xs text-[#6E675D]">
+            Evidence-based non-clinical precautions during elevated particulate and combustion gas episodes
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5 text-xs text-[#3D3934] space-y-4 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
+              <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
+                <span>🫁</span>
+                <span>Asthma & COPD Precautions</span>
+              </h4>
+              <p className="text-[11px] text-[#5A5348]">
+                Carry prescribed rapid-acting bronchodilators at all times. During high PM2.5 or SO₂ episodes, bronchospasm can occur rapidly upon airway irritation. Consult your doctor if rescue inhaler frequency increases.
+              </p>
+            </div>
+
+            <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
+              <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
+                <span>🚗</span>
+                <span>Corridor & Inversion Avoidance</span>
+              </h4>
+              <p className="text-[11px] text-[#5A5348]">
+                Avoid high-intensity outdoor aerobic activity near major vehicular corridors, especially during morning nocturnal inversion conditions (typically 6:00 AM – 9:00 AM) when combustion pollutants pool near ground level.
+              </p>
+            </div>
+
+            <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
+              <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
+                <span>🏠</span>
+                <span>Indoor Air Quality & HEPA Filtration</span>
+              </h4>
+              <p className="text-[11px] text-[#5A5348]">
+                Keep windows closed during peak episodes. Utilize true HEPA air purifiers in bedrooms and living spaces. Prefer damp-mopping over dry dusting or sweeping to prevent resuspending settled coarse particulates.
+              </p>
+            </div>
+
+            <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
+              <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
+                <span>😷</span>
+                <span>Particulate Respirator Guidance</span>
+              </h4>
+              <p className="text-[11px] text-[#5A5348]">
+                When outdoor travel is essential during severe haze, a certified, properly fitted particulate respirator (e.g. N95 or FFP2 without an exhalation valve) offers substantial filtration compared to simple cloth masks.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3 bg-[#FBF4E6] rounded-xl border border-[#E8D1A0] text-[11px] text-[#78350F] flex items-start gap-2.5">
+            <span className="font-bold text-[#8C5D14]">Educational Disclaimer:</span>
+            <span>
+              This information is provided for general health literacy and environmental awareness. It does not replace individualized clinical instructions, prescriptions, or formal medical care.
+            </span>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

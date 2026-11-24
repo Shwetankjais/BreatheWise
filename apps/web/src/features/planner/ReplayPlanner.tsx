@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '../../lib/api/client';
 import { formatReplayTimestamp } from '../../lib/replay';
 import type { Schemas } from '../../lib/api/types';
@@ -21,6 +21,7 @@ export function ReplayPlanner({ supportedVersions }: Props) {
   const [latest, setLatest] = useState(24);
   const [sensitivity, setSensitivity] = useState<'general' | 'sensitive'>('general');
   const [ceiling, setCeiling] = useState('');
+  const [issueFilter, setIssueFilter] = useState('');
   const [result, setResult] = useState<Schemas['ReplayPlan'] | null>(null);
   const [activeWindowIndex, setActiveWindowIndex] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -29,6 +30,23 @@ export function ReplayPlanner({ supportedVersions }: Props) {
   const [retry, setRetry] = useState(0);
   const requestId = useRef(0);
   const scope = supportedVersions.join('|');
+
+  const filteredIssues = useMemo(() => {
+    if (!issues?.issues) return [];
+    if (!issueFilter.trim()) return issues.issues;
+    const q = issueFilter.toLowerCase();
+    return issues.issues.filter(
+      i =>
+        i.issue_at.toLowerCase().includes(q) ||
+        describeClock(i.issue_at, issues.clock_basis).toLowerCase().includes(q)
+    );
+  }, [issues, issueFilter]);
+
+  useEffect(() => {
+    if (filteredIssues.length > 0 && !filteredIssues.some(i => i.issue_at === issue)) {
+      setIssue(filteredIssues[0].issue_at);
+    }
+  }, [filteredIssues, issue]);
 
   useEffect(() => {
     let current = true;
@@ -194,23 +212,35 @@ export function ReplayPlanner({ supportedVersions }: Props) {
               />
 
               {/* 2. Issue Selector */}
-              <Select
-                label="Complete forecast issue"
-                value={issue}
-                disabled={loading || !issues?.issues.length}
-                options={
-                  issues?.issues.length
-                    ? issues.issues.map(i => ({
-                        value: i.issue_at,
-                        label: describeClock(i.issue_at, issues.clock_basis)
-                      }))
-                    : [{ value: '', label: loading ? 'Loading complete issues…' : 'No complete issues available' }]
-                }
-                onChange={e => {
-                  resetResult();
-                  setIssue(e.target.value);
-                }}
-              />
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-[#1C1A1F]">Complete forecast issue</label>
+                  <input
+                    type="text"
+                    aria-label="Filter issues by date"
+                    placeholder="Search date / hour..."
+                    value={issueFilter}
+                    onChange={e => setIssueFilter(e.target.value)}
+                    className="text-[11px] px-2 py-0.5 rounded-lg border border-[#DDD3BC] bg-[#FFFDF9] focus:outline-none focus:ring-1 focus:ring-[#E29E2E] w-36"
+                  />
+                </div>
+                <Select
+                  value={issue}
+                  disabled={loading || !filteredIssues.length}
+                  options={
+                    filteredIssues.length
+                      ? filteredIssues.map(i => ({
+                          value: i.issue_at,
+                          label: describeClock(i.issue_at, issues?.clock_basis || 'same_recorded_clock')
+                        }))
+                      : [{ value: '', label: loading ? 'Loading complete issues…' : 'No matching issues on this page' }]
+                  }
+                  onChange={e => {
+                    resetResult();
+                    setIssue(e.target.value);
+                  }}
+                />
+              </div>
 
               {/* 3. Duration Selector */}
               <div>
@@ -394,6 +424,18 @@ export function ReplayPlanner({ supportedVersions }: Props) {
                 </span>
               </div>
             </div>
+
+            {/* Suggested Adjustments when No Suitable Window */}
+            {result.status === 'no_suitable_window' && (
+              <div className="p-4 rounded-2xl border border-[#FDE68A] bg-[#FFFBEB] text-xs text-[#78350F] space-y-2">
+                <div className="font-bold text-sm">Suggested Adjustments:</div>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Widen the earliest start (+{earliest}h) and latest end (+{latest}h) bounds to allow more candidate windows.</li>
+                  <li>Lower the duration (currently {duration / 60} {duration === 60 ? 'hour' : 'hours'}) so shorter windows can qualify.</li>
+                  {ceiling && <li>Increase or remove the optional concentration ceiling (currently {ceiling} µg/m³).</li>}
+                </ul>
+              </div>
+            )}
 
             {/* 24-Hour Horizon Trajectory Map */}
             {result.windows.length > 0 && (

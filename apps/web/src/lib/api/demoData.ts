@@ -22,7 +22,9 @@ import {
   ModelCatalogue,
   ModelEvaluation,
   PredictionPage,
-  GeometryResponse
+  GeometryResponse,
+  LocationContext,
+  PollutantReading
 } from './types';
 
 export const DEMO_CITIES: City[] = [
@@ -982,4 +984,98 @@ export const DEMO_GEOMETRY_RESPONSE: GeometryResponse = {
       }
     }
   ]
+};
+
+export const DEMO_LOCATION_CONTEXT: LocationContext = {
+  user_latitude: 28.6139,
+  user_longitude: 77.2090,
+  nearest_station: DEMO_STATIONS[0],
+  distance_km: 1.84,
+  in_bounds: true,
+  bounds_limit_km: 50.0,
+  boundary_message: null,
+  ground_pollutants: {
+    pm25: {
+      pollutant: 'pm25',
+      available: true,
+      value: 147.0,
+      unit: 'µg/m³',
+      measured_at: '2026-11-24T10:00:00Z',
+      source: 'DPCC - Delhi (Synthetic Demo)',
+      quality_flags: ['synthetic_demo'],
+      stale: false,
+      averaging_period: '1-hour reading (not 24h official NAQI)'
+    },
+    pm10: {
+      pollutant: 'pm10',
+      available: true,
+      value: 232.0,
+      unit: 'µg/m³',
+      measured_at: '2026-11-24T10:00:00Z',
+      source: 'DPCC - Delhi (Synthetic Demo)',
+      quality_flags: ['synthetic_demo'],
+      stale: false,
+      averaging_period: '1-hour reading (not 24h official NAQI)'
+    },
+    no2: {
+      pollutant: 'no2',
+      available: true,
+      value: 48.5,
+      unit: 'µg/m³',
+      measured_at: '2026-11-24T10:00:00Z',
+      source: 'DPCC - Delhi (Synthetic Demo)',
+      quality_flags: ['synthetic_demo'],
+      stale: false,
+      averaging_period: '1-hour reading (not 24h official NAQI)'
+    },
+    so2: {
+      pollutant: 'so2',
+      available: true,
+      value: 14.2,
+      unit: 'µg/m³',
+      measured_at: '2026-11-24T10:00:00Z',
+      source: 'DPCC - Delhi (Synthetic Demo)',
+      quality_flags: ['synthetic_demo'],
+      stale: false,
+      averaging_period: '1-hour reading (not 24h official NAQI)'
+    },
+    co: {
+      pollutant: 'co',
+      available: true,
+      value: 1.8,
+      unit: 'mg/m³',
+      measured_at: '2026-11-24T10:00:00Z',
+      source: 'DPCC - Delhi (Synthetic Demo)',
+      quality_flags: ['synthetic_demo'],
+      stale: false,
+      averaging_period: '1-hour reading (not 24h official NAQI)'
+    },
+    o3: {
+      pollutant: 'o3',
+      available: false,
+      value: null,
+      unit: null,
+      measured_at: null,
+      source: null,
+      quality_flags: [],
+      stale: false,
+      averaging_period: '1-hour reading'
+    }
+  },
+  weather: {
+    temperature_c: 24.5,
+    relative_humidity_pct: 58.0,
+    apparent_temperature_c: 25.2,
+    wind_speed_kmh: 8.4,
+    wind_direction_deg: 290,
+    surface_pressure_hpa: 1012.4,
+    precipitation_mm: 0.0,
+    weather_code: 1,
+    condition_description: 'Mainly clear',
+    source_timestamp: '2026-11-24T10:00:00Z',
+    source: 'Open-Meteo.com (ECMWF/GFS Gridded NWP)',
+    estimate_type: 'gridded_numerical_weather_prediction',
+    available: true,
+    disclaimer: 'Gridded meteorological model estimate from numerical weather prediction (NWP); not a calibrated ground station observation.'
+  }
 };

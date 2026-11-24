@@ -10,6 +10,7 @@ from breathewise.schemas.common import Envelope, Pollutant
 from breathewise.schemas.environment import Measurement, StationView
 from breathewise.schemas.history import History, HistoryPoint
 from breathewise.services.cities import validate_city
+from breathewise.services.location import PollutantReading, get_station_pollutants
 from fastapi import APIRouter, Depends, Query, Request
 from pydantic import AwareDatetime
 from sqlalchemy import select
@@ -84,6 +85,22 @@ def latest(
     if data.stale:
         meta.quality_flags.append("stale_observation")
     return Envelope(meta=meta, data=data)
+
+
+@router.get(
+    "/stations/{station_id}/pollutants", response_model=Envelope[dict[str, PollutantReading]]
+)
+def station_pollutants(
+    request: Request,
+    db: Db,
+    station_id: str,
+):
+    repo.station(db, station_id)
+    data = get_station_pollutants(db, station_id)
+    return Envelope(
+        meta=data_meta(request),
+        data=data,
+    )
 
 
 @router.get("/history", response_model=Envelope[History])

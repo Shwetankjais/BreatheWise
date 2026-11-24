@@ -1679,6 +1679,22 @@
         "title": "Envelope[Identity]",
         "type": "object"
       },
+      "Envelope_LocationContext_": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LocationContext"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[LocationContext]",
+        "type": "object"
+      },
       "Envelope_Measurement_": {
         "properties": {
           "data": {
@@ -1933,6 +1949,26 @@
           "data"
         ],
         "title": "Envelope[UtcPredictionPage]",
+        "type": "object"
+      },
+      "Envelope_dict_str__PollutantReading__": {
+        "properties": {
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PollutantReading"
+            },
+            "title": "Data",
+            "type": "object"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "Envelope[dict[str, PollutantReading]]",
         "type": "object"
       },
       "Envelope_list_Advisory__": {
@@ -2948,6 +2984,84 @@
         "title": "LineString",
         "type": "object"
       },
+      "LocationContext": {
+        "properties": {
+          "boundary_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boundary Message"
+          },
+          "bounds_limit_km": {
+            "default": 50.0,
+            "title": "Bounds Limit Km",
+            "type": "number"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "ground_pollutants": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PollutantReading"
+            },
+            "default": {},
+            "title": "Ground Pollutants",
+            "type": "object"
+          },
+          "in_bounds": {
+            "default": true,
+            "title": "In Bounds",
+            "type": "boolean"
+          },
+          "nearest_station": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "user_latitude": {
+            "title": "User Latitude",
+            "type": "number"
+          },
+          "user_longitude": {
+            "title": "User Longitude",
+            "type": "number"
+          },
+          "weather": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WeatherContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "user_latitude",
+          "user_longitude"
+        ],
+        "title": "LocationContext",
+        "type": "object"
+      },
       "Measurement": {
         "additionalProperties": false,
         "properties": {
@@ -3818,6 +3932,87 @@
           "freshness"
         ],
         "title": "PollutantAvailability",
+        "type": "object"
+      },
+      "PollutantReading": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "averaging_period": {
+            "default": "1-hour reading",
+            "title": "Averaging Period",
+            "type": "string"
+          },
+          "measured_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured At"
+          },
+          "pollutant": {
+            "title": "Pollutant",
+            "type": "string"
+          },
+          "quality_flags": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Quality Flags",
+            "type": "array"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "stale": {
+            "default": false,
+            "title": "Stale",
+            "type": "boolean"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "pollutant",
+          "available"
+        ],
+        "title": "PollutantReading",
         "type": "object"
       },
       "PredictionPage": {
@@ -5251,6 +5446,137 @@
         "title": "UtcSplit",
         "type": "object"
       },
+      "WeatherContext": {
+        "properties": {
+          "apparent_temperature_c": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apparent Temperature C"
+          },
+          "available": {
+            "default": true,
+            "title": "Available",
+            "type": "boolean"
+          },
+          "condition_description": {
+            "default": "Unknown",
+            "title": "Condition Description",
+            "type": "string"
+          },
+          "disclaimer": {
+            "default": "Gridded meteorological model estimate from numerical weather prediction (NWP); not a calibrated ground station observation.",
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "estimate_type": {
+            "default": "gridded_numerical_weather_prediction",
+            "title": "Estimate Type",
+            "type": "string"
+          },
+          "precipitation_mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Precipitation Mm"
+          },
+          "relative_humidity_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Relative Humidity Pct"
+          },
+          "source": {
+            "default": "Open-Meteo.com (ECMWF/GFS Gridded NWP)",
+            "title": "Source",
+            "type": "string"
+          },
+          "source_timestamp": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Timestamp"
+          },
+          "surface_pressure_hpa": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Surface Pressure Hpa"
+          },
+          "temperature_c": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature C"
+          },
+          "weather_code": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weather Code"
+          },
+          "wind_direction_deg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wind Direction Deg"
+          },
+          "wind_speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wind Speed Kmh"
+          }
+        },
+        "title": "WeatherContext",
+        "type": "object"
+      },
       "WeatherRequest": {
         "additionalProperties": false,
         "properties": {
@@ -6610,6 +6936,108 @@
           }
         },
         "summary": "Coverage"
+      }
+    },
+    "/api/v1/environment/context": {
+      "get": {
+        "operationId": "environment_context_api_v1_environment_context_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "latitude",
+            "required": true,
+            "schema": {
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Latitude",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "longitude",
+            "required": true,
+            "schema": {
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Longitude",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "city_id",
+            "required": false,
+            "schema": {
+              "default": "delhi",
+              "title": "City Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_LocationContext_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Environment Context"
       }
     },
     "/api/v1/forecast-runs": {
@@ -9575,6 +10003,85 @@
           }
         },
         "summary": "Latest"
+      }
+    },
+    "/api/v1/stations/{station_id}/pollutants": {
+      "get": {
+        "operationId": "station_pollutants_api_v1_stations__station_id__pollutants_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "station_id",
+            "required": true,
+            "schema": {
+              "title": "Station Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_dict_str__PollutantReading__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Station Pollutants"
       }
     }
   }
