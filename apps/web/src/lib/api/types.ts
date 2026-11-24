@@ -53,7 +53,7 @@ export type ArchiveCompare = Schemas['ArchiveCompare'];
 export type ArchiveComparisonBucket = Schemas['ArchiveComparisonBucket'];
 export type ArchivePairAgreement = Schemas['ArchivePairAgreement'];
 
-// Contract 1.2.0 Additive Entities — Model Registry & Evaluation
+// Contract 1.2.0 & 1.3.0 Additive Entities — Model Registry & Evaluation
 export type ModelCatalogue = Schemas['ModelCatalogue'];
 export type ModelSummary = Schemas['ModelSummary'];
 export type ModelEvaluation = Schemas['ModelEvaluation'];
@@ -64,12 +64,26 @@ export type RecordedSplit = Schemas['RecordedSplit'];
 export type PredictionPage = Schemas['PredictionPage'];
 export type HeldoutPrediction = Schemas['HeldoutPrediction'];
 
+// Contract 1.3.0 Additive Entities — UTC Models & Issue-Time Purged Cohorts
+export type UtcModelEvaluation = Schemas['UtcModelEvaluation'];
+export type UtcPredictionPage = Schemas['UtcPredictionPage'];
+export type UtcHeldoutPrediction = Schemas['UtcHeldoutPrediction'];
+export type UtcSplit = Schemas['UtcSplit'];
+export type IssuePurgeSummary = Schemas['IssuePurgeSummary'];
+export type BoundaryRowCounts = Schemas['BoundaryRowCounts'];
+
 // Contract 1.2.0 Additive Entities — Route Geometry
 export type GeometryRequest = Schemas['GeometryRequest'];
 export type GeometryResponse = Schemas['GeometryResponse'];
 export type RouteGeometry = Schemas['RouteGeometry'];
 export type LineString = Schemas['LineString'];
 export type Coordinates = Schemas['Coordinates'];
+
+// Contract 1.3.0 Additive Entities — Shadow Forecast Runs
+export type ForecastRunPage = Schemas['ForecastRunPage'];
+export type ForecastRunView = Schemas['ForecastRunView'];
+export type ForecastRunDetail = Schemas['ForecastRunDetail'];
+export type ShadowPoint = Schemas['ShadowPoint'];
 
 export type DataMode = 'live' | 'historical_replay' | 'demo';
 

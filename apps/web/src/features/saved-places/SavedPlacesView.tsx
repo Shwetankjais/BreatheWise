@@ -50,6 +50,27 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
   const [ruleError, setRuleError] = useState<string | null>(null);
   const [isSubmittingRule, setIsSubmittingRule] = useState(false);
 
+  // In-Card Feedback Message (replaces disruptive window.alert)
+  const [feedbackMessage, setFeedbackMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Health Profile & Preferences State
+  const [sensitivity, setSensitivity] = useState<'general' | 'sensitive'>(identity?.preferences?.sensitivity || 'general');
+  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+
+  // Sync sensitivity when identity changes
+  useEffect(() => {
+    if (identity?.preferences?.sensitivity) {
+      setSensitivity(identity.preferences.sensitivity);
+    }
+  }, [identity]);
+
+  // Auto-dismiss feedback message after 5 seconds
+  useEffect(() => {
+    if (!feedbackMessage) return;
+    const timer = setTimeout(() => setFeedbackMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [feedbackMessage]);
+
   // Keep selected station ID aligned when stations load asynchronously
   useEffect(() => {
     if (!newPlaceStationId && stations.length > 0) {
@@ -93,18 +114,20 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
     if (res.ok) {
       setNewPlaceLabel('');
       setIsAddPlaceOpen(false);
+      setFeedbackMessage({ type: 'success', text: `Place "${newPlaceLabel.trim()}" saved successfully.` });
       onRefreshPlacesAndRules();
     } else {
-      alert(`Failed to save place: ${res.error.message}`);
+      setFeedbackMessage({ type: 'error', text: `Failed to save place: ${res.error.message}` });
     }
   };
 
   const handleDeletePlace = async (id: string) => {
     const res = await apiClient.deleteSavedPlace(id);
     if (res.ok) {
+      setFeedbackMessage({ type: 'success', text: 'Saved place removed successfully.' });
       onRefreshPlacesAndRules();
     } else {
-      alert(`Failed to delete place: ${res.error.message}`);
+      setFeedbackMessage({ type: 'error', text: `Failed to delete place: ${res.error.message}` });
     }
   };
 
@@ -141,6 +164,10 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
       setIsAddRuleOpen(false);
       setNewRuleThreshold('250');
       setRuleError(null);
+      setFeedbackMessage({
+        type: 'success',
+        text: `Alert rule created for ${newRulePollutant.toUpperCase()} (Threshold: ${parsedThreshold} µg/m³).`
+      });
       onRefreshPlacesAndRules();
     } else {
       setRuleError(res.error.message);
@@ -150,14 +177,57 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
   const handleDeleteRule = async (id: string) => {
     const res = await apiClient.deleteAlertRule(id);
     if (res.ok) {
+      setFeedbackMessage({ type: 'success', text: 'Alert rule removed successfully.' });
       onRefreshPlacesAndRules();
     } else {
-      alert(`Failed to delete rule: ${res.error.message}`);
+      setFeedbackMessage({ type: 'error', text: `Failed to delete rule: ${res.error.message}` });
+    }
+  };
+
+  const handleSavePreferences = async () => {
+    setIsSavingPreferences(true);
+    const res = await apiClient.updatePreferences({ sensitivity });
+    setIsSavingPreferences(false);
+    if (res.ok) {
+      setFeedbackMessage({
+        type: 'success',
+        text: `Health profile updated: ${sensitivity === 'sensitive' ? 'Sensitive Cohort' : 'General Population'}.`
+      });
+      onRefreshPlacesAndRules();
+    } else {
+      setFeedbackMessage({
+        type: 'error',
+        text: `Failed to update preferences: ${res.error.message}`
+      });
     }
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      {/* In-Card Toast Feedback Banner */}
+      {feedbackMessage && (
+        <div
+          className={`p-3.5 rounded-xl text-xs font-semibold flex items-center justify-between border shadow-xs ${
+            feedbackMessage.type === 'success'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+              : 'bg-rose-50 text-rose-900 border-rose-200'
+          }`}
+          role="alert"
+        >
+          <div className="flex items-center gap-2">
+            <span className="font-bold">{feedbackMessage.type === 'success' ? '✓' : '⚠️'}</span>
+            <span>{feedbackMessage.text}</span>
+          </div>
+          <button
+            onClick={() => setFeedbackMessage(null)}
+            className="text-slate-400 hover:text-slate-600 font-bold ml-2 cursor-pointer p-0.5"
+            aria-label="Dismiss alert"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Session Authentication Banner */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -228,6 +298,59 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
         )}
       </div>
 
+      {/* User Preferences & Health Profile Card */}
+      {isAuthenticated && (
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <CardTitle className="text-sm font-bold">
+                  Health Profile & Sensitivity Preferences
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Persists personal sensitivity preferences. Alert thresholds are explicitly user-set, and health guidance is educational.
+                </CardDescription>
+              </div>
+              <span className="font-mono text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 self-start sm:self-auto">
+                Timezone: Asia/Kolkata (IST)
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">
+                  Population Sensitivity Cohort
+                </label>
+                <select
+                  value={sensitivity}
+                  onChange={e => setSensitivity(e.target.value as 'general' | 'sensitive')}
+                  className="w-full text-xs rounded-lg border border-slate-300 p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                >
+                  <option value="general">General Population</option>
+                  <option value="sensitive">Sensitive Cohort (Children, Elderly, Respiratory/Asthma)</option>
+                </select>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Sensitivity preferences are saved to your account. Alert triggers are evaluated solely against your explicitly defined threshold rules.
+                </p>
+              </div>
+
+              <div className="flex flex-col justify-end">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleSavePreferences}
+                  isLoading={isSavingPreferences}
+                  className="self-start sm:self-auto"
+                >
+                  Save Profile Preferences
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Saved Places Section */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
@@ -287,6 +410,8 @@ export const SavedPlacesView: React.FC<SavedPlacesViewProps> = ({
           </div>
         )}
       </div>
+
+
 
       {/* Alert Rules Section */}
       <div className="space-y-4">

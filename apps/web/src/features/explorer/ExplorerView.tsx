@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   StationView,
   Pollutant,
@@ -31,14 +31,34 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   onSelectStation
 }) => {
   // Top-Level Mode: Live UTC Intake vs Audited Recorded-Clock Archive (Contract 1.2.0)
-  const [datasetSource, setDatasetSource] = useState<'live_telemetry' | 'recorded_clock_archive'>('live_telemetry');
+  const [datasetSource, setDatasetSource] = useState<'live_telemetry' | 'recorded_clock_archive'>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('source') === 'archive') return 'recorded_clock_archive';
+    }
+    return 'live_telemetry';
+  });
 
   // -------------------------------------------------------------------------
   // LIVE TELEMETRY STATE
   // -------------------------------------------------------------------------
-  const [pollutant, setPollutant] = useState<Pollutant>('pm25');
+  const [pollutant, setPollutant] = useState<Pollutant>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const val = p.get('pollutant') as Pollutant;
+      if (['pm25', 'pm10', 'no2', 'so2', 'co', 'o3'].includes(val)) return val;
+    }
+    return 'pm25';
+  });
   const [rangePreset, setRangePreset] = useState<RangePreset>('48h');
-  const [aggregation, setAggregation] = useState<'hourly' | 'daily'>('hourly');
+  const [aggregation, setAggregation] = useState<'hourly' | 'daily'>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const agg = p.get('agg');
+      if (agg === 'hourly' || agg === 'daily') return agg;
+    }
+    return 'hourly';
+  });
   const [historyData, setHistoryData] = useState<History | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +75,74 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   const [viewMode, setViewMode] = useState<'chart' | 'table'>('chart');
   const [hoveredPoint, setHoveredPoint] = useState<{ measured_at: string; value: number; stationName?: string } | null>(null);
 
+  // Request Sequence Tokens (Prevent out-of-order stale responses)
+  const liveHistoryReqIdRef = useRef<number>(0);
+  const archiveExploreReqIdRef = useRef<number>(0);
+  const archiveCompareReqIdRef = useRef<number>(0);
+
+  // -------------------------------------------------------------------------
+  // RECORDED-CLOCK ARCHIVE STATE (Contract 1.2.0)
+  // -------------------------------------------------------------------------
+  const [archiveCatalogue, setArchiveCatalogue] = useState<ArchiveCatalogue | null>(null);
+  const [isLoadingArchiveCatalogue, setIsLoadingArchiveCatalogue] = useState(false);
+  const [archiveSubMode, setArchiveSubMode] = useState<'explore' | 'compare'>('explore');
+
+  // Archive Explore State
+  const [archiveStationId, setArchiveStationId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('archive_station') || 'site_301';
+    }
+    return 'site_301';
+  });
+  const [archivePollutant, setArchivePollutant] = useState<Pollutant>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const val = p.get('pollutant') as Pollutant;
+      if (['pm25', 'pm10', 'no2', 'so2', 'co', 'o3'].includes(val)) return val;
+    }
+    return 'pm25';
+  });
+  const [archiveStart, setArchiveStart] = useState<string>('2023-11-01T00:00:00');
+  const [archiveEnd, setArchiveEnd] = useState<string>('2023-11-08T00:00:00');
+  const [archiveAggregation, setArchiveAggregation] = useState<'daily' | 'monthly'>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const agg = p.get('agg');
+      if (agg === 'daily' || agg === 'monthly') return agg;
+    }
+    return 'daily';
+  });
+  const [archiveExploreData, setArchiveExploreData] = useState<ArchiveExplore | null>(null);
+  const [isLoadingArchiveExplore, setIsLoadingArchiveExplore] = useState(false);
+  const [archiveExploreError, setArchiveExploreError] = useState<string | null>(null);
+  const [hoveredBucketIndex, setHoveredBucketIndex] = useState<number | null>(null);
+
+  // Archive Compare State (Requires clock_assumption=same_recorded_clock)
+  const [archiveCompareIds, setArchiveCompareIds] = useState<string[]>(['site_301', 'site_113']);
+  const [archiveCompareData, setArchiveCompareData] = useState<ArchiveCompare | null>(null);
+  const [isLoadingArchiveCompare, setIsLoadingArchiveCompare] = useState(false);
+  const [archiveCompareError, setArchiveCompareError] = useState<string | null>(null);
+
+  // URL Query Parameters 2-Way Synchronization
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const p = new URLSearchParams(window.location.search);
+    if (datasetSource === 'recorded_clock_archive') {
+      p.set('source', 'archive');
+      p.set('archive_station', archiveStationId);
+      p.set('pollutant', archivePollutant);
+      p.set('agg', archiveAggregation);
+    } else {
+      p.delete('source');
+      p.delete('archive_station');
+      p.set('pollutant', pollutant);
+      p.set('agg', aggregation);
+    }
+    const newUrl = `${window.location.pathname}?${p.toString()}`;
+    window.history.replaceState(null, '', newUrl);
+  }, [datasetSource, archiveStationId, archivePollutant, archiveAggregation, pollutant, aggregation]);
+
   // Compute aligned UTC range bounds
   const { startIso, endIso, hoursCount } = useMemo(() => {
     const hours = rangePreset === '24h' ? 24 : rangePreset === '7d' ? 168 : 48;
@@ -68,15 +156,15 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     };
   }, [rangePreset]);
 
-  // Load Primary Live Station History
-  useEffect(() => {
+  // Load Primary Live Station History (with sequence token to prevent race conditions)
+  const fetchLiveHistory = () => {
     if (datasetSource !== 'live_telemetry' || !selectedStation) return;
-    let isMounted = true;
+    const reqId = ++liveHistoryReqIdRef.current;
     setIsLoading(true);
     setErrorMessage(null);
 
     apiClient.getHistory(selectedStation.id, startIso, endIso, pollutant).then(res => {
-      if (!isMounted) return;
+      if (reqId !== liveHistoryReqIdRef.current) return;
       setIsLoading(false);
       if (res.ok) {
         setHistoryData(res.data);
@@ -85,23 +173,23 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         setErrorMessage(`${res.error.code}: ${res.error.message}`);
       }
     });
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchLiveHistory();
   }, [datasetSource, selectedStation, pollutant, startIso, endIso]);
 
-  // Load Secondary Station History in Comparison Mode
+  // Load Secondary Station History in Comparison Mode (with sequence token)
   useEffect(() => {
     if (datasetSource !== 'live_telemetry' || !isCompareMode || !compareStationId) {
       setCompareHistoryData(null);
       return;
     }
-    let isMounted = true;
+    const reqId = ++liveHistoryReqIdRef.current;
     setIsLoadingCompare(true);
 
     apiClient.getHistory(compareStationId, startIso, endIso, pollutant).then(res => {
-      if (!isMounted) return;
+      if (reqId !== liveHistoryReqIdRef.current) return;
       setIsLoadingCompare(false);
       if (res.ok) {
         setCompareHistoryData(res.data);
@@ -109,36 +197,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         setCompareHistoryData(null);
       }
     });
-
-    return () => {
-      isMounted = false;
-    };
   }, [datasetSource, isCompareMode, compareStationId, pollutant, startIso, endIso]);
-
-  // -------------------------------------------------------------------------
-  // RECORDED-CLOCK ARCHIVE STATE (Contract 1.2.0)
-  // -------------------------------------------------------------------------
-  const [archiveCatalogue, setArchiveCatalogue] = useState<ArchiveCatalogue | null>(null);
-  const [isLoadingArchiveCatalogue, setIsLoadingArchiveCatalogue] = useState(false);
-  const [archiveSubMode, setArchiveSubMode] = useState<'explore' | 'compare'>('explore');
-
-  // Archive Explore State
-  const [archiveStationId, setArchiveStationId] = useState<string>('site_301');
-  const [archivePollutant, setArchivePollutant] = useState<Pollutant>('pm25');
-  const [archiveStart, setArchiveStart] = useState<string>('2023-11-01T00:00:00');
-  const [archiveEnd, setArchiveEnd] = useState<string>('2023-11-08T00:00:00');
-  const [archiveAggregation, setArchiveAggregation] = useState<'daily' | 'monthly'>('daily');
-  const [archiveExploreData, setArchiveExploreData] = useState<ArchiveExplore | null>(null);
-  const [isLoadingArchiveExplore, setIsLoadingArchiveExplore] = useState(false);
-  const [archiveExploreError, setArchiveExploreError] = useState<string | null>(null);
-
-  // Archive Compare State (Requires clock_assumption=same_recorded_clock)
-  const [archiveCompareIds, setArchiveCompareIds] = useState<string[]>(['site_301', 'site_113']);
-  const [archiveCompareData, setArchiveCompareData] = useState<ArchiveCompare | null>(null);
-  const [isLoadingArchiveCompare, setIsLoadingArchiveCompare] = useState(false);
-  const [archiveCompareError, setArchiveCompareError] = useState<string | null>(null);
-
-  // Fetch Archive Catalogue on Mount / Switching to Archive
   useEffect(() => {
     if (datasetSource !== 'recorded_clock_archive') return;
     let isMounted = true;
@@ -167,19 +226,19 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     };
   }, [datasetSource]);
 
-  // Fetch Archive Explore Data
-  useEffect(() => {
+  // Fetch Archive Explore Data (with sequence token)
+  const fetchArchiveExplore = () => {
     if (datasetSource !== 'recorded_clock_archive' || archiveSubMode !== 'explore' || !archiveStationId) {
       return;
     }
-    let isMounted = true;
+    const reqId = ++archiveExploreReqIdRef.current;
     setIsLoadingArchiveExplore(true);
     setArchiveExploreError(null);
 
     apiClient
       .getArchiveExplore(archiveStationId, archivePollutant, archiveStart, archiveEnd, archiveAggregation)
       .then(res => {
-        if (!isMounted) return;
+        if (reqId !== archiveExploreReqIdRef.current) return;
         setIsLoadingArchiveExplore(false);
         if (res.ok) {
           setArchiveExploreData(res.data);
@@ -188,14 +247,14 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
           setArchiveExploreError(`${res.error.code}: ${res.error.message}`);
         }
       });
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchArchiveExplore();
   }, [datasetSource, archiveSubMode, archiveStationId, archivePollutant, archiveStart, archiveEnd, archiveAggregation]);
 
-  // Fetch Archive Compare Data (Requires clock_assumption=same_recorded_clock)
-  useEffect(() => {
+  // Fetch Archive Compare Data (Requires clock_assumption=same_recorded_clock, with sequence token)
+  const fetchArchiveCompare = () => {
     if (
       datasetSource !== 'recorded_clock_archive' ||
       archiveSubMode !== 'compare' ||
@@ -203,7 +262,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     ) {
       return;
     }
-    let isMounted = true;
+    const reqId = ++archiveCompareReqIdRef.current;
     setIsLoadingArchiveCompare(true);
     setArchiveCompareError(null);
 
@@ -218,7 +277,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         'same_recorded_clock'
       )
       .then(res => {
-        if (!isMounted) return;
+        if (reqId !== archiveCompareReqIdRef.current) return;
         setIsLoadingArchiveCompare(false);
         if (res.ok) {
           setArchiveCompareData(res.data);
@@ -227,10 +286,10 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
           setArchiveCompareError(`${res.error.code}: ${res.error.message}`);
         }
       });
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchArchiveCompare();
   }, [datasetSource, archiveSubMode, archiveCompareIds, archivePollutant, archiveStart, archiveEnd, archiveAggregation]);
 
   // Dynamically compute available pollutants from the selected archive station(s)
@@ -268,6 +327,24 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
       { pollutant: 'o3' as Pollutant, unit: 'µg/m³', label: 'O3 (µg/m³)' }
     ];
   }, [archiveSubMode, archiveCatalogue, archiveStationId, archiveCompareIds]);
+
+  // URL Filter Synchronization (Non-destructive)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (datasetSource === 'recorded_clock_archive') {
+      url.searchParams.set('source', 'archive');
+      url.searchParams.set('archive_station', archiveStationId);
+      url.searchParams.set('pollutant', archivePollutant);
+      url.searchParams.set('agg', archiveAggregation);
+    } else {
+      url.searchParams.delete('source');
+      url.searchParams.delete('archive_station');
+      url.searchParams.set('pollutant', pollutant);
+      url.searchParams.set('preset', rangePreset);
+    }
+    window.history.replaceState({}, '', url.toString());
+  }, [datasetSource, archiveStationId, archivePollutant, archiveAggregation, pollutant, rangePreset]);
 
   // Reset incompatible pollutant selection if selected station doesn't support it
   useEffect(() => {
@@ -676,16 +753,133 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 </CardHeader>
                 <CardContent className="p-0">
                   {isLoadingArchiveExplore ? (
-                    <div className="p-12 text-center text-xs text-slate-400 animate-pulse">
+                    <div className="p-12 text-center text-xs text-slate-500">
                       Retrieving audited archive bucket telemetry...
                     </div>
                   ) : archiveExploreError ? (
-                    <div className="p-6 text-center text-xs text-amber-900 bg-amber-50 m-4 rounded-lg border border-amber-200">
-                      {archiveExploreError}
+                    <div className="p-6 text-center text-xs text-amber-900 bg-amber-50 m-4 rounded-lg border border-amber-200 space-y-2">
+                      <p className="font-semibold">{archiveExploreError}</p>
+                      <button
+                        onClick={fetchArchiveExplore}
+                        className="px-3 py-1 bg-amber-600 text-white rounded text-xs font-semibold hover:bg-amber-700 cursor-pointer transition-colors"
+                      >
+                        Retry Query
+                      </button>
                     </div>
                   ) : archiveExploreData && archiveExploreData.points.length > 0 ? (
-                    <div className="overflow-x-auto max-h-80">
-                      <table className="w-full text-left text-xs">
+                    <>
+                      {/* Visual Bucket Trend Chart */}
+                      <div className="p-4 bg-slate-900 border-b border-slate-800 text-white space-y-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                          <span className="font-bold text-slate-200">
+                            Bucket Aggregation Trend ({archiveExploreData.points.length} Periods • {archiveExploreData.unit})
+                          </span>
+                          <div className="flex items-center gap-3 text-[11px]">
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-2.5 h-2.5 rounded bg-teal-500" />
+                              <span className="text-slate-300">Sufficient (&ge;75%)</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-2.5 h-2.5 rounded bg-amber-500" />
+                              <span className="text-amber-300">Partial (&lt;75%)</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="relative w-full h-36 sm:h-40">
+                          {(() => {
+                            const pts = archiveExploreData.points;
+                            const maxVal = Math.max(...pts.map(p => p.value ?? 0), 20) * 1.15;
+                            const chartW = 740;
+                            const chartH = 110;
+                            const padL = 40;
+                            const padT = 15;
+
+                            const barWidth = Math.max(4, Math.min(24, ((chartW - padL) / pts.length) * 0.7));
+                            const step = (chartW - padL) / Math.max(1, pts.length);
+
+                            return (
+                              <svg viewBox="0 0 760 145" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                                {[0, 0.5, 1].map((lvl, idx) => {
+                                  const yPos = padT + chartH - lvl * chartH;
+                                  return (
+                                    <g key={idx}>
+                                      <line x1={padL} y1={yPos} x2={chartW} y2={yPos} stroke="#334155" strokeWidth="0.8" strokeDasharray="3,3" />
+                                      <text x={padL - 6} y={yPos + 3} textAnchor="end" fill="#94a3b8" fontSize="8" fontFamily="monospace">
+                                        {Math.round(lvl * maxVal)}
+                                      </text>
+                                    </g>
+                                  );
+                                })}
+
+                                {pts.map((pt, i) => {
+                                  const x = padL + i * step + step / 2 - barWidth / 2;
+                                  const val = pt.value ?? 0;
+                                  const barH = (val / maxVal) * chartH;
+                                  const y = padT + chartH - barH;
+                                  const isHovered = hoveredBucketIndex === i;
+                                  const isSufficient = pt.coverage_fraction >= 0.75;
+
+                                  return (
+                                    <g key={i}>
+                                      {pt.value !== null ? (
+                                        <rect
+                                          x={x}
+                                          y={y}
+                                          width={barWidth}
+                                          height={Math.max(2, barH)}
+                                          fill={isSufficient ? '#14b8a6' : '#f59e0b'}
+                                          opacity={isHovered ? 1 : 0.85}
+                                          rx={1.5}
+                                        />
+                                      ) : (
+                                        <line
+                                          x1={x}
+                                          y1={padT + chartH - 4}
+                                          x2={x + barWidth}
+                                          y2={padT + chartH - 4}
+                                          stroke="#94a3b8"
+                                          strokeWidth="2"
+                                          strokeDasharray="2,2"
+                                        />
+                                      )}
+                                      <rect
+                                        x={padL + i * step}
+                                        y={padT}
+                                        width={step}
+                                        height={chartH}
+                                        fill="transparent"
+                                        className="cursor-pointer"
+                                        onMouseEnter={() => setHoveredBucketIndex(i)}
+                                        onMouseLeave={() => setHoveredBucketIndex(null)}
+                                      />
+                                    </g>
+                                  );
+                                })}
+                              </svg>
+                            );
+                          })()}
+                        </div>
+
+                        {hoveredBucketIndex !== null && archiveExploreData.points[hoveredBucketIndex] && (
+                          <div className="bg-slate-800 border border-slate-700 rounded p-2 text-xs flex flex-wrap items-center justify-between gap-2 text-slate-200">
+                            <span className="font-mono text-[11px] text-teal-400">
+                              {archiveExploreData.points[hoveredBucketIndex].period_start} → {archiveExploreData.points[hoveredBucketIndex].period_end}
+                            </span>
+                            <div className="flex items-center gap-3 text-xs">
+                              <span>
+                                Mean: <strong className="text-white">{archiveExploreData.points[hoveredBucketIndex].value !== null ? `${archiveExploreData.points[hoveredBucketIndex].value!.toFixed(1)} ${archiveExploreData.unit}` : 'Missing'}</strong>
+                              </span>
+                              <span>
+                                Valid: {archiveExploreData.points[hoveredBucketIndex].valid_count} / {archiveExploreData.points[hoveredBucketIndex].expected_count} ({(archiveExploreData.points[hoveredBucketIndex].coverage_fraction * 100).toFixed(0)}%)
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="overflow-x-auto max-h-80">
+                        <table className="w-full text-left text-xs">
                         <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] sticky top-0">
                           <tr>
                             <th className="p-2.5">Bucket Start</th>
@@ -728,6 +922,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                         </tbody>
                       </table>
                     </div>
+                  </>
                   ) : (
                     <div className="p-8 text-center text-xs text-slate-400">
                       No archive records found for selected station and bounds.
@@ -760,12 +955,18 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 </CardHeader>
                 <CardContent className="p-0">
                   {isLoadingArchiveCompare ? (
-                    <div className="p-8 text-center text-xs text-slate-400 animate-pulse">
+                    <div className="p-8 text-center text-xs text-slate-500">
                       Computing matched-clock pair agreement across {archiveCompareIds.length} stations...
                     </div>
                   ) : archiveCompareError ? (
-                    <div className="p-4 text-center text-xs text-amber-900 bg-amber-50 m-4 rounded border border-amber-200">
-                      {archiveCompareError}
+                    <div className="p-4 text-center text-xs text-amber-900 bg-amber-50 m-4 rounded border border-amber-200 space-y-2">
+                      <p className="font-semibold">{archiveCompareError}</p>
+                      <button
+                        onClick={fetchArchiveCompare}
+                        className="px-3 py-1 bg-amber-600 text-white rounded text-xs font-semibold hover:bg-amber-700 cursor-pointer transition-colors"
+                      >
+                        Retry Comparison
+                      </button>
                     </div>
                   ) : archiveCompareData?.pair_agreement && archiveCompareData.pair_agreement.length > 0 ? (
                     <div className="divide-y divide-slate-100">
@@ -1079,16 +1280,22 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
 
             <CardContent>
               {isLoading ? (
-                <div className="py-24 text-center text-slate-400 text-xs animate-pulse">
+                <div className="py-24 text-center text-slate-500 text-xs">
                   Retrieving historical time-series telemetry from database...
                 </div>
               ) : errorMessage ? (
-                <div className="py-16 text-center text-xs text-amber-900 bg-amber-50 rounded-lg border border-amber-200 p-4 space-y-1">
+                <div className="py-16 text-center text-xs text-amber-900 bg-amber-50 rounded-lg border border-amber-200 p-4 space-y-2">
                   <div className="font-bold text-sm">Historical Observation Notice</div>
                   <p>{errorMessage}</p>
                   <p className="text-[11px] text-slate-500 pt-1">
                     Historical query requires an aligned UTC hourly boundary and existing audited records.
                   </p>
+                  <button
+                    onClick={fetchLiveHistory}
+                    className="px-3 py-1 bg-teal-600 text-white rounded text-xs font-semibold hover:bg-teal-700 cursor-pointer transition-colors"
+                  >
+                    Retry Live Query
+                  </button>
                 </div>
               ) : displayPoints.length > 0 ? (
                 viewMode === 'chart' ? (

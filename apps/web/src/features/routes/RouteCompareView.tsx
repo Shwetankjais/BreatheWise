@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/Card';
@@ -95,6 +95,7 @@ export const RouteCompareView: React.FC = () => {
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [isLoadingGeometry, setIsLoadingGeometry] = useState(false);
   const [geometryError, setGeometryError] = useState<string | null>(null);
+  const routeReqIdRef = useRef<number>(0);
 
   const handleSelectPreset = (presetId: string) => {
     const match = PRESET_ROUTES.find(p => p.id === presetId);
@@ -105,9 +106,9 @@ export const RouteCompareView: React.FC = () => {
     }
   };
 
-  // Fetch real route alternatives via POST /api/v1/routes/geometry (Contract 1.2.0)
-  useEffect(() => {
-    let isMounted = true;
+  // Fetch real route alternatives via POST /api/v1/routes/geometry (Contract 1.2.0, with sequence token)
+  const fetchRouteGeometry = () => {
+    const reqId = ++routeReqIdRef.current;
     setIsLoadingGeometry(true);
     setGeometryError(null);
 
@@ -117,7 +118,7 @@ export const RouteCompareView: React.FC = () => {
     apiClient
       .getRouteGeometry(origin, destination, mode, 3)
       .then(res => {
-        if (!isMounted) return;
+        if (reqId !== routeReqIdRef.current) return;
         setIsLoadingGeometry(false);
         if (res.ok) {
           setGeometryResponse(res.data);
@@ -129,10 +130,10 @@ export const RouteCompareView: React.FC = () => {
           setGeometryError(`${res.error.code}: ${res.error.message}`);
         }
       });
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchRouteGeometry();
   }, [customOrigin, customDest, mode]);
 
   const activeRoute = useMemo(() => {
@@ -228,6 +229,69 @@ export const RouteCompareView: React.FC = () => {
               >
                 {settingTarget === 'destination' ? 'Click Map for Pin B' : 'Set Pin B (Dest)'}
               </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Coordinate Input Controls */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
+          <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+            <span className="font-bold text-emerald-800 text-[11px] whitespace-nowrap">Pin A (Origin):</span>
+            <div className="flex items-center gap-1.5 w-full">
+              <input
+                type="number"
+                step="0.0001"
+                value={customOrigin[0]}
+                onChange={e => {
+                  const val = parseFloat(e.target.value);
+                  if (!isNaN(val)) setCustomOrigin([val, customOrigin[1]]);
+                }}
+                className="w-1/2 p-1.5 border border-slate-300 rounded font-mono text-[11px] bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                placeholder="Latitude"
+                aria-label="Origin Latitude"
+              />
+              <input
+                type="number"
+                step="0.0001"
+                value={customOrigin[1]}
+                onChange={e => {
+                  const val = parseFloat(e.target.value);
+                  if (!isNaN(val)) setCustomOrigin([customOrigin[0], val]);
+                }}
+                className="w-1/2 p-1.5 border border-slate-300 rounded font-mono text-[11px] bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                placeholder="Longitude"
+                aria-label="Origin Longitude"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+            <span className="font-bold text-red-800 text-[11px] whitespace-nowrap">Pin B (Dest):</span>
+            <div className="flex items-center gap-1.5 w-full">
+              <input
+                type="number"
+                step="0.0001"
+                value={customDest[0]}
+                onChange={e => {
+                  const val = parseFloat(e.target.value);
+                  if (!isNaN(val)) setCustomDest([val, customDest[1]]);
+                }}
+                className="w-1/2 p-1.5 border border-slate-300 rounded font-mono text-[11px] bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                placeholder="Latitude"
+                aria-label="Destination Latitude"
+              />
+              <input
+                type="number"
+                step="0.0001"
+                value={customDest[1]}
+                onChange={e => {
+                  const val = parseFloat(e.target.value);
+                  if (!isNaN(val)) setCustomDest([customDest[0], val]);
+                }}
+                className="w-1/2 p-1.5 border border-slate-300 rounded font-mono text-[11px] bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                placeholder="Longitude"
+                aria-label="Destination Longitude"
+              />
             </div>
           </div>
         </div>
@@ -342,12 +406,30 @@ export const RouteCompareView: React.FC = () => {
           </div>
 
           {isLoadingGeometry ? (
-            <div className="p-8 text-center text-xs text-slate-400 bg-white rounded-xl border border-slate-200 animate-pulse">
+            <div className="p-8 text-center text-xs text-slate-500 bg-white rounded-xl border border-slate-200">
               Computing road network alternatives via routing engine...
             </div>
           ) : geometryError ? (
-            <div className="p-4 text-center text-xs text-amber-900 bg-amber-50 rounded-xl border border-amber-200">
-              {geometryError}
+            <div className="p-4 text-center text-xs text-amber-900 bg-amber-50 rounded-xl border border-amber-200 space-y-2">
+              <div className="font-bold">Routing Notice / Engine Response</div>
+              <p>{geometryError}</p>
+              <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
+                <button
+                  onClick={fetchRouteGeometry}
+                  className="px-3 py-1 bg-teal-600 text-white rounded text-xs font-semibold hover:bg-teal-700 cursor-pointer transition-colors"
+                >
+                  Retry Route Query
+                </button>
+                <button
+                  onClick={() => {
+                    handleSelectPreset(PRESET_ROUTES[0].id);
+                    setMode('driving');
+                  }}
+                  className="px-3 py-1 bg-slate-200 text-slate-800 rounded text-xs font-semibold hover:bg-slate-300 cursor-pointer transition-colors"
+                >
+                  Reset to Delhi Preset
+                </button>
+              </div>
             </div>
           ) : geometryResponse?.routes && geometryResponse.routes.length > 0 ? (
             geometryResponse.routes.map((route: RouteGeometry, idx: number) => {

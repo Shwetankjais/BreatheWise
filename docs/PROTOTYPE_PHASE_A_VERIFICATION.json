@@ -1,0 +1,212 @@
+{
+  "verified_at": "2026-11-24T07:49:59.223Z",
+  "scope": "Actual localhost APIs and persisted artifacts; simulated failures explicitly identified",
+  "profiles": [
+    {
+      "name": "desktop",
+      "checks": [
+        {
+          "name": "registry-driven recorded/UTC issue-purged evaluation and playback",
+          "passed": true,
+          "models": [
+            {
+              "version": "delhi-recorded-pm25-hourly-v2",
+              "horizons": 24,
+              "clock": "source_naive_clock_unverified",
+              "cohort": "fixed_model_issue_time_purged",
+              "horizon": 2,
+              "prediction": 236.89127853841202,
+              "observed": 238
+            },
+            {
+              "version": "delhi-openaq-pm25-hourly-v1",
+              "horizons": 24,
+              "clock": "UTC_hour_ending",
+              "cohort": "fixed_model_issue_time_purged",
+              "horizon": 2,
+              "prediction": 30.259697164223148,
+              "observed": 68
+            },
+            {
+              "version": "delhi-recorded-pm25-v1",
+              "horizons": 5,
+              "clock": "source_naive_clock_unverified",
+              "cohort": "target_timestamp_split_only",
+              "horizon": 3,
+              "prediction": 275.2965356634587,
+              "observed": 251
+            }
+          ]
+        },
+        {
+          "name": "actual persisted forecast-run list/detail keeps rejection and zero rows",
+          "passed": true,
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "predictions": 0
+        },
+        {
+          "name": "simulated empty registry stays empty without demo model substitution",
+          "passed": true,
+          "simulation": "Only registry HTTP response is explicitly empty; no fixture forecast result"
+        },
+        {
+          "name": "simulated registry outage remains a failure",
+          "passed": true,
+          "simulation": "Explicit503 registry test response"
+        }
+      ],
+      "api_paths": [
+        "/api/v1/advisories?pollutant=pm25 ->200",
+        "/api/v1/cities ->200",
+        "/api/v1/capabilities ->200",
+        "/api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25 ->503",
+        "/api/v1/stations?city_id=delhi ->200",
+        "/api/v1/station-catalogue?city_id=delhi ->200",
+        "/api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "/api/v1/stations/openaq-235/forecast?pollutant=pm25 ->503",
+        "/api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/evaluation ->200",
+        "/api/v1/models ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=2&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-evaluation ->200",
+        "/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=2&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/evaluation ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=false ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=false ->200",
+        "/api/v1/forecast-runs?limit=20&offset=0 ->200",
+        "/api/v1/forecast-runs/51cded18-d577-4319-a602-d2683431b0be ->200",
+        "/api/v1/models ->503"
+      ]
+    },
+    {
+      "name": "mobile",
+      "checks": [
+        {
+          "name": "registry-driven recorded/UTC issue-purged evaluation and playback",
+          "passed": true,
+          "models": [
+            {
+              "version": "delhi-recorded-pm25-hourly-v2",
+              "horizons": 24,
+              "clock": "source_naive_clock_unverified",
+              "cohort": "fixed_model_issue_time_purged",
+              "horizon": 2,
+              "prediction": 236.89127853841202,
+              "observed": 238
+            },
+            {
+              "version": "delhi-openaq-pm25-hourly-v1",
+              "horizons": 24,
+              "clock": "UTC_hour_ending",
+              "cohort": "fixed_model_issue_time_purged",
+              "horizon": 2,
+              "prediction": 30.259697164223148,
+              "observed": 68
+            },
+            {
+              "version": "delhi-recorded-pm25-v1",
+              "horizons": 5,
+              "clock": "source_naive_clock_unverified",
+              "cohort": "target_timestamp_split_only",
+              "horizon": 3,
+              "prediction": 275.2965356634587,
+              "observed": 251
+            }
+          ]
+        },
+        {
+          "name": "actual persisted forecast-run list/detail keeps rejection and zero rows",
+          "passed": true,
+          "run_id": "51cded18-d577-4319-a602-d2683431b0be",
+          "error": "AVAILABILITY_REQUIRED_INPUT_UNAVAILABLE",
+          "predictions": 0
+        },
+        {
+          "name": "simulated empty registry stays empty without demo model substitution",
+          "passed": true,
+          "simulation": "Only registry HTTP response is explicitly empty; no fixture forecast result"
+        },
+        {
+          "name": "simulated registry outage remains a failure",
+          "passed": true,
+          "simulation": "Explicit503 registry test response"
+        }
+      ],
+      "api_paths": [
+        "/api/v1/advisories?pollutant=pm25 ->200",
+        "/api/v1/cities ->200",
+        "/api/v1/capabilities ->200",
+        "/api/v1/hotspots?city_id=delhi&horizon_h=6&threshold=0&pollutant=pm25 ->503",
+        "/api/v1/stations?city_id=delhi ->200",
+        "/api/v1/observed-rankings?city_id=delhi&pollutant=pm25&limit=20&include_stale=false ->200",
+        "/api/v1/station-catalogue?city_id=delhi ->200",
+        "/api/v1/stations/openaq-235/forecast?pollutant=pm25 ->503",
+        "/api/v1/stations/openaq-50/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-235/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-8365/latest?pollutant=pm25 ->200",
+        "/api/v1/stations/openaq-8472/latest?pollutant=pm25 ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/evaluation ->200",
+        "/api/v1/models ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-recorded-pm25-hourly-v2/predictions?horizon_h=2&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-evaluation ->200",
+        "/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-predictions?horizon_h=2&split=test&limit=25&offset=0&issue_time_purged=true ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/evaluation ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=1&split=test&limit=25&offset=0&issue_time_purged=false ->200",
+        "/api/v1/models/delhi-recorded-pm25-v1/predictions?horizon_h=3&split=test&limit=25&offset=0&issue_time_purged=false ->200",
+        "/api/v1/forecast-runs?limit=20&offset=0 ->200",
+        "/api/v1/forecast-runs/51cded18-d577-4319-a602-d2683431b0be ->200",
+        "/api/v1/models ->503"
+      ]
+    }
+  ],
+  "changed_paths": [],
+  "snapshot_unchanged": true,
+  "passed": true,
+  "freeze_ack": "FREEZE_ACK \u2014 2026-11-24T13:17:00+05:30:",
+  "fingerprint_paths": {
+    "apps/web/src/main.tsx": "fd765bca26ff88dbcb687bd2615475bf16270c1570767a9f1a0897d65e9a78c7",
+    "apps/web/src/styles/globals.css": "43b5aba040adaa61e7ec83f100c0621b0ea3b27cb5bf6247c315d3a472fbb73d",
+    "apps/web/src/styles/tokens.css": "e89b1c20dba7c4bb7ac428f5979bfd6e25caa480266bd4cced658d64614538ba",
+    "apps/web/src/components/map/StationMap.tsx": "a114415180c4bef72b724521eaef2b579062d996f202cdacc63e92848703f1e8",
+    "apps/web/src/features/overview/OverviewView.tsx": "1973840a37d4f14230e9f3e65141a48f7f846eff361789dcaf80ff72a74d6572",
+    "apps/web/src/features/explorer/ExplorerView.tsx": "e74158cb6641221722d5945f0919b8bdcb8c29a6a1e3755dfa4264236350c3bb",
+    "apps/web/src/features/model-performance/ModelAuditView.tsx": "cf78f2d2d7f84f1f99f86f77fac4282d2aae369a6da845e641f1eaa203da576a",
+    "apps/web/src/features/routes/RouteCompareView.tsx": "e7733d5b0909aed8b6c8d8aaeb9527ab7a89315a28c456899134a5bcbc794943",
+    "apps/web/src/features/saved-places/SavedPlacesView.tsx": "e9d56845ee2604cbbe7f663e93667efec8ef0d7c5e9000704b6b0316737c0626",
+    "apps/web/src/components/ui/Badge.tsx": "6b162f8f7c18ada6e187293dbf8b7cae745f3db38ab6f5288b09db9d8aed59a0",
+    "apps/web/src/components/ui/Button.tsx": "9c9fecced8c54425e4558a0279fbc89d487d5074bf989398235fb4cd351f6dc4",
+    "apps/web/src/components/ui/Card.tsx": "20eb472f97558b7e9b3ba736e4748ea38821cf6ffd96f629d0829423f21bc887",
+    "apps/web/src/components/ui/DataModeBadge.tsx": "e5657df3279eec0f8abc4d4419ecd2916c194705543be7ea6c17cfedd634b0bf",
+    "apps/web/src/components/ui/Dialog.tsx": "572fd048ad615548cd2f4e327e38bd0c080f0627381ed6d2b1bf0d5dbf028691",
+    "apps/web/src/components/ui/Select.tsx": "83565b10d1801abdc8a3836389f90dd39c820a3d5b2379b9e1de890bc0876aab",
+    "apps/web/src/components/ui/Tabs.tsx": "deda08c759506064cb33755fd2da8aede086cd93d89faaa4c37492df24cb5a46",
+    "apps/web/src/components/ui/Tooltip.tsx": "536d46a8c887071fef47a0541f6874f290a285279bd33fe390ff9ec83afcc6e1",
+    "apps/web/src/components/layout/Header.tsx": "13ba83193dfd2fb29f01cfc54cc16033593616f62594f0144e4870a8b7fe37bf",
+    "apps/web/src/components/layout/AtmosphericHero.tsx": "dedb1c2149c791c59136f979832884a687a46522009117d89d8e0fafe9308ec5",
+    "apps/web/src/components/layout/NotificationDrawer.tsx": "f59ad3e5a3686195d7e2d8fed03b1dff81954082c23a153f8b1fa4bb530e6596",
+    "apps/web/src/features/health/HealthView.tsx": "9c28dde29c8c68992238a4815c5f9491568a7d3647c79040f93ab60739a69d20",
+    "apps/web/src/features/hotspots/HotspotsView.tsx": "5372edf7da8087c24858c0045a7b34b3c531cb4850ae6359177e0c2160f05faf",
+    "apps/web/src/features/planner/PlannerView.tsx": "a5ad51817e5738d937af86d4eafd7244e9906de8eddfa86f0350af8d1f31adc9",
+    "apps/web/src/features/coverage/CoverageView.tsx": "831751768e85e98559dc05b5e4c805ab32590f761940998565a8ffe02f71281b",
+    "apps/web/src/features/scenarios/WeatherScenarioView.tsx": "ebe25759555d4728b18aaff794dfc241a68e3d73ba3264bf88510da5cddaf54f",
+    "apps/web/src/lib/aqi.ts": "3363db2fcf247adf677a6db9d77572552b80c330254be455fdfd46408f4945bc",
+    "apps/web/src/lib/sanitize.ts": "2b5303f0e751654c0b341eb8141c206f57d1bdb29845333f1c5f20aa9a65f913",
+    "apps/web/src/lib/api/types.ts": "ce6643379b7db0ef960a35a7af065859460c5e60214eb77cbd49d3f7e406e6ad",
+    "apps/web/src/lib/api/demoData.ts": "cc180a230cf0fa728ad07681087c0ebf5be45b56ecb351df10e65119d0ec3bdc",
+    "apps/web/src/lib/api/client.ts": "57fa4b6da1f40f683ef68e2bed9dec0424dd443a431b22ca8c32665a9e6badaf",
+    "apps/web/src/App.tsx": "a9c3c0e164a37c464b6039cfa5970d3c0f8d5a651e0fa2611224cf6f82d4b30b",
+    "apps/web/tests/aqi.test.ts": "7a2442dc54859c89b0d5850d3c9ba12b3749c2d0fc107494cf80feeaaba801e2",
+    "apps/web/tests/client.test.ts": "e8e24e095b4c315e18fb7ce18e7d9034f5eba24b8ba3ca20578b187997628fe2",
+    "apps/web/tests/features.test.ts": "a14d7fa8920f80921fe4986e53bc194518c7b08a464b6772445bea657f2c18d4",
+    "docs/UI_IMPLEMENTATION.md": "04e5cb37a0f1f490b7cfdf667dc039f2cce35b93a7665d97d5e25d74af28b9b5",
+    "docs/handoffs/antigravity.md": "38f19053dcf7f357a5ee79be8ea031205a336975fd70786fa00f86477e435528"
+  },
+  "unit_tests_passed": 49,
+  "build": "passed; nonfatal bundle-size warning"
+}

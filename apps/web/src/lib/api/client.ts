@@ -38,9 +38,15 @@ import {
   ArchiveCompare,
   ModelCatalogue,
   ModelEvaluation,
+  UtcModelEvaluation,
   PredictionPage,
+  UtcPredictionPage,
   GeometryResponse,
-  Coordinates
+  Coordinates,
+  ForecastRunPage,
+  ForecastRunView,
+  ForecastRunDetail,
+  ShadowPoint
 } from './types';
 
 import {
@@ -188,7 +194,8 @@ export class BreatheWiseApiClient {
     }
 
     try {
-      const res = await fetch(`${this.baseUrl}${path}`, {
+      const normalizedPath = path.startsWith(this.baseUrl) ? path.slice(this.baseUrl.length) : path;
+      const res = await fetch(`${this.baseUrl}${normalizedPath}`, {
         ...options,
         headers
       });
@@ -858,7 +865,11 @@ export class BreatheWiseApiClient {
     return this.request<ModelCatalogue>('/models');
   }
 
-  async getModelEvaluation(modelVersion: string, horizonH?: number | null): Promise<ApiResult<ModelEvaluation>> {
+  async getModelEvaluation(
+    modelVersion: string,
+    horizonH?: number | null,
+    evaluationPath?: string | null
+  ): Promise<ApiResult<ModelEvaluation | UtcModelEvaluation>> {
     if (this.isDemoMode) {
       return {
         ok: false,
@@ -871,16 +882,23 @@ export class BreatheWiseApiClient {
       };
     }
     const query = horizonH !== undefined && horizonH !== null ? `?horizon_h=${horizonH}` : '';
-    return this.request<ModelEvaluation>(`/models/${encodeURIComponent(modelVersion)}/evaluation${query}`);
+    const endpoint = evaluationPath || `/models/${encodeURIComponent(modelVersion)}/evaluation`;
+    return this.request<ModelEvaluation | UtcModelEvaluation>(`${endpoint}${query}`);
   }
 
   async getModelPredictions(
     modelVersion: string,
     horizonH: number = 1,
-    split: 'test' | 'validation' | 'rolling_2022' | 'rolling_2023' = 'test',
+    split: string = 'test',
     limit: number = 100,
-    offset: number = 0
-  ): Promise<ApiResult<PredictionPage>> {
+    offset: number = 0,
+    options?: {
+      predictionsPath?: string | null;
+      issueTimePurged?: boolean;
+      targetStart?: string | null;
+      targetEnd?: string | null;
+    }
+  ): Promise<ApiResult<PredictionPage | UtcPredictionPage>> {
     if (this.isDemoMode) {
       return {
         ok: false,
@@ -898,7 +916,17 @@ export class BreatheWiseApiClient {
       limit: String(limit),
       offset: String(offset)
     });
-    return this.request<PredictionPage>(`/models/${encodeURIComponent(modelVersion)}/predictions?${query.toString()}`);
+    if (options?.issueTimePurged !== undefined) {
+      query.set('issue_time_purged', String(options.issueTimePurged));
+    }
+    if (options?.targetStart) {
+      query.set('target_start', options.targetStart);
+    }
+    if (options?.targetEnd) {
+      query.set('target_end', options.targetEnd);
+    }
+    const endpoint = options?.predictionsPath || `/models/${encodeURIComponent(modelVersion)}/predictions`;
+    return this.request<PredictionPage | UtcPredictionPage>(`${endpoint}?${query.toString()}`);
   }
 
   // ----------------------------------------------------------------------
@@ -928,6 +956,58 @@ export class BreatheWiseApiClient {
         alternatives
       })
     });
+  }
+
+  // ----------------------------------------------------------------------
+  // Contract 1.2.0 & 1.3.0 Additive Methods: Shadow Forecast Runs
+  // ----------------------------------------------------------------------
+
+  async getForecastRuns(
+    stationId?: string,
+    modelVersion?: string,
+    limit: number = 20,
+    offset: number = 0
+  ): Promise<ApiResult<ForecastRunPage>> {
+    if (this.isDemoMode) {
+      return {
+        ok: true,
+        data: {
+          total_count: 0,
+          limit,
+          offset,
+          runs: []
+        },
+        meta: {
+          contract_version: '1.2.0',
+          data_mode: 'demo',
+          request_id: 'demo-runs',
+          source: 'demo_fixture'
+        },
+        status: 200
+      };
+    }
+    const query = new URLSearchParams({
+      limit: String(limit),
+      offset: String(offset)
+    });
+    if (stationId) query.set('station_id', stationId);
+    if (modelVersion) query.set('model_version', modelVersion);
+    return this.request<ForecastRunPage>(`/forecast-runs?${query.toString()}`);
+  }
+
+  async getForecastRun(runId: string): Promise<ApiResult<ForecastRunDetail>> {
+    if (this.isDemoMode) {
+      return {
+        ok: false,
+        error: {
+          code: 'FORECAST_RUN_UNAVAILABLE',
+          message: 'Individual shadow forecast run detail is unavailable in demo mode.',
+          retryable: false
+        },
+        status: 404
+      };
+    }
+    return this.request<ForecastRunDetail>(`/forecast-runs/${encodeURIComponent(runId)}`);
   }
 }
 

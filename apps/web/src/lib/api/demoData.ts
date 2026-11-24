@@ -662,6 +662,7 @@ export const DEMO_MODELS: ModelCatalogue = {
       target_unit: 'µg/m³',
       status: 'available',
       supported_horizons: [1, 3, 6, 12, 24],
+      feature_count: 75,
       live_supported_horizons: [],
       native_diagnostics_ready: true,
       retrospective_evaluation_ready: false,
@@ -680,22 +681,81 @@ export const DEMO_MODELS: ModelCatalogue = {
       model_version: 'delhi-recorded-pm25-v1',
       kind: 'retrospective_forecast',
       dataset_mode: 'recorded_clock',
+      clock_basis: 'source_naive_clock_unverified',
+      evaluation_cohort: 'target_timestamp_split_only',
+      evaluation_path: '/api/v1/models/delhi-recorded-pm25-v1/evaluation',
+      predictions_path: '/api/v1/models/delhi-recorded-pm25-v1/predictions',
       pollutant: 'pm25',
       target_unit: 'µg/m³',
       status: 'available',
       supported_horizons: [1, 3, 6, 12, 24],
+      feature_count: 39,
       live_supported_horizons: [],
       native_diagnostics_ready: false,
       retrospective_evaluation_ready: true,
       live_forecast_ready: false,
       continuous_trajectory_ready: false,
-      station_ids: ['site_301', 'site_113', 'site_115'],
+      station_ids: ['site_301'],
       artifact_hashes: {
         model: 'sha256_mock_hash_delhi_v1'
       },
       limitations: [
-        'Retrospective evaluation on frozen chronological test split',
-        'Naive recorded clock assumption; live inference eligibility not certified'
+        'Discovered boundary-availability limitation: historical target-only evaluation contains split-boundary availability overlaps.',
+        'Original values are preserved as qualified historical evidence; see v2 and UTC experiments for issue-time purged primary cohorts.'
+      ]
+    },
+    {
+      model_version: 'delhi-recorded-pm25-hourly-v2',
+      kind: 'retrospective_forecast',
+      dataset_mode: 'recorded_clock',
+      clock_basis: 'source_naive_clock_unverified',
+      evaluation_cohort: 'fixed_model_issue_time_purged',
+      evaluation_path: '/api/v1/models/delhi-recorded-pm25-hourly-v2/evaluation',
+      predictions_path: '/api/v1/models/delhi-recorded-pm25-hourly-v2/predictions',
+      pollutant: 'pm25',
+      target_unit: 'µg/m³',
+      status: 'available',
+      supported_horizons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      feature_count: 39,
+      live_supported_horizons: [],
+      native_diagnostics_ready: false,
+      retrospective_evaluation_ready: true,
+      live_forecast_ready: false,
+      continuous_trajectory_ready: false,
+      station_ids: ['site_301'],
+      artifact_hashes: {
+        model: 'sha256_mock_hash_delhi_v2'
+      },
+      limitations: [
+        'Separate recorded-clock hourly model across all 24 horizons.',
+        'Primary evaluation uses fixed_model_issue_time_purged cohort without lookahead.'
+      ]
+    },
+    {
+      model_version: 'delhi-openaq-pm25-hourly-v1',
+      kind: 'retrospective_forecast',
+      dataset_mode: 'utc_provider_history',
+      clock_basis: 'UTC_hour_ending',
+      evaluation_cohort: 'fixed_model_issue_time_purged',
+      evaluation_path: '/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-evaluation',
+      predictions_path: '/api/v1/models/delhi-openaq-pm25-hourly-v1/utc-predictions',
+      pollutant: 'pm25',
+      target_unit: 'µg/m³',
+      status: 'available',
+      supported_horizons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      feature_count: 39,
+      live_supported_horizons: [],
+      native_diagnostics_ready: false,
+      retrospective_evaluation_ready: true,
+      live_forecast_ready: false,
+      continuous_trajectory_ready: false,
+      station_ids: ['openaq-235'],
+      artifact_hashes: {
+        model: 'sha256_mock_hash_delhi_utc_v1'
+      },
+      limitations: [
+        'Separate UTC-native hourly model using verified OpenAQ provider clock and sensor.',
+        'Chronological UTC splits; primary evaluation uses fixed_model_issue_time_purged cohort.'
       ]
     }
   ]
