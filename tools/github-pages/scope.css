@@ -1,0 +1,2 @@
+/* The separate Vite root must explicitly scan the existing application. */
+@import "tailwindcss" source("../../apps/web/src");
