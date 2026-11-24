@@ -3,7 +3,7 @@
 import re
 
 import duckdb
-from breathewise.core.config import get_settings
+from breathewise.core.config import ROOT, get_settings
 from breathewise.core.errors import ServiceError
 from breathewise.ml.experiment import EXPERIMENT_VERSIONS, checked_artifact, load_manifest
 from breathewise.ml.issue_purged import EXPECTED_SIDECAR_SHA256, load_issue_purged
@@ -116,6 +116,42 @@ def catalogue():
     from breathewise.services.availability_models import summary as availability_summary
 
     rows.append(availability_summary())
+    from breathewise.ml.v5 import VERSION, checked_manifest
+
+    try:
+        manifest = checked_manifest(ROOT / "docs/MODEL_V5_MANIFEST.json")
+        rows.append(
+            ModelSummary(
+                model_version=VERSION,
+                kind="native_diagnostic",
+                dataset_mode="diagnostic",
+                supported_horizons=manifest["horizons"],
+                feature_count=manifest["feature_count"],
+                target_unit=None,
+                declared_target_transform=manifest["serialized_target_transform"],
+                golden_parity_verified=False,
+                unavailable_reasons=manifest["unavailable_reasons"],
+                artifact_hashes={"supplied_joblib": manifest["artifact_sha256"]},
+                native_diagnostics_ready=False,
+                status="available",
+                limitations=[
+                    "Offline diagnostic tooling verified; native libraries are isolated from API",
+                    "Artifact-declared horizons only; no public forecast or evaluation endpoint",
+                    "69 ordered inputs; XGBoost positional order, formulas, units and golden parity unverified",
+                ],
+            )
+        )
+    except (OSError, ValueError, KeyError, TypeError):
+        rows.append(
+            ModelSummary(
+                model_version=VERSION,
+                kind="native_diagnostic",
+                dataset_mode="diagnostic",
+                status="artifact_invalid",
+                limitations=["V5 manifest missing or invalid"],
+                unavailable_reasons=["V5_MANIFEST_INVALID"],
+            )
+        )
     return ModelCatalogue(models=rows)
 
 

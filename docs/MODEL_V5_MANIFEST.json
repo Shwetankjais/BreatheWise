@@ -1,0 +1,910 @@
+{
+  "model_version": "supplied-horizon-ensemble-v5",
+  "artifact_sha256": "473439721f93ed2b6890f916ba9532a62dadefb0e6289485fb8ae698a32f0e19",
+  "artifact_bytes": 151950058,
+  "state_read_complete": true,
+  "serialized_python_constructors_executed": false,
+  "serialized_schema_version": "prod_v5_horizon_specialized_lgb_xgb",
+  "bundle_keys": [
+    "models_by_horizon",
+    "features",
+    "horizons",
+    "target_transform",
+    "schema_version"
+  ],
+  "horizons": [
+    1,
+    3,
+    6,
+    12,
+    24
+  ],
+  "feature_count": 69,
+  "features": [
+    "lat",
+    "lon",
+    "elevation_m",
+    "sensor_distance_km",
+    "live_pm25",
+    "live_pm25_lag_1h",
+    "live_pm25_lag_3h",
+    "live_pm25_lag_6h",
+    "live_pm25_lag_12h",
+    "live_pm25_lag_24h",
+    "live_pm25_lag_48h",
+    "live_pm25_diff_3h",
+    "live_pm25_diff_24h",
+    "live_pm25_roll_mean_24h",
+    "live_pm25_roll_max_24h",
+    "live_vs_cams_bias",
+    "temperature_2m",
+    "relative_humidity_2m",
+    "dewpoint_spread",
+    "precipitation",
+    "wind_speed_10m",
+    "wind_direction_10m",
+    "boundary_layer_height",
+    "surface_pressure",
+    "shortwave_radiation",
+    "ventilation_coeff",
+    "stagnation_index",
+    "wind_u",
+    "wind_v",
+    "blh_lag_3h",
+    "blh_lag_24h",
+    "wind_speed_lag_3h",
+    "precip_roll_sum_24h",
+    "cams_pm25",
+    "cams_pm10",
+    "cams_no2",
+    "cams_co",
+    "cams_so2",
+    "cams_o3",
+    "cams_dust",
+    "cams_dust_fraction",
+    "cams_pm25_to_pm10",
+    "cams_pm25_lag_1h",
+    "cams_pm25_lag_3h",
+    "cams_pm25_lag_6h",
+    "cams_pm25_lag_12h",
+    "cams_pm25_lag_24h",
+    "cams_pm25_lag_48h",
+    "cams_pm25_diff_3h",
+    "cams_pm25_diff_24h",
+    "cams_pm25_roll_mean_24h",
+    "hour_sin",
+    "hour_cos",
+    "doy_sin",
+    "doy_cos",
+    "is_weekend",
+    "target_temperature_2m",
+    "target_relative_humidity_2m",
+    "target_precipitation",
+    "target_wind_speed_10m",
+    "target_boundary_layer_height",
+    "target_ventilation_coeff",
+    "target_cams_pm25",
+    "target_cams_pm10",
+    "target_cams_no2",
+    "cams_pm25_delta_h",
+    "blh_delta_h",
+    "target_hour_sin",
+    "target_hour_cos"
+  ],
+  "feature_provenance": [
+    {
+      "order": 0,
+      "name": "lat",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 1,
+      "name": "lon",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 2,
+      "name": "elevation_m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 3,
+      "name": "sensor_distance_km",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 4,
+      "name": "live_pm25",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 5,
+      "name": "live_pm25_lag_1h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 6,
+      "name": "live_pm25_lag_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 7,
+      "name": "live_pm25_lag_6h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 8,
+      "name": "live_pm25_lag_12h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 9,
+      "name": "live_pm25_lag_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 10,
+      "name": "live_pm25_lag_48h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 11,
+      "name": "live_pm25_diff_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 12,
+      "name": "live_pm25_diff_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 13,
+      "name": "live_pm25_roll_mean_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 14,
+      "name": "live_pm25_roll_max_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 15,
+      "name": "live_vs_cams_bias",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 16,
+      "name": "temperature_2m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 17,
+      "name": "relative_humidity_2m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 18,
+      "name": "dewpoint_spread",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 19,
+      "name": "precipitation",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 20,
+      "name": "wind_speed_10m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 21,
+      "name": "wind_direction_10m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 22,
+      "name": "boundary_layer_height",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 23,
+      "name": "surface_pressure",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 24,
+      "name": "shortwave_radiation",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 25,
+      "name": "ventilation_coeff",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 26,
+      "name": "stagnation_index",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 27,
+      "name": "wind_u",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 28,
+      "name": "wind_v",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 29,
+      "name": "blh_lag_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 30,
+      "name": "blh_lag_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 31,
+      "name": "wind_speed_lag_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 32,
+      "name": "precip_roll_sum_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 33,
+      "name": "cams_pm25",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 34,
+      "name": "cams_pm10",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 35,
+      "name": "cams_no2",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 36,
+      "name": "cams_co",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 37,
+      "name": "cams_so2",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 38,
+      "name": "cams_o3",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 39,
+      "name": "cams_dust",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 40,
+      "name": "cams_dust_fraction",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 41,
+      "name": "cams_pm25_to_pm10",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 42,
+      "name": "cams_pm25_lag_1h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 43,
+      "name": "cams_pm25_lag_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 44,
+      "name": "cams_pm25_lag_6h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 45,
+      "name": "cams_pm25_lag_12h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 46,
+      "name": "cams_pm25_lag_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 47,
+      "name": "cams_pm25_lag_48h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 48,
+      "name": "cams_pm25_diff_3h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 49,
+      "name": "cams_pm25_diff_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 50,
+      "name": "cams_pm25_roll_mean_24h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 51,
+      "name": "hour_sin",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 52,
+      "name": "hour_cos",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 53,
+      "name": "doy_sin",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 54,
+      "name": "doy_cos",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 55,
+      "name": "is_weekend",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 56,
+      "name": "target_temperature_2m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 57,
+      "name": "target_relative_humidity_2m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 58,
+      "name": "target_precipitation",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 59,
+      "name": "target_wind_speed_10m",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 60,
+      "name": "target_boundary_layer_height",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 61,
+      "name": "target_ventilation_coeff",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 62,
+      "name": "target_cams_pm25",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 63,
+      "name": "target_cams_pm10",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 64,
+      "name": "target_cams_no2",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 65,
+      "name": "cams_pm25_delta_h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 66,
+      "name": "blh_delta_h",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 67,
+      "name": "target_hour_sin",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    },
+    {
+      "order": 68,
+      "name": "target_hour_cos",
+      "recovered_from_artifact": true,
+      "unit": null,
+      "formula_verified": false,
+      "issue_time_availability_verified": false
+    }
+  ],
+  "feature_order_sha256": "7f468102965b64952f703bef1c24b43d5c3a0848721bc6087d25a1a340ab7a24",
+  "serialized_target_transform": "none",
+  "target_unit": null,
+  "target_scale_verified": false,
+  "serialized_xgboost_snapshot_version": "3.4.1",
+  "isolated_runtime_versions": {
+    "python": "3.12.16",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "numpy": "2.5.5"
+  },
+  "training_dependency_versions_verified": false,
+  "xgboost_feature_order_verified_from_artifact": false,
+  "feature_formulas_verified": false,
+  "golden_output_parity_verified": false,
+  "operational_issue_time_inputs_verified": false,
+  "public_live_forecast_ready": false,
+  "status": "diagnostic_only",
+  "unavailable_reasons": [
+    "V5_GOLDEN_PARITY_MISSING",
+    "V5_FEATURE_FORMULAS_AND_UNITS_MISSING",
+    "V5_XGBOOST_FEATURE_ORDER_UNVERIFIED",
+    "V5_ISSUE_TIME_INPUTS_UNVERIFIED",
+    "V5_TARGET_UNIT_UNVERIFIED",
+    "V5_TRAINING_ENVIRONMENT_UNVERIFIED"
+  ],
+  "static_opcode_count": 973,
+  "serialized_symbol_names": [
+    "collections.OrderedDict",
+    "collections.defaultdict",
+    "lightgbm.basic.Booster",
+    "numpy._core.multiarray.scalar",
+    "numpy.dtype",
+    "xgboost.core.Booster"
+  ],
+  "horizon_models": {
+    "1": {
+      "weights_serialized": [
+        0.55,
+        0.45
+      ],
+      "lgb_native_sha256": "61702107c75d2bd6fe0f982fa3a71655f0e033655e040780d173c00498514d93",
+      "xgb_snapshot_sha256": "d0c32e832cdca35412825dd71542b99eb7146b9e1dc1dcb205bf6459a7c96e9c",
+      "lgb_export_sha256": "61702107c75d2bd6fe0f982fa3a71655f0e033655e040780d173c00498514d93",
+      "xgb_export_sha256": "6e6e202a25252b3284f306ca524c77e8d50346f28a846897fcd4821aad03f610",
+      "lgb_num_trees": 1521,
+      "lgb_stored_best_iteration": 1521,
+      "lgb_stored_training_params": {
+        "objective": "regression",
+        "metric": "rmse",
+        "learning_rate": 0.035,
+        "num_leaves": 127,
+        "max_depth": 11,
+        "min_data_in_leaf": 100,
+        "feature_fraction": 0.75,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "lambda_l1": 3.0,
+        "lambda_l2": 8.0,
+        "num_threads": -1,
+        "seed": 43,
+        "verbose": -1,
+        "num_iterations": 1800
+      },
+      "xgb_num_trees": 1027,
+      "xgb_stored_best_iteration_zero_based": 966,
+      "xgb_snapshot_version": [
+        3,
+        4,
+        1
+      ],
+      "xgb_objective": "reg:squarederror",
+      "xgb_booster_kind": "gbtree",
+      "xgb_feature_names_serialized": false,
+      "nan_mechanics": {
+        "finite_row": "both_native_components_finite",
+        "single_feature_nan_rows_tested": 69,
+        "all_native_outputs_finite": true,
+        "training_missingness_policy_verified": false
+      }
+    },
+    "3": {
+      "weights_serialized": [
+        0.55,
+        0.45
+      ],
+      "lgb_native_sha256": "d847d73b3fc4f2d8c5ad8077ec3b659fb35a4c6d71abadfcbcedc196b006cb6b",
+      "xgb_snapshot_sha256": "01ba5105167b8656738fb0c29826f4e3da7ac2edaf6d5683adc3c7937e92dad4",
+      "lgb_export_sha256": "d847d73b3fc4f2d8c5ad8077ec3b659fb35a4c6d71abadfcbcedc196b006cb6b",
+      "xgb_export_sha256": "0a2a5c0eb125ddc0cb8c0f450ad8f17240430fd93fba8e2495f72c0fbda5b3c1",
+      "lgb_num_trees": 1755,
+      "lgb_stored_best_iteration": 1755,
+      "lgb_stored_training_params": {
+        "objective": "regression",
+        "metric": "rmse",
+        "learning_rate": 0.035,
+        "num_leaves": 127,
+        "max_depth": 11,
+        "min_data_in_leaf": 100,
+        "feature_fraction": 0.75,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "lambda_l1": 3.0,
+        "lambda_l2": 8.0,
+        "num_threads": -1,
+        "seed": 45,
+        "verbose": -1,
+        "num_iterations": 1800
+      },
+      "xgb_num_trees": 1500,
+      "xgb_stored_best_iteration_zero_based": 1496,
+      "xgb_snapshot_version": [
+        3,
+        4,
+        1
+      ],
+      "xgb_objective": "reg:squarederror",
+      "xgb_booster_kind": "gbtree",
+      "xgb_feature_names_serialized": false,
+      "nan_mechanics": {
+        "finite_row": "both_native_components_finite",
+        "single_feature_nan_rows_tested": 69,
+        "all_native_outputs_finite": true,
+        "training_missingness_policy_verified": false
+      }
+    },
+    "6": {
+      "weights_serialized": [
+        0.55,
+        0.45
+      ],
+      "lgb_native_sha256": "ecfdc5c2360f38753b3ad7a5ccfc6882295016ab8bb29678816e1e2e116eeccb",
+      "xgb_snapshot_sha256": "89f61f822855eebd31221f4085086fa9cbf467259a665ec02fa8a5ea39ba53b6",
+      "lgb_export_sha256": "ecfdc5c2360f38753b3ad7a5ccfc6882295016ab8bb29678816e1e2e116eeccb",
+      "xgb_export_sha256": "f3cdd7e88fa38279ef30cc352edecf4bec1eaa3bc9d6f50d7e74b1aa5be43997",
+      "lgb_num_trees": 1602,
+      "lgb_stored_best_iteration": 1602,
+      "lgb_stored_training_params": {
+        "objective": "regression",
+        "metric": "rmse",
+        "learning_rate": 0.035,
+        "num_leaves": 127,
+        "max_depth": 11,
+        "min_data_in_leaf": 100,
+        "feature_fraction": 0.75,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "lambda_l1": 3.0,
+        "lambda_l2": 8.0,
+        "num_threads": -1,
+        "seed": 48,
+        "verbose": -1,
+        "num_iterations": 1800
+      },
+      "xgb_num_trees": 1500,
+      "xgb_stored_best_iteration_zero_based": 1484,
+      "xgb_snapshot_version": [
+        3,
+        4,
+        1
+      ],
+      "xgb_objective": "reg:squarederror",
+      "xgb_booster_kind": "gbtree",
+      "xgb_feature_names_serialized": false,
+      "nan_mechanics": {
+        "finite_row": "both_native_components_finite",
+        "single_feature_nan_rows_tested": 69,
+        "all_native_outputs_finite": true,
+        "training_missingness_policy_verified": false
+      }
+    },
+    "12": {
+      "weights_serialized": [
+        0.55,
+        0.45
+      ],
+      "lgb_native_sha256": "8de1f906fbbf613ed3ab9e8ca70369248963a16a1c7a6e18eba92a0f1e1b33fb",
+      "xgb_snapshot_sha256": "afa390b5f1ed41ea6cdf349b188b56a84b83db19f3c70841c6a9812742a0ee0c",
+      "lgb_export_sha256": "8de1f906fbbf613ed3ab9e8ca70369248963a16a1c7a6e18eba92a0f1e1b33fb",
+      "xgb_export_sha256": "85c6443dbeb47d9d13b5af4c2cd45216d9d6a1bd61dc91471963c02cc73437b8",
+      "lgb_num_trees": 1800,
+      "lgb_stored_best_iteration": 1800,
+      "lgb_stored_training_params": {
+        "objective": "regression",
+        "metric": "rmse",
+        "learning_rate": 0.035,
+        "num_leaves": 127,
+        "max_depth": 11,
+        "min_data_in_leaf": 100,
+        "feature_fraction": 0.75,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "lambda_l1": 3.0,
+        "lambda_l2": 8.0,
+        "num_threads": -1,
+        "seed": 54,
+        "verbose": -1,
+        "num_iterations": 1800
+      },
+      "xgb_num_trees": 1500,
+      "xgb_stored_best_iteration_zero_based": 1499,
+      "xgb_snapshot_version": [
+        3,
+        4,
+        1
+      ],
+      "xgb_objective": "reg:squarederror",
+      "xgb_booster_kind": "gbtree",
+      "xgb_feature_names_serialized": false,
+      "nan_mechanics": {
+        "finite_row": "both_native_components_finite",
+        "single_feature_nan_rows_tested": 69,
+        "all_native_outputs_finite": true,
+        "training_missingness_policy_verified": false
+      }
+    },
+    "24": {
+      "weights_serialized": [
+        0.55,
+        0.45
+      ],
+      "lgb_native_sha256": "dd8df625101ecd0569ab2fa277fcbfa6b4826cd48075251417c79a713233b7b6",
+      "xgb_snapshot_sha256": "edbb39c057a342697e7271e688e1a0ad5e8c4d946ecc84d491a7b1d1df5f1452",
+      "lgb_export_sha256": "dd8df625101ecd0569ab2fa277fcbfa6b4826cd48075251417c79a713233b7b6",
+      "xgb_export_sha256": "e9d004c8ada16bcf5b5bbf6a49713caec99de8fef1fd7de93c3d5f5164444fa6",
+      "lgb_num_trees": 885,
+      "lgb_stored_best_iteration": 885,
+      "lgb_stored_training_params": {
+        "objective": "regression",
+        "metric": "rmse",
+        "learning_rate": 0.035,
+        "num_leaves": 127,
+        "max_depth": 11,
+        "min_data_in_leaf": 100,
+        "feature_fraction": 0.75,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "lambda_l1": 3.0,
+        "lambda_l2": 8.0,
+        "num_threads": -1,
+        "seed": 66,
+        "verbose": -1,
+        "num_iterations": 1800
+      },
+      "xgb_num_trees": 1031,
+      "xgb_stored_best_iteration_zero_based": 970,
+      "xgb_snapshot_version": [
+        3,
+        4,
+        1
+      ],
+      "xgb_objective": "reg:squarederror",
+      "xgb_booster_kind": "gbtree",
+      "xgb_feature_names_serialized": false,
+      "nan_mechanics": {
+        "finite_row": "both_native_components_finite",
+        "single_feature_nan_rows_tested": 69,
+        "all_native_outputs_finite": true,
+        "training_missingness_policy_verified": false
+      }
+    }
+  }
+}

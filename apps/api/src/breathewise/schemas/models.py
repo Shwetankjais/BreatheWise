@@ -18,6 +18,9 @@ class ModelSummary(StrictModel):
     station_ids: list[str] = []
     pollutant: str = "pm25"
     target_unit: str | None = None
+    declared_target_transform: str | None = None
+    golden_parity_verified: bool | None = None
+    unavailable_reasons: list[str] | None = None
     feature_count: int | None = None
     dataset_sha256: str | None = None
     artifact_hashes: dict[str, str] = {}

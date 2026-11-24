@@ -3412,6 +3412,17 @@
             ],
             "title": "Dataset Sha256"
           },
+          "declared_target_transform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Declared Target Transform"
+          },
           "evaluation_cohort": {
             "anyOf": [
               {
@@ -3455,6 +3466,17 @@
               }
             ],
             "title": "Feature Count"
+          },
+          "golden_parity_verified": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Golden Parity Verified"
           },
           "kind": {
             "enum": [
@@ -3562,6 +3584,20 @@
               }
             ],
             "title": "Timezone"
+          },
+          "unavailable_reasons": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reasons"
           }
         },
         "required": [

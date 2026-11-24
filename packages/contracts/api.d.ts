@@ -2178,6 +2178,8 @@ export interface components {
             dataset_mode: "diagnostic" | "recorded_clock" | "utc_provider_history" | "utc_availability_scenario";
             /** Dataset Sha256 */
             dataset_sha256?: string | null;
+            /** Declared Target Transform */
+            declared_target_transform?: string | null;
             /** Evaluation Cohort */
             evaluation_cohort?: string | null;
             /** Evaluation Path */
@@ -2186,6 +2188,8 @@ export interface components {
             experimental_shadow_ready?: boolean | null;
             /** Feature Count */
             feature_count?: number | null;
+            /** Golden Parity Verified */
+            golden_parity_verified?: boolean | null;
             /**
              * Kind
              * @enum {string}
@@ -2242,6 +2246,8 @@ export interface components {
             target_unit?: string | null;
             /** Timezone */
             timezone?: string | null;
+            /** Unavailable Reasons */
+            unavailable_reasons?: string[] | null;
         };
         /** NotificationView */
         NotificationView: {
