@@ -19,8 +19,14 @@ Set exact frontend CORS origin, redeploy and verify browser requests. Provision 
 
 Checks: frontend typecheck and connected Pages production build passed. HTTP findings are actual server responses; public browser result is recorded separately after deployment.
 
-## Public deployment/browser result
+## Initial public deployment/browser result (superseded below)
 
 Commit52ce63c was deployed successfully by GitHub Pages workflow45441458791. Actual Chromium desktop1440/mobile390 tests reached all10tabs with no pageerrors or horizontal overflow. Both profiles displayed the explicit hosted-connection failure and NETWORK_ERROR: API CORS still rejected the GitHub Pages origin. This is not successful API-to-screen acceptance. An actual OPTIONS preflight returned400 without access-control-allow-origin. The owner reported the WEB_ORIGIN update was made; the deployed response still needs re-verification after Render finishes applying it.
 
 Actual route geometry POST returned503 ROUTING_UNAVAILABLE (missing trusted OSRM endpoint). Actual replay POST returned503 EVALUATION_UNAVAILABLE (missing registered artifacts). Weather context returned200 with weather.available=false and upstream429; the weather provider call was rate-limited, not successful modeled data. No hosted credentials/session were used or created.
+
+## Final connected browser verification — CORS resolved
+
+After the service owner applied WEB_ORIGIN, actual GET and OPTIONS preflight requests returned200 with access-control-allow-origin=https://shwetankjais.github.io. Both desktop1440/mobile390 then opened all10tabs with no pageerrors and no document overflow. Browser network logs confirmed actual Render200responses for health, capabilities, cities, stations, stationpollutants/latest, observed rankings, station catalogue, context, advisories and model registry. The banner correctly states that the server provides synthetic demo data. Evaluation/history/routes still returned503; no fallback was used. Authenticated persistence and successful ML inference were not verified on this host.
+
+Frontend60tests passed, frontend typecheck and connected Pages build passed, Pages workflow45441458791 passed. Hosting transport is connected; the missing live ingestion, artifacts, route provider and session setup remain actual feature blockers.

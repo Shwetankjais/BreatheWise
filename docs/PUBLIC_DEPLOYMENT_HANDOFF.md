@@ -1,4 +1,4 @@
-> Update 24 November 2026: Render API is deployed at https://breathewise-api-56wc.onrender.com . GitHub Pages is being connected through VITE_API_BASE_URL. See RENDER_CONNECTION_STATUS.md for actual server scope and blockers. Earlier "no API" status below is historical; no Vercel deployment is needed for the Pages route.
+> Update 24 November 2026: Render API is deployed at https://breathewise-api-56wc.onrender.com . GitHub Pages is connected through VITE_API_BASE_URL and CORS is verified. See RENDER_CONNECTION_STATUS.md for actual server scope and blockers. Earlier "no API" status below is historical; no Vercel deployment is needed for the Pages route.
 
 # Optional full-stack hosting handoff — Vercel/Render pending
 

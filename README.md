@@ -1,6 +1,6 @@
 # BreatheWise India
 
-**Public demo: [https://shwetankjais.github.io/BreatheWise/](https://shwetankjais.github.io/BreatheWise/) — deployed on GitHub Pages and verified on desktop/mobile.** This is an explicitly labeled synthetic static preview without a hosted API or database. The accepted real-data prototype remains localhost-only at http://127.0.0.1:5173. Vercel/Render are not used. See [public demo scope](docs/GITHUB_PAGES_DEPLOYMENT.md).
+**Public frontend:** https://shwetankjais.github.io/BreatheWise/ — now connected to the [Render API](https://breathewise-api-56wc.onrender.com/docs). CORS and real browser API calls are verified at desktop/mobile widths. Render currently serves **synthetic demo observations**; approved archive/model assets, live ingestion, hosted identities and routing configuration remain required. The real-data localhost prototype is separate. See [verified hosted scope](docs/RENDER_CONNECTION_STATUS.md).
 
 
 Hyperlocal Atmospheric Intelligence & Machine Learning Forecasting for India's Cities.
