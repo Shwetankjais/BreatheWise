@@ -409,14 +409,143 @@ def test_refresh_skips_ingestion_for_retained_rejected_sensor(
         },
     )
 
-    def forbidden_ingestion(*args, **kwargs):
-        pytest.fail("Rejected retained sensor must not be ingested with cached identity")
+    alert_only_calls = []
 
-    monkeypatch.setattr(module, "run_cycle", forbidden_ingestion)
+    def alert_only_cycle(db_engine, fetch=None, **kwargs):
+        assert fetch is None, "Rejected retained sensor must not be ingested with cached identity"
+        assert kwargs["provider"] == "none"
+        alert_only_calls.append(True)
+        return {"status": "success"}
+
+    monkeypatch.setattr(module, "run_cycle", alert_only_cycle)
     monkeypatch.setattr(sys, "argv", ["refresh_delhi.py", "--verify"])
     assert module.main() == 1
+    assert len(alert_only_calls) == 1
     retained = json.loads(path.read_text())["stations"][0]
     assert retained["verification_status"] == "verification_failed"
     assert retained["verification_error_code"] == failure_code
     assert retained["verified_at"] == previous["stations"][0]["verified_at"]
     assert retained["pending_revisions"] == previous["stations"][0]["pending_revisions"]
+
+
+@pytest.mark.integration
+def test_all_failed_sensor_verifications_still_deliver_cached_alert_once(
+    backend, monkeypatch, tmp_path
+):
+    import importlib.util
+    import json
+    import sys
+    from types import SimpleNamespace
+
+    from breathewise.core.config import ROOT
+    from breathewise.db.models import AlertRule, Notification, Observation
+    from pydantic import SecretStr
+    from sqlalchemy import func, select
+
+    client, owner, _, _ = backend
+    user_id = client.get("/api/v1/me", headers=owner).json()["data"]["user_id"]
+    monkeypatch.setenv("DATA_MODE", "live")
+    get_settings.cache_clear()
+    measured = datetime.now(UTC).replace(minute=0, second=0, microsecond=0) - timedelta(hours=1)
+    with Session(engine()) as db, db.begin():
+        db.add(
+            Station(
+                id="openaq-235",
+                name="Synthetic cached monitor",
+                city_id="delhi",
+                latitude=28.6,
+                longitude=77.2,
+                source="synthetic",
+                data_mode="live",
+            )
+        )
+        db.flush()
+        db.add(
+            Observation(
+                station_id="openaq-235",
+                pollutant="pm25",
+                measured_at=measured,
+                available_at=measured + timedelta(minutes=5),
+                value=98,
+                unit="µg/m³",
+                original_value=98,
+                original_unit="µg/m³",
+                source="synthetic",
+                quality_flags=[],
+            )
+        )
+        db.add(
+            AlertRule(
+                id="verification-failure-alert",
+                user_id=user_id,
+                station_id="openaq-235",
+                pollutant="pm25",
+                threshold=50,
+                cooldown_minutes=60,
+                enabled=True,
+                deleted=False,
+            )
+        )
+    spec = importlib.util.spec_from_file_location(
+        "cohort_alert_failure_test", ROOT / "scripts/refresh_delhi.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    path = tmp_path / "catalogue-alert.json"
+    old_time = (measured - timedelta(days=1)).isoformat()
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "verified_at": old_time,
+                "scope": "synthetic",
+                "stations": [
+                    {
+                        "location_id": 235,
+                        "verified_at": old_time,
+                        "selected_sensors": {"pm25": 42},
+                        "pending_revisions": [],
+                    }
+                ],
+                "rejected": [],
+            }
+        )
+    )
+    monkeypatch.setattr(module, "cache_path", lambda: path)
+    monkeypatch.setattr(module, "load_cache", lambda: json.loads(path.read_text()))
+    monkeypatch.setattr(
+        module,
+        "get_settings",
+        lambda: SimpleNamespace(data_mode="live", openaq_api_key=SecretStr("synthetic-key")),
+    )
+    monkeypatch.setattr(
+        module,
+        "verify_cohort",
+        lambda client, key: {
+            "schema_version": "1.0",
+            "verified_at": datetime.now(UTC).isoformat(),
+            "scope": "synthetic",
+            "stations": [],
+            "rejected": [{"location_id": 235, "code": "OPENAQ_NETWORK_ERROR"}],
+        },
+    )
+    monkeypatch.setattr(sys, "argv", ["refresh_delhi.py", "--verify"])
+    assert module.main() == 1
+    assert module.main() == 1
+    with Session(engine()) as db:
+        assert (
+            db.scalar(
+                select(func.count())
+                .select_from(Notification)
+                .where(Notification.rule_id == "verification-failure-alert")
+            )
+            == 1
+        )
+        assert (
+            db.scalar(
+                select(func.count())
+                .select_from(Observation)
+                .where(Observation.station_id == "openaq-235")
+            )
+            == 1
+        )

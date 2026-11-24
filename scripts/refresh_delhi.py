@@ -146,6 +146,7 @@ def main():
                 temp.write_text(json.dumps(cached, indent=2, allow_nan=False) + "\n")
                 temp.replace(path)
         results = []
+        ingestion_attempted = False
         rejected_ids = {x["location_id"] for x in cached.get("rejected", [])}
         for station in cached["stations"]:
             if (
@@ -161,6 +162,8 @@ def main():
                     }
                 )
                 continue
+
+            ingestion_attempted = True
 
             def fetch(station=station):
                 end = datetime.now(UTC)
@@ -243,12 +246,23 @@ def main():
                     "inserted": (result["ingestion"] or {}).get("inserted"),
                 }
             )
+        alert_only = None
+        if not ingestion_attempted:
+            # Failed metadata verification must not suppress independently eligible
+            # cached-observation alerts. No rejected provider sensor is fetched.
+            alert_only = run_cycle(
+                engine(),
+                None,
+                provider="none",
+                emit=lambda event: print(json.dumps(event), flush=True),
+            )
         result = {
             "event": "cohort_refresh",
             "scope": cached["scope"],
             "stations": results,
             "rejected": cached["rejected"],
             "model_inference": "unavailable",
+            "alert_only_status": alert_only["status"] if alert_only else None,
         }
         print(json.dumps(result, allow_nan=False))
         return 0 if results and all(x["status"] == "success" for x in results) else 1
