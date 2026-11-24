@@ -2,7 +2,7 @@
 Local air pollution forecasting and exposure planning.
 
 ## Current state — 24 November 2026
-Current checkpoint: contract1.3.0 adds two separate24-hour retrospective experiments (recorded-clock and verified UTC-native), issue-boundary-purged evaluation/playback, bounded provider-history caching and persisted experimental shadow-run/status APIs. Active allocation Codex40%/Antigravity60%; file ownership unchanged. See docs/FORECAST_MILESTONE.md for exact metrics/checks/limits. Supplied native75 remains diagnostic-only; actual delayed/stale/partial inputs keep public live forecasting, activity trajectories and spatial exposure unavailable. The prior frontend milestone5cd7127 remains accepted; new frontend1.3.0 source is ready for coordinated integration and remains uncommitted. No main merge or deployment.
+Current prototype: API/web run locally at http://127.0.0.1:8000 and http://127.0.0.1:5173 using the verified real cache/archive/model paths and a private local identity. Contract1.4.0 includes historical replay planning and an independently trained availability-aware experimental model; actual partial inputs currently produce an honest retained learned-run rejection. Frontend1.3 is accepted at2d979ad; PhaseB replay UI/final combined demo remains active. Allocation Codex40%/Antigravity60%, ownership unchanged. See docs/LOCALHOST_PROTOTYPE.md for commands and docs/PROTOTYPE_COMPLETION.md for exact implemented scope, metrics and remaining gates. No main merge, deployment or complete live-forecast claim.
 
 Approved project folder: `/Users/shwetankjaiswal/Desktop/BreatheWise`.
 Approved remote: https://github.com/Shwetankjais/BreatheWise .
