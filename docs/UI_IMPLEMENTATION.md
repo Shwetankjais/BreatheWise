@@ -55,10 +55,10 @@ The following visual artifacts have been generated in `work/prototype/` to recor
 ## 4. Verification Check Results
 
 1. **Vitest Unit Suite (`npm --workspace=@breathewise/web run test`):**
-   - **57 of 57 tests PASSED** in 386ms across 4 test suites:
+   - **60 of 60 tests PASSED** in 298ms across 4 test suites:
      - `features.test.ts` (28 passed)
+     - `client.test.ts` (22 passed)
      - `replay.test.ts` (5 passed)
-     - `client.test.ts` (19 passed)
      - `aqi.test.ts` (5 passed)
    - Exit status: 0
 
@@ -67,14 +67,19 @@ The following visual artifacts have been generated in `work/prototype/` to recor
    - Exit status: 0
 
 3. **Vite Production Build (`npm --workspace=@breathewise/web run build`):**
-   - Clean production bundle generated in 948ms:
-     - `dist/index.html` (0.36 kB)
-     - `dist/assets/index-DzEDJ7_F.css` (75.65 kB)
-     - `dist/assets/index-DLD-Ysls.js` (655.59 kB)
+   - Clean production bundle generated in 979ms.
    - Exit status: 0
 
 4. **Playwright Browser Suite (Desktop 1440x900 & Mobile 390x844):**
    - Document scroll width matches viewport width on both viewports (`1440px` and `390px` respectively; 0 horizontal overflow).
    - "Find Nearest Monitor" button visible and interactive on both viewports.
-   - All navigation tabs clicked and rendered without unhandled errors.
-   - Historical Replay Activity Planner loads complete issues, submits comparison request, and renders ranked windows with 24-hour trajectory visualizer.
+   - All 6 core journeys pass with full interactive assertions and screenshots.
+
+---
+
+## 5. Final Application Completion & Scientific Copy Additions
+
+1. **Environmental Weather Context Card:** Integrated Open-Meteo NWP gridded numerical model predictions with temperature, humidity, wind, and surface pressure, clearly attributed as modeled context.
+2. **Criteria Pollutant Ground Telemetry:** Dedicated panel reporting genuine continuous monitoring for PM2.5, PM10, NO₂, SO₂, CO, and O₃, clearly distinguishing available ground sensors from unverified parameters and disclaiming official 24-hour CPCB NAQI.
+3. **Historical Replay Planner Enhancements:** Complete issue date and text filter input for rapid issue location; suggested adjustments rendered when no candidate window meets user constraints.
+4. **Sourced Health Literacy & Respiratory Precautions:** Educational advice for Asthma, COPD, children, and the elderly directing individuals to clinician-provided action plans and clarifying the aerosol filtration scope and gaseous limitations of particulate respirators.

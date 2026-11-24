@@ -555,7 +555,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 </span>
               </div>
               <CardDescription className="text-[11px] text-[#6E675D]">
-                Open-Meteo numerical weather prediction
+                Open-Meteo numerical weather prediction (modeled context)
               </CardDescription>
             </CardHeader>
             <CardContent className="p-3.5 space-y-2.5 text-xs">
@@ -678,7 +678,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 mobileTab === 'list' ? 'bg-[#FFFDF9] text-[#1C1A1F] shadow-xs font-bold border border-[#DDD3BC]' : 'text-[#6E675D]'
               }`}
             >
-              Station Directory ({stations.length})
+              {selectedCity.name} Monitors ({stations.length})
             </button>
           </div>
 
@@ -696,7 +696,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                           : 'border-transparent text-[#6E675D] hover:text-[#1C1A1F]'
                       }`}
                     >
-                      Active CAAQMS Stations ({filteredStations.length} / {stations.length})
+                      {selectedCity.name} CAAQMS Monitors ({filteredStations.length} / {stations.length})
                     </button>
                     <span className="text-[#DDD3BC]">|</span>
                     <button
@@ -998,7 +998,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     </span>
                   </div>
                   <CardDescription className="text-[11px] text-[#6E675D]">
-                    Continuous CAAQMS readings for {selectedStation.name}
+                    Continuous CAAQMS ground observations for {selectedStation.name}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-3.5 space-y-3">

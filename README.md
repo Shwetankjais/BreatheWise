@@ -2,7 +2,45 @@
 
 Hyperlocal Atmospheric Intelligence & Machine Learning Forecasting for India's Cities.
 
-BreatheWise integrates air quality monitoring observations, meteorological forecasts, and machine learning models to provide retrospective evaluation, held-out model playback, historical activity replay planning, and criteria pollutant health advisories.
+BreatheWise integrates ground-level continuous air quality monitoring observations (CAAQMS), numerical weather prediction models (Open-Meteo NWP), and specialized machine learning models (LightGBM/XGBoost) to deliver honest retrospective evaluations, step-by-step held-out model playback, historical outdoor activity replay planning, and criteria pollutant health guidance.
+
+---
+
+## Problem Statement & Architecture
+
+### Problem Statement
+Indian metropolitan centers—starting with the National Capital Territory of Delhi—frequently experience severe particulate episodes driven by meteorological inversions, seasonal biomass combustion, and intense vehicular corridors. Existing consumer applications either present lagging single-station numbers, unverified 24-hour forecasts that mask missing hours with synthetic zeros, or conflate instantaneous hourly readings with official 24-hour CPCB National Air Quality Index (NAQI) standards.
+
+BreatheWise addresses this through **atmospheric integrity and scientific transparency**:
+1. **Separation of Clocks & Models:** Strictly segregates naive recorded station clocks from UTC provider history.
+2. **True Sensor Ground Telemetry vs. Gridded NWP:** Ground monitor readings are never conflated with gridded numerical weather prediction estimates.
+3. **Causal Forecast Integrity:** Eliminates lookahead bias via issue-time purged evaluation cohorts.
+4. **Honest Capability Gating:** Unavailable capabilities surface explicit HTTP status codes (`503 MODEL_UNAVAILABLE`, `409 TRAJECTORY_UNAVAILABLE`, `409 EXPOSURE_UNAVAILABLE`) rather than fabricated synthetic fallbacks.
+
+### Architecture Overview
+```text
+BreatheWise Monorepo
+├── apps/
+│   ├── api/                     # FastAPI backend (Python 3.12, SQLAlchemy, Alembic, Pydantic v2)
+│   │   ├── src/breathewise/
+│   │   │   ├── adapters/        # OpenAQ v3, Open-Meteo NWP, OSRM routing
+│   │   │   ├── api/             # REST endpoints (environment, observations, models, replay, routes)
+│   │   │   ├── db/              # Models, SQLite/PostgreSQL engine, Alembic migrations
+│   │   │   └── services/        # Location bounds, advisories, cities, capabilities
+│   │   └── tests/               # 131 unit, integration, and contract tests (pytest)
+│   └── web/                     # React 18 SPA (TypeScript, Vite, Leaflet, Tailwind CSS)
+│       ├── src/
+│       │   ├── components/      # Map, layout, UI primitives, data mode badges
+│       │   ├── features/        # Overview, Replay Planner, Model Audit, EDA, Routes, Health, Places
+│       │   └── lib/             # API client, AQI math, replay helpers
+│       └── tests/               # 60 Vitest unit and integration tests
+├── packages/
+│   └── contracts/               # OpenAPI 3.1 schema and auto-generated TypeScript declarations
+├── scripts/                     # Local prototype supervisor, data intake, contract export
+└── tools/
+    ├── browser-tests/           # Playwright headless browser test suite
+    └── model-v5/                # Isolated v5 diagnostic audit environment
+```
 
 ---
 
@@ -60,6 +98,8 @@ Open **`http://localhost:5173`**. The application runs in explicit Demo mode, cl
 ---
 
 ## Deployment Paths
+
+> **Deployment Status:** Docker multi-stage container building and runtime health checks were locally verified (`docker build -t breathewise-api:test -f Dockerfile.api .`). Render and Vercel blueprints are verified, reproducible deployment specifications ready for instant cloud hosting; no external cloud instances are claimed without active production credentials.
 
 ### Option A: Full-Stack Docker (`compose.yaml`)
 
@@ -153,7 +193,7 @@ FORECAST_REGISTRY_ROOT=work/forecast-experiment
 Teammates can verify test coverage and build readiness on any clean machine:
 
 ```bash
-# 1. Frontend Unit Tests (58 tests across 4 suites)
+# 1. Frontend Unit Tests (60 tests across 4 suites)
 npm --workspace=@breathewise/web run test
 
 # 2. TypeScript Static Typecheck (0 errors)
@@ -162,7 +202,7 @@ npm --workspace=@breathewise/web run typecheck
 # 3. Production Bundle Build
 npm --workspace=@breathewise/web run build
 
-# 4. Backend Unit & Contract Tests (127 passed)
+# 4. Backend Unit & Contract Tests (131 passed, 1 skipped)
 uv run pytest -q
 
 # 5. Contract Specification Export & Validation

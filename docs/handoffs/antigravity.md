@@ -1,10 +1,40 @@
 # Antigravity handoff
 
 Agent: shwetank's-antigravity (Senior UI/UX Designer & Frontend FDE).  
-Status: APPLICATION_COMPLETION_MILESTONE_COMPLETE (All earlier freeze statements superseded).  
-Git authority: User explicitly authorized commit and push to `feat/foundation` for this milestone, overriding the prior sole-Codex-Git-writer arrangement for this serialized release window. Codex-owned files and tests are strictly preserved.  
+Status: FINAL_SUBMISSION_READY (Git window released by Codex at eff1c9f / 408faa5; final submission slice verified).  
+Git authority: Window released by Codex. Antigravity staging and pushing final reviewed submission slice to `feat/foundation`. Codex-owned files and tests strictly preserved.  
 Orchestrator: Original project chat (docs/ORCHESTRATOR.md).  
 Branch Context: `feat/foundation`  
+
+---
+
+## Final Submission Slice & Release ACK — 2026-11-24T20:12:00+05:30
+
+**RELEASE_ACK:** Codex's model integration commit (`eff1c9fba4f112e8b18bd48f74635a18b7612798` / `408faa5`) is verified on `feat/foundation`. Antigravity resumes the serialized Git window to commit the final verified submission slice.
+
+### 1. Verification Summary
+1. **Frontend Unit Tests:** 60 of 60 tests PASSED (`npm --workspace=@breathewise/web run test` across 4 test suites: `features.test.ts`, `client.test.ts`, `replay.test.ts`, `aqi.test.ts`).
+2. **Frontend Typecheck & Production Build:** Clean build in 1.08s (`tsc --noEmit && vite build`).
+3. **Backend Unit & Contract Tests:** 131 passed, 1 skipped (`uv run pytest -q`, Starlette TestClient warning handled, PostgreSQL concurrency skip preserved).
+4. **Backend Lint & Formatting:** Clean (`uv run ruff check apps/api` all checks passed).
+5. **Headless Browser Journeys:** All 6 core journeys verified across desktop (1440x900) and mobile (390x844). Mobile document scroll width matches viewport width (`390px`, **0 horizontal scroll overflow**).
+6. **Local Prototype Daemon:** Active and responding on `http://127.0.0.1:8000/api/v1/health` and `http://127.0.0.1:5173/` via background task `task-4132`.
+
+### 2. Ready Files for Submission Commit
+- `apps/web/src/features/health/HealthView.tsx` (clinician-provided action plan; removal of universal 6–9 AM avoidance; particulate respirator aerosol scope and gaseous/diagnosis limitations)
+- `apps/web/src/features/overview/OverviewView.tsx` (station catalogue scoped to Delhi CAAQMS monitors; ground observation vs modeled weather attribution)
+- `apps/web/src/features/model-performance/ModelAuditView.tsx` (diagnostic-only integration for `supplied-horizon-ensemble-v5`)
+- `README.md` (problem statement, architecture, tech stack, data realities, Docker/cloud deployment documentation)
+- `docs/PROTOTYPE_COMPLETION.md` (updated test metrics and running supervisor status)
+- `docs/UI_IMPLEMENTATION.md` (updated test metrics and Section 5 additions)
+- `docs/handoffs/antigravity.md` (this handoff)
+
+---
+
+## Previous Coordination Record (Superseded)
+
+### Git/Contract Pause ACK — 2026-11-24T20:03:30+05:30 (Resolved)
+Antigravity paused Git and shared-contract writes while Codex audited and integrated `production_horizon_specialized_v5.joblib`. Resumed following Codex release at `408faa5`.
 
 ---
 

@@ -293,20 +293,20 @@ export const HealthView: React.FC<HealthViewProps> = ({
             <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
               <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
                 <span>🫁</span>
-                <span>Asthma & COPD Precautions</span>
+                <span>Asthma & COPD Action Plans</span>
               </h4>
               <p className="text-[11px] text-[#5A5348]">
-                Carry prescribed rapid-acting bronchodilators at all times. During high PM2.5 or SO₂ episodes, bronchospasm can occur rapidly upon airway irritation. Consult your doctor if rescue inhaler frequency increases.
+                Individuals diagnosed with asthma or COPD should follow their clinician-provided action plan and use prescribed medicines as directed. During episodes of elevated PM2.5 or SO₂, airway reactivity may increase. Consult your healthcare provider if your symptoms or rescue inhaler requirements change.
               </p>
             </div>
 
             <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
               <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
                 <span>🚗</span>
-                <span>Corridor & Inversion Avoidance</span>
+                <span>Corridor & Meteorological Inversion Awareness</span>
               </h4>
               <p className="text-[11px] text-[#5A5348]">
-                Avoid high-intensity outdoor aerobic activity near major vehicular corridors, especially during morning nocturnal inversion conditions (typically 6:00 AM – 9:00 AM) when combustion pollutants pool near ground level.
+                Heavy vehicular arteries can exhibit localized pollutant stagnation when atmospheric boundary layers compress or surface winds stagnate. Review real-time monitor readings rather than relying on assumed morning time bands, and adjust outdoor exertion based on actual observed local station data.
               </p>
             </div>
 
@@ -316,17 +316,17 @@ export const HealthView: React.FC<HealthViewProps> = ({
                 <span>Indoor Air Quality & HEPA Filtration</span>
               </h4>
               <p className="text-[11px] text-[#5A5348]">
-                Keep windows closed during peak episodes. Utilize true HEPA air purifiers in bedrooms and living spaces. Prefer damp-mopping over dry dusting or sweeping to prevent resuspending settled coarse particulates.
+                Keeping windows closed during acute particulate episodes and utilizing certified HEPA mechanical air purifiers helps reduce indoor fine particle concentrations. Wet-mopping surfaces is preferable to dry sweeping, which can resuspend settled coarse particles.
               </p>
             </div>
 
             <div className="p-3.5 bg-[#FAF6EE] rounded-xl border border-[#DDD3BC] space-y-1.5">
               <h4 className="font-bold text-[#1C1A1F] text-xs flex items-center gap-1.5">
                 <span>😷</span>
-                <span>Particulate Respirator Guidance</span>
+                <span>Particulate Respirator Scope & Limitations</span>
               </h4>
               <p className="text-[11px] text-[#5A5348]">
-                When outdoor travel is essential during severe haze, a certified, properly fitted particulate respirator (e.g. N95 or FFP2 without an exhalation valve) offers substantial filtration compared to simple cloth masks.
+                Certified particulate respirators (e.g. well-fitted N95, KN95, or FFP2) filter solid and liquid aerosols (PM2.5 and PM10). They do not filter hazardous combustion gases such as carbon monoxide, nitrogen dioxide, sulfur dioxide, or ozone. Respirators do not diagnose or cure pulmonary disorders.
               </p>
             </div>
           </div>
@@ -334,7 +334,7 @@ export const HealthView: React.FC<HealthViewProps> = ({
           <div className="p-3 bg-[#FBF4E6] rounded-xl border border-[#E8D1A0] text-[11px] text-[#78350F] flex items-start gap-2.5">
             <span className="font-bold text-[#8C5D14]">Educational Disclaimer:</span>
             <span>
-              This information is provided for general health literacy and environmental awareness. It does not replace individualized clinical instructions, prescriptions, or formal medical care.
+              This information is sourced from WHO environmental guidelines and provided strictly for health literacy. It does not provide medical diagnoses, treatment advice, or personalized clinical prescriptions. Always consult your personal physician.
             </span>
           </div>
         </CardContent>

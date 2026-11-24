@@ -341,7 +341,10 @@ export const ModelAuditView: React.FC<ModelAuditViewProps> = ({ capabilities }) 
   const recoveredModelSummary = useMemo(() => {
     if (modelCatalogue?.models) {
       const found = modelCatalogue.models.find(
-        m => m.model_version === 'supplied-native-75-v1' || m.kind === 'native_diagnostic'
+        m =>
+          m.model_version === 'supplied-horizon-ensemble-v5' ||
+          m.model_version === 'supplied-native-75-v1' ||
+          m.kind === 'native_diagnostic'
       );
       if (found) return found;
     }
@@ -479,14 +482,18 @@ export const ModelAuditView: React.FC<ModelAuditViewProps> = ({ capabilities }) 
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <div className="text-[10px] font-bold uppercase text-slate-400">Target Transform</div>
                   <div className="text-xs font-bold text-slate-900 mt-1">
-                    <code className="font-mono">log1p(PM2.5)</code> with <code className="font-mono">expm1</code> inversion
+                    {recoveredModelSummary?.model_version === 'supplied-horizon-ensemble-v5' ? (
+                      <code className="font-mono">none (raw linear scale)</code>
+                    ) : (
+                      <><code className="font-mono">log1p(PM2.5)</code> with <code className="font-mono">expm1</code> inversion</>
+                    )}
                   </div>
                 </div>
 
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <div className="text-[10px] font-bold uppercase text-slate-400">Input Feature Count</div>
                   <div className="text-xs font-bold text-slate-900 mt-1">
-                    {recoveredModelSummary?.feature_count ?? 75} Ordered Atmospheric Features
+                    {recoveredModelSummary?.feature_count ?? (recoveredModelSummary?.model_version === 'supplied-horizon-ensemble-v5' ? 69 : 75)} Ordered Atmospheric Features
                   </div>
                 </div>
 
