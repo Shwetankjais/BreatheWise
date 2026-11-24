@@ -26,6 +26,8 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npm run typecheck --workspace apps/web
       - run: npm exec vite -- build --config tools/github-pages/vite.config.ts
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

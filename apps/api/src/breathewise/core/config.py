@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = next(
@@ -22,6 +22,14 @@ class Settings(BaseSettings):
     forecast_registry_root: Path = ROOT / "work/forecast-experiment"
     routing_base_url: str = ""
     model_artifact_path: Path = ROOT / "artifacts/models/zero_input_aq_weather_model.joblib"
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_driver(cls, value: str) -> str:
+        for prefix in ("postgres://", "postgresql://"):
+            if value.startswith(prefix):
+                return "postgresql+psycopg://" + value[len(prefix) :]
+        return value
 
     @property
     def cors_origins(self) -> list[str]:

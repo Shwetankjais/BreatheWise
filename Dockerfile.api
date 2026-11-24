@@ -34,6 +34,7 @@ COPY --from=builder /app/apps/api /app/apps/api
 COPY --from=builder /app/packages /app/packages
 COPY pyproject.toml alembic.ini ./
 COPY scripts/ /app/scripts/
+COPY docs/ /app/docs/
 
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \

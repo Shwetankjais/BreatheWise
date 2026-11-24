@@ -3,8 +3,20 @@
 import { apiClient } from '../../apps/web/src/lib/api/client';
 import './scope.css';
 
+const apiOrigin = import.meta.env.VITE_API_BASE_URL?.trim();
+if (apiOrigin && !/^https:\/\//i.test(apiOrigin)) {
+  throw new Error('Public API URL must use HTTPS');
+}
+if (apiOrigin) {
+  apiClient.setDemoMode(false);
+  const scope = document.querySelector('[aria-label="Public deployment scope"]');
+  if (scope) scope.textContent = 'Connected to hosted API. Source timestamps and capability status determine which results are available.';
+  document.title = 'BreatheWise — Air Quality';
+}
+
 // Static hosting has no API. Return an explicit unavailable result locally for
 // any existing UI flow that attempts a server request; never substitute data.
+if (!apiOrigin) {
 const networkFetch = window.fetch.bind(window);
 window.fetch = async (input, init) => {
   const url = new URL(input instanceof Request ? input.url : String(input), location.href);
@@ -17,4 +29,5 @@ window.fetch = async (input, init) => {
   return networkFetch(input, init);
 };
 apiClient.setDemoMode(true);
+}
 void import('../../apps/web/src/main');
