@@ -19,7 +19,7 @@ For the hosted real-observation rollout, follow [Render live ingestion](docs/LIV
 
 </div>
 
-> **Deployment scope — verified 24 November 2026:** GitHub Pages is connected to FastAPI on Render, with working CORS. Render currently contains **synthetic demo observations**. The richer local setup uses actual Delhi observations and separately supplied archive/model assets. Operational live ML forecasts remain unavailable. [See the hosted feature report.](docs/RENDER_CONNECTION_STATUS.md)
+> **Deployment scope — verified 25 November 2026:** GitHub Pages is connected to FastAPI on Render. The hosted API now serves **real OpenAQ/CPCB PM2.5 observations from four Delhi stations** in isolated live mode. Readings retain their source timestamps and freshness flags; the checked readings were marked stale. Other pollutants and cities are not imported. Operational live ML forecasts, hosted historical replay and pollution exposure ranking remain unavailable. [See the hosted feature report.](docs/RENDER_CONNECTION_STATUS.md)
 
 ---
 
@@ -35,7 +35,7 @@ BreatheWise brings these sources into one interface while retaining their contex
 
 | Workspace | What it does | Current scope |
 |---|---|---|
-| 🗺️ **Overview & Map** | Select a station; inspect concentrations, units, source, timestamps and freshness | Real observations in the configured local setup; hosted demo station on Render |
+| 🗺️ **Overview & Map** | Select a station; inspect concentrations, units, source, timestamps and freshness | Four real Delhi OpenAQ/CPCB PM2.5 stations on Render; freshness varies |
 | 📍 **Location & Weather** | Browser-permission geolocation, nearest monitor and Open-Meteo weather context | A 50 km proximity guard; weather depends on upstream availability |
 | 🧪 **Pollutant Details** | Separate PM2.5, PM10, NO₂, SO₂, CO and O₃ availability | The real local intake currently imports **PM2.5 only**; missing pollutants stay unavailable |
 | 📈 **Historical EDA** | Explore observed history, compare compatible station series and export results | Requires the audited archive; unavailable on the current hosted API |
@@ -57,7 +57,7 @@ BreatheWise brings these sources into one interface while retaining their contex
 5. In a configured local installation, explore held-out playback and historical replay planning.
 6. Compare available windows by duration and sensitivity; inspect a no-suitable-window result.
 
-The public site makes real requests to Render, but its seeded station values are synthetic. Selecting a demo preview never establishes live forecasting capability.
+The public site makes real requests to Render and displays the live-mode Delhi station cohort. Check each observation's timestamp and stale flag before using it. Selecting a demo preview never establishes live forecasting capability.
 
 </details>
 

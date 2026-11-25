@@ -1,5 +1,11 @@
 # Render API connection — 24 November 2026
 
+## Current hosted status — verified 25 November 2026
+
+Render deployed commit `d90c2ef` with a dedicated `breathewise_live` PostgreSQL schema. Direct API checks returned `meta.data_mode=live` and four real Delhi OpenAQ/CPCB stations: Anand Vihar (`openaq-235`), Punjabi Bagh (`openaq-50`), Nehru Nagar (`openaq-8365`) and Bawana (`openaq-8472`). The checked pollutant responses returned Anand Vihar PM2.5 **87.0 µg/m³** and Punjabi Bagh PM2.5 **72.5 µg/m³**, both measured at `2026-11-25T10:30:00Z` and both marked `stale=true` by the API. These are time-specific observations, not current values or forecasts. No `synthetic_demo` flag was present in the live station response.
+
+`GET /api/v1/ready` returned `503` with `database=true`, `providers=true`, `model=false`: real-data ingestion works, while operational ML inference does not. Other pollutants returned unavailable/null for the checked stations. The GitHub Pages origin received the correct CORS header. The website uses this Render API; a fresh desktop/mobile browser pass against this live deployment has not yet been recorded. Historical replay and other model-backed hosted features still require separate validated assets. The 24 November findings below describe the earlier demo deployment and are superseded where they conflict with this status.
+
 API: https://breathewise-api-56wc.onrender.com . Frontend: https://shwetankjais.github.io/BreatheWise/ . Vercel is not required. GitHub Actions repository variable VITE_API_BASE_URL is set to this API origin. The connected Pages build calls the server; explicit static fixtures are used only without the URL or via user-selected preview mode.
 
 ## Actual HTTP findings

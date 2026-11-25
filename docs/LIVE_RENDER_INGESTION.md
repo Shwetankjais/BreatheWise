@@ -1,5 +1,7 @@
 # Render live observation rollout
 
+**Verified 25 November 2026:** Render commit `d90c2ef` serves four real Delhi OpenAQ/CPCB stations in `DATA_MODE=live`. Direct checks found PM2.5 at Anand Vihar (87.0 µg/m³) and Punjabi Bagh (72.5 µg/m³), measured `2026-11-25T10:30:00Z`; both were flagged stale. `/api/v1/ready` reported `database=true`, `providers=true`, `model=false`. The deployment is live for this bounded observation cohort, not for operational ML forecasts or all-city coverage.
+
 The public frontend is GitHub Pages; the API is the `breathewise-api` Render Docker service. `OPENAQ_API_KEY` belongs only in Render's Environment settings. Never put it in GitHub Pages, Vite variables, screenshots, or commits.
 
 ## What this deployment can ingest
