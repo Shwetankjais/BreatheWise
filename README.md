@@ -15,6 +15,8 @@
 
 [**Explore the website →**](https://shwetankjais.github.io/BreatheWise/) · [**API docs**](https://breathewise-api-56wc.onrender.com/docs) · [**Verification evidence**](docs/SUBMISSION.md) · [**Model research**](docs/FORECAST_ISSUE_PURGED.md)
 
+For the hosted real-observation rollout, follow [Render live ingestion](docs/LIVE_RENDER_INGESTION.md). The OpenAQ key must stay server-side; live observations, historical replay, and operational ML forecasts have separate readiness requirements.
+
 </div>
 
 > **Deployment scope — verified 24 November 2026:** GitHub Pages is connected to FastAPI on Render, with working CORS. Render currently contains **synthetic demo observations**. The richer local setup uses actual Delhi observations and separately supplied archive/model assets. Operational live ML forecasts remain unavailable. [See the hosted feature report.](docs/RENDER_CONNECTION_STATUS.md)

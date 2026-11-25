@@ -12,7 +12,9 @@ services:
           name: breathewise-db
           property: connectionString
       - key: DATA_MODE
-        value: demo
+        value: live
+      - key: BREATHEWISE_AUTO_REFRESH
+        value: "1"
       - key: WEB_ORIGIN
         value: https://shwetankjais.github.io,http://localhost:5173,http://127.0.0.1:5173
       - key: PORT
